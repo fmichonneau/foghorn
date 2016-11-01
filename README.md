@@ -1,15 +1,17 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/horn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/horn)
+[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/horn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/horn) ![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg) [![](http://www.r-pkg.org/badges/version/foghorn)](http://www.r-pkg.org/pkg/foghorn)
 
 foghorn
 =======
 
-> **foghorn** *noun* 1. Device used to facilitate navigation in foggy conditions.
+> **foghorn** *noun* <br> 1. Device used to facilitate navigation in foggy conditions by warning of potential hazards ahead.
 
-`foghorn` makes accessible to the R terminal the results of the CRAN check results for the packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your .Rprofile (to check regularly on the status of the published packages), or as a tibble.
+`foghorn` makes accessible to the R terminal the results of the CRAN check results for the packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your `.Rprofile` (to check regularly on the status of the published packages), or as a tibble.
 
-The package uses [whoami](https://cran.r-project.org/package=whoami) to guess your email address, but addresses can be added manually.
+As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when built by CRAN. `foghorn` brings this information to your terminal automatically so you don't have to check the CRAN check results page regularly.
+
+The package uses [whoami](https://cran.r-project.org/package=whoami) to guess your email address, but it can be specified manually.
 
 Installation
 ------------
