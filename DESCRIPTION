@@ -1,0 +1,21 @@
+Package: horn
+Title: Summarizes CRAN Check Results in the Terminal
+Version: 0.0.0.9000
+Authors@R: person("Francois", "Michonneau", role=c("aut", "cre"),
+                                email="francois.michonneau@gmail.com")
+Description: A graphical summary of the CRAN check results in your R terminal.
+Depends: R (>= 3.3.1)
+Imports:
+  clisymbols (>= 1.0.0),
+  crayon (>= 1.3.2),
+  dplyr (>= 0.5.0),
+  magrittr (>= 1.5),
+  rvest (>= 0.3.2),
+  tibble (>= 1.2),
+  tidyr (>= 0.6.0),
+  whoami (>= 1.1.1),
+  xml2 (>= 1.0.0)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1.9000
