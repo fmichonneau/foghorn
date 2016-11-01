@@ -1,0 +1,59 @@
+---
+output: github_document
+---
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
+[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn)
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# foghorn
+
+> **foghorn** *noun* Device used to facilitate navigation in foggy conditions.
+
+`foghorn` makes accessible to the R terminal the results of the CRAN check
+results for the packages maintained by individuals, or for other package of
+interests. It provides a graphical summary of the results designed to added to
+your .Rprofile (to check regularly on the status of the published packages), or
+as a tibble.
+
+The package uses [whoami](https://cran.r-project.org/package=whoami) to guess
+your email address, but addresses can be added manually.
+
+## Installation
+
+You can install foghorn from github with:
+
+```{r gh-installation, eval = FALSE}
+# install.packages("ghit")
+ghit::install_github("fmichonneau/foghorn")
+```
+
+## Example
+
+```{r example}
+## load the package
+library(foghorn)
+
+## Graphical interface
+summary_cran_checks(email = "francois.michonneau@gmail.com")
+
+## Summary as a tibble
+cran_check_results(email = "francois.michonneau@gmail.com")
+
+## You can also have information just for some packages
+summary_cran_checks(email = NULL,  package = c("mregions", "ridigbio"))
+cran_check_results(email = NULL,  package = c("mregions", "ridigbio"))
+
+## Or both
+summary_cran_checks(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
+cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
+```
