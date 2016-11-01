@@ -1,41 +1,30 @@
----
-output: github_document
----
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/horn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/horn)
 
+foghorn
+=======
 
-[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn)
+> **foghorn** *noun* 1. Device used to facilitate navigation in foggy conditions.
 
+`foghorn` makes accessible to the R terminal the results of the CRAN check results for the packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your .Rprofile (to check regularly on the status of the published packages), or as a tibble.
 
+The package uses [whoami](https://cran.r-project.org/package=whoami) to guess your email address, but addresses can be added manually.
 
-
-# foghorn
-
-> **foghorn** *noun* Device used to facilitate navigation in foggy conditions.
-
-`foghorn` makes accessible to the R terminal the results of the CRAN check
-results for the packages maintained by individuals, or for other package of
-interests. It provides a graphical summary of the results designed to added to
-your .Rprofile (to check regularly on the status of the published packages), or
-as a tibble.
-
-The package uses [whoami](https://cran.r-project.org/package=whoami) to guess
-your email address, but addresses can be added manually.
-
-## Installation
+Installation
+------------
 
 You can install foghorn from github with:
 
-
-```r
+``` r
 # install.packages("ghit")
 ghit::install_github("fmichonneau/foghorn")
 ```
 
-## Example
+Example
+-------
 
-
-```r
+``` r
 ## load the package
 library(foghorn)
 

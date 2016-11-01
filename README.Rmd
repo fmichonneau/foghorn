@@ -1,11 +1,12 @@
 ---
 output: github_document
 ---
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 
 [![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn)
-
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/horn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/horn)
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -17,7 +18,8 @@ knitr::opts_chunk$set(
 
 # foghorn
 
-> **foghorn** *noun* Device used to facilitate navigation in foggy conditions.
+> **foghorn** *noun*
+>     1. Device used to facilitate navigation in foggy conditions.
 
 `foghorn` makes accessible to the R terminal the results of the CRAN check
 results for the packages maintained by individuals, or for other package of
