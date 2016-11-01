@@ -31,7 +31,7 @@ table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
 
 ##' @importFrom tibble data_frame
 default_cran_checks <- tibble::data_frame(
-    Package = integer(0),
+    #Package = integer(0),
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
@@ -48,22 +48,22 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
 }
 
 ##' @importFrom magrittr %>%
-##' @importFrom dplyr group_by tally bind_rows ungroup
+##' @importFrom dplyr count_ bind_rows ungroup
 ##' @importFrom tidyr spread
 table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
     tbl <- table_cran_checks.cran_checks_email(parsed, .id = "Package")
     res <- tbl %>%
-        dplyr::group_by_("Package", "Status") %>%
-        dplyr::tally(.) %>%
+        dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup(.)
+        dplyr::ungroup()
     res
 }
 
 
 ##' Make a table that summarizes the results of the CRAN checks for a
 ##' set of packages specified by a maintainer or by names.
+##'
 ##'
 ##' Given the email address of a package maintainer, and/or a vector
 ##' of package names, returns a tibble that allows you to detect
