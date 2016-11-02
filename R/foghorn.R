@@ -2,6 +2,7 @@
 parse_cran <- function(x) {
     .res <- try(xml2::read_html(x), silent = TRUE)
     if (inherits(.res, "try-error")) {
+        on.exit(close(x))
         stop("Invalid email address or package: ", .res, call. = FALSE)
     }
     .res
