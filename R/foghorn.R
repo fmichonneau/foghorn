@@ -108,7 +108,9 @@ cran_check_results <- function(email = whoami::email_address(), package = NULL,
 summary_functional <- function(what) {
     function(tbl_pkg, ...) {
         if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
+            n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
             paste(tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+                  paste0("(", n, ")"),
                   collapse = ", ")
         }
     }
