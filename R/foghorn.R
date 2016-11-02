@@ -29,13 +29,12 @@ parse_cran_checks_pkg <- function(pkg) {
 
 table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
 
-##' @importFrom tibble data_frame
-default_cran_checks <- tibble::data_frame(
-    #Package = integer(0),
+default_cran_checks <- data.frame(
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
-    ERROR = integer(0))
+    ERROR = integer(0),
+    stringsAsFactors = FALSE)
 
 ##' @importFrom rvest html_table
 ##' @importFrom dplyr bind_rows
@@ -78,9 +77,12 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @importFrom whoami email_address
 ##' @importFrom dplyr distinct_
 ##' @export
-##' @param email email address for package maintainers (character vector)
+##' @param email email address for package maintainers (character
+##'     vector)
 ##' @param package package names (character vector)
 ##' @param show columns of the data frame to show
+##' @return a data frame that tabulates the number of CRAN platforms
+##'     that return errors, warnings, notes, or OK for the packages.
 cran_check_results <- function(email = whoami::email_address(), package = NULL,
                                show = c("error", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
@@ -123,9 +125,10 @@ summary_warning <- summary_functional("WARN")
 ##' Summary of the CRAN check results
 ##'
 ##' Given the email address of a package maintainer, and/or a vector
-##' of package names, it displays at the console a summary of the CRAN
-##' check results. This function is designed to be included in your
-##' .Rprofile to be run (periodically) at start up.
+##' of package names, it displays at the console a summary of the
+##' check results run on the CRAN platforms. This function is designed
+##' to be included in your .Rprofile to be run (periodically) at start
+##' up.
 ##'
 ##' This package tries to guess your email address by using the
 ##' \code{\link[whoami]{email_address}} function. You can specify email
@@ -134,12 +137,17 @@ summary_warning <- summary_functional("WARN")
 ##' @importFrom crayon red yellow blue bold
 ##' @importFrom clisymbols symbol
 ##' @export
-##' @param email email address for package maintainers (character vector)
+##' @param email email address for package maintainers (character
+##'     vector)
 ##' @param package package names (character vector)
-##' @examples \dontrun{
-##'  summary_cran_checks(email = c("user1@company1.com", "user2@company2.com"))
-##'  summary_cran_checks(email = "user1@company1.com", package = c("pkg1", "pkg2"))
-##' }
+##' @examples \dontrun{ summary_cran_checks(email =
+##'     c("user1@company1.com", "user2@company2.com"))
+##'     summary_cran_checks(email = "user1@company1.com", package =
+##'     c("pkg1", "pkg2")) }
+##' @return Prints the packages that return errors, warnings, and
+##'     notes on the CRAN platforms. The number in parenthesis after
+##'     the name of the packages indicates the number of CRAN
+##'     platforms that produce these results.
 summary_cran_checks <- function(email = whoami::email_address(), package = NULL) {
     res_checks <- cran_check_results(email, package)
     pkg_err <- summary_error(res_checks)
