@@ -162,6 +162,20 @@ url_pkg_res <- function(pkg) {
 }
 
 
+##' Visit the page in your web browser for a given package.
+##'
+##' @title Visit the CRAN check results page for a package
+##' @param pkg name of the package to check the results for
+##' @return \code{TRUE} invisibly
+##' @author Francois Michonneau
+##' @export
+##' @importFrom utils browseURL
+visit_cran_check <- function(pkg) {
+    url <- url_pkg_res(pkg)
+    utils::browseURL(url)
+    invisible(TRUE)
+}
+
 
 ## view_warning <- function(parsed, ...) {
 ##     all_p <- xml_find_all(parsed, ".//p")
