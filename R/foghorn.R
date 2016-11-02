@@ -176,11 +176,66 @@ visit_cran_check <- function(pkg) {
     invisible(TRUE)
 }
 
+cran_regexpr <- function(what) {
+    what <- switch(what,
+                   `error` = "ERROR",
+                   `warning` = "WARN",
+                   `note` = "NOTE")
+    paste0("Result:\\s", what)
+}
 
-## view_warning <- function(parsed, ...) {
-##     all_p <- xml_find_all(parsed, ".//p")
-##     which_warn <- grep("Current CRAN status:\\nWARN", all_p)
-##     res <- xml_text(all_p[which_warn + 1])
-##     res <- gsub("\\n{2,}", "\n", res)
-##     cat(res)
-## }
+parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
+    what <- match.arg(what)
+    parsed <- parse_cran_checks_pkg(pkg)
+
+    all_p <- lapply(parsed, function(x) {
+        p <- xml2::xml_find_all(x, ".//p")
+        p <- strsplit(xml2::xml_text(x), "\n")
+        p <- unlist(p)
+        p <- p[nzchar(p)]
+        p <- gsub(" ", " ", p)
+        chk_idx <- grep("^Check:", p)
+        res_idx <- grep("^Result:", p)
+        flv_idx <- grep("^Flavors?:", p)
+        if (!identical(length(chk_idx), length(res_idx)) &&
+            !identical(length(chk_idx), length(flv_idx)))
+            stop("File an issue on Github indicating the name of your package.")
+        msg <- mapply(function(c, r, f) {
+            data.frame(
+                result = gsub("^Result: ", "", p[r]),
+                check = gsub("^Check: ", "", p[c]),
+                flavors = gsub("^Flavors?: ", "", p[f]),
+                message = paste(p[(r+1):(f-1)], collapse = "\n"),
+                stringsAsFactors = FALSE
+            )
+        }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+        dplyr::bind_rows(msg)
+    })
+    names(all_p) <- pkg
+    dplyr::bind_rows(all_p, .id = "Package")
+}
+
+format_cran <- function(type, string) {
+    col_tbl <- list(
+        "ERROR" = function(x) crayon::red(x),
+        "WARN" = function(x) crayon::yellow(x),
+        "NOTE" = function(x) crayon::blue(x)
+    )
+    col_tbl[[type]](string)
+}
+
+
+summary_cran_results <- function(pkg, verbose = TRUE) {
+    res <- parse_cran_results(pkg)
+    apply(res, 1, function(x)  {
+        if (verbose)
+            msg <- crayon::silver(x[5])
+        else
+            msg <- ""
+        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3])), "\n",
+            ## need to make the flavors as an unordered list
+            x[4], sep = "")), "\n",
+            msg, "\n", sep = "")
+    })
+    invisible(NULL)
+}
