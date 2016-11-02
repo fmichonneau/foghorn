@@ -20,8 +20,7 @@ parse_cran_checks_email <- function(email) {
 }
 
 parse_cran_checks_pkg <- function(pkg) {
-    url <- paste0("https://cran.r-project.org/web/checks/check_results_",
-                  pkg, ".html")
+    url <- url_pkg_res(pkg)
     res <- lapply(url, parse_cran)
     names(res) <- pkg
     class(res) <- "cran_checks_pkg"
@@ -161,6 +160,11 @@ summary_cran_checks <- function(email = whoami::email_address(), package = NULL)
         with_note = pkg_note
     ))
 }
+
+url_pkg_res <- function(pkg) {
+    paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
+}
+
 
 
 ## view_warning <- function(parsed, ...) {
