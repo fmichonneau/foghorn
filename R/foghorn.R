@@ -154,11 +154,7 @@ summary_cran_checks <- function(email = whoami::email_address(), package = NULL)
     if (!is.null(pkg_note))
         message(crayon::blue(paste(clisymbols::symbol$star,
                                    "Package(s) with notes on CRAN:", crayon::bold(pkg_note))))
-    invisible(list(
-        with_error = pkg_err,
-        with_warning = pkg_wrn,
-        with_note = pkg_note
-    ))
+    invisible(res_checks)
 }
 
 url_pkg_res <- function(pkg) {
