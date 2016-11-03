@@ -240,9 +240,9 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
             msg <- crayon::silver(x[5])
         else
             msg <- ""
-        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3])), "\n",
+        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3]), "\n",
             ## need to make the flavors as an unordered list
-            x[4], sep = "")), "\n",
+                        x[4], sep = ""), "\n",
             msg, "\n", sep = "")
     })
     invisible(NULL)
