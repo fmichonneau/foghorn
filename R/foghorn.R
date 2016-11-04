@@ -210,7 +210,7 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
         p <- strsplit(xml2::xml_text(x), "\n")
         p <- unlist(p)
         p <- p[nzchar(p)]
-        p <- gsub(" ", " ", p)
+        p <- gsub("_", " ", p)
         chk_idx <- grep("^Check:", p)
         res_idx <- grep("^Result:", p)
         flv_idx <- grep("^Flavors?:", p)
