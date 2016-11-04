@@ -2,19 +2,28 @@
 parse_cran <- function(x) {
     .res <- try(xml2::read_html(x), silent = TRUE)
     if (inherits(.res, "try-error")) {
-        on.exit(close(x))
-        stop("Invalid email address or package: ", .res, call. = FALSE)
+        ## is there a cleaner way to do this ???
+        ss <- showConnections(all=TRUE)
+        cc <- as.numeric(rownames(ss)[ss[,1]==x])
+        if (length(cc)>0) on.exit(close(getConnection(cc)))
+        return(NA)
     }
-    .res
+    ## not sure whether we need to close connections ... ?
+    return(.res)
 }
 
 parse_cran_checks_email <- function(email) {
     if (!grepl("\\@", email))
         stop("Malformed email address: ", sQuote(email), call. = FALSE)
     email <- gsub("\\@", "_at_", email)
+    ##  "all characters different from letters, digits, hyphens, underscores, colons, and periods replaced by underscores ..."
+    email <- gsub("[^[:alnum:]_:.-]","_",email)
     url <- paste0("https://cran.r-project.org/web/checks/check_results_",
            email, ".html")
     res <- lapply(url, parse_cran)
+    if (length(bad <- which(is.na(res)))>0) {
+        stop("Invalid email address(es): ", email[bad], call. = FALSE)
+    }
     class(res) <- "cran_checks_email"
     res
 }
@@ -201,7 +210,7 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
         p <- strsplit(xml2::xml_text(x), "\n")
         p <- unlist(p)
         p <- p[nzchar(p)]
-        p <- gsub(" ", " ", p)
+        p <- gsub("_", " ", p)
         chk_idx <- grep("^Check:", p)
         res_idx <- grep("^Result:", p)
         flv_idx <- grep("^Flavors?:", p)
@@ -240,9 +249,9 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
             msg <- crayon::silver(x[5])
         else
             msg <- ""
-        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3])), "\n",
+        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3]), "\n",
             ## need to make the flavors as an unordered list
-            x[4], sep = "")), "\n",
+                        x[4], sep = ""), "\n",
             msg, "\n", sep = "")
     })
     invisible(NULL)
