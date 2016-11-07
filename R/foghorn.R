@@ -236,11 +236,12 @@ format_cran <- function(type, string) {
 }
 
 
+##' @importFrom clisymbols symbol
 render_flavors <- function(x) {
     ## transform the comma separated list of platform flavors into
     ## unordered list
     res <- unlist(strsplit(x, ", "))
-    paste0(" * ", res, "\n")
+    paste("  ", clisymbols::symbol$pointer, res, "\n")
 }
 
 summary_cran_results <- function(pkg, verbose = TRUE) {
