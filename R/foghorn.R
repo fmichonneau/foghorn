@@ -13,8 +13,10 @@ parse_cran <- function(x) {
 }
 
 parse_cran_checks_email <- function(email) {
-    if (!grepl("\\@", email))
-        stop("Malformed email address: ", sQuote(email), call. = FALSE)
+    email_test <- sapply(email, function(x)
+        if (!grepl("\\@", x)) {
+            stop("Malformed email address: ", sQuote(email), call. = FALSE)
+        })
     email <- gsub("\\@", "_at_", email)
     ##  "all characters different from letters, digits, hyphens, underscores, colons, and periods replaced by underscores ..."
     email <- gsub("[^[:alnum:]_:.-]","_",email)
