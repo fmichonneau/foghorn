@@ -244,6 +244,17 @@ render_flavors <- function(x) {
     paste("  ", clisymbols::symbol$pointer, res, "\n")
 }
 
+
+##' Given a package name published on CRAN, print the outcomes of
+##' checks that return notes, warnings or errors, and optionally print
+##' the messages.
+##'
+##' @title Summarize CRAN results for a package
+##' @param pkg name of the package on CRAN
+##' @param verbose Should the messages of the \dQuote{Check Details} be printed? (logical)
+##' @return \code{NULL}, used for its side effect of printing the CRAN messages
+##' @export
+##' @importFrom crayon bold
 summary_cran_results <- function(pkg, verbose = TRUE) {
     res <- parse_cran_results(pkg)
     apply(res, 1, function(x)  {
