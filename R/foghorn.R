@@ -193,14 +193,6 @@ visit_cran_check <- function(pkg) {
     invisible(TRUE)
 }
 
-cran_regexpr <- function(what) {
-    what <- switch(what,
-                   `error` = "ERROR",
-                   `warning` = "WARN",
-                   `note` = "NOTE")
-    paste0("Result:\\s", what)
-}
-
 parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
     what <- match.arg(what)
     parsed <- parse_cran_checks_pkg(pkg)
