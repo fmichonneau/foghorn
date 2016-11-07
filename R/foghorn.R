@@ -58,6 +58,7 @@ get_cran_table <- function(parsed, ...) {
     dplyr::bind_rows(res, default_cran_checks, ...)
 }
 
+
 all_packages <- function(parsed, ...) UseMethod("all_packages")
 
 all_packages_by_email <- function(x) {
@@ -116,13 +117,13 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
         if (length(tbl) < 1) {
             ## If there is no table on the page, the maintainer has
             ## authored a single package, let's look for it:
-            pkg <- rvest::html_text(xml2::xml_find_all(x, ".//h3/a"))
+            pkg <- all_packages_by_email(x)
             if (length(pkg) > 1)
                 stop("Please file an issue on GitHub indicating the name of your package")
             ## then, we can call the other method to parse the results of that pacakge
             table_cran_checks.cran_checks_pkg(parse_cran_checks_pkg(pkg))
         } else
-           x[[1]]
+           tbl[[1]]
     })
     dplyr::bind_rows(res, default_cran_checks, ...)
 }
@@ -132,12 +133,12 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
 ##' @importFrom tidyr spread
 table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
     tbl <- get_cran_table(parsed, .id = "Package")
-    res <- tbl %>%
+
+    tbl %>%
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
         dplyr::ungroup()
-    res
 }
 
 
