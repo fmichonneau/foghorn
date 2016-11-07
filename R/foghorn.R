@@ -224,11 +224,13 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
     dplyr::bind_rows(all_p, .id = "Package")
 }
 
+##' @importFrom crayon red yellow blue
+##' @importFrom clisymbols symbol
 format_cran <- function(type, string) {
     col_tbl <- list(
-        "ERROR" = function(x) crayon::red(x),
-        "WARN" = function(x) crayon::yellow(x),
-        "NOTE" = function(x) crayon::blue(x)
+        "ERROR" = function(x) crayon::red(paste(clisymbols::symbol$cross, x)),
+        "WARN" = function(x) crayon::yellow(paste(clisymbols::symbol$circle_filled, x)),
+        "NOTE" = function(x) crayon::blue(paste(clisymbols::symbol$star, x))
     )
     col_tbl[[type]](string)
 }
