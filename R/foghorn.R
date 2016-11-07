@@ -190,21 +190,25 @@ cran_check_results <- function(email = whoami::email_address(), package = NULL,
 
 
 
-summary_functional <- function(what) {
+summary_functional <- function(what, show_n = TRUE) {
     function(tbl_pkg, ...) {
         if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
             n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
-            paste(tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
-                  paste0("(", n, ")"),
+            if (show_n) {
+                n <- paste0(" (", n, ")")
+            } else
+                n <- ""
+            paste0(tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+                  n,
                   collapse = ", ")
         }
     }
 }
 
-summary_error <- summary_functional("ERROR")
-summary_note <- summary_functional("NOTE")
-summary_warning <- summary_functional("WARN")
-
+summary_error <- summary_functional("ERROR", TRUE)
+summary_note <- summary_functional("NOTE", TRUE)
+summary_warning <- summary_functional("WARN", TRUE)
+summary_memtest <- summary_functional("has_memtest", FALSE)
 
 ##' Summary of the CRAN check results
 ##'
@@ -218,7 +222,7 @@ summary_warning <- summary_functional("WARN")
 ##' \code{\link[whoami]{email_address}} function. You can specify email
 ##' addresses manually.
 ##'
-##' @importFrom crayon red yellow blue bold
+##' @importFrom crayon red yellow blue bold cyan
 ##' @importFrom clisymbols symbol
 ##' @export
 ##' @param email email address for package maintainers (character
@@ -237,6 +241,7 @@ summary_cran_checks <- function(email = whoami::email_address(), package = NULL)
     pkg_err <- summary_error(res_checks)
     pkg_wrn <- summary_warning(res_checks)
     pkg_note <- summary_note(res_checks)
+    pkg_memtest <- summary_memtest(res_checks)
     if (!is.null(pkg_err))
         message(crayon::red(paste(clisymbols::symbol$cross,
                                   "Package(s) with errors on CRAN:", crayon::bold(pkg_err))))
@@ -246,6 +251,9 @@ summary_cran_checks <- function(email = whoami::email_address(), package = NULL)
     if (!is.null(pkg_note))
         message(crayon::blue(paste(clisymbols::symbol$star,
                                    "Package(s) with notes on CRAN:", crayon::bold(pkg_note))))
+    if (!is.null(pkg_memtest))
+        message(crayon::cyan(paste(clisymbols::symbol$info,
+                                   "Packages(s) with memtest notes:", crayon::bold(pkg_memtest))))
     invisible(res_checks)
 }
 
@@ -329,7 +337,7 @@ render_flavors <- function(x) {
 ##' @param verbose Should the messages of the \dQuote{Check Details} be printed? (logical)
 ##' @return \code{NULL}, used for its side effect of printing the CRAN messages
 ##' @export
-##' @importFrom crayon bold
+##' @importFrom crayon bold silver
 summary_cran_results <- function(pkg, verbose = TRUE) {
     res <- parse_cran_results(pkg)
     if (nrow(res) < 1) {
