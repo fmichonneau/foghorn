@@ -77,6 +77,37 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
     })
 }
 
+
+has_memtest <- function(parsed, ...) {
+    pkg <- all_packages(parsed)
+
+    res <- lapply(pkg, function(x) {
+        data.frame(`Package` = x,
+                   `has_memtest` = rep(FALSE, length(x)),
+                   stringsAsFactors = FALSE)
+    })
+    res <- dplyr::bind_rows(res)
+    pkg_with_mem <- lapply(parsed, function(x) {
+        all_urls <- xml2::xml_text(xml2::xml_find_all(x, ".//p//child::a[@href]//@href"))
+        with_mem <- grep("memtest", all_urls, value = TRUE)
+        with_mem <- grep("[^Rout]$", with_mem, value = TRUE)
+        pkg_with_mem <- unique(basename(with_mem))
+        pkg_with_mem
+    })
+    pkg_with_mem <- unlist(pkg_with_mem)
+    res[["has_memtest"]][match(pkg_with_mem, res$Package)] <- TRUE
+    res
+}
+
+add_memtest <- function(tbl, parsed, ...) {
+    memtest <- has_memtest(parsed)
+    dplyr::left_join(tbl, memtest, by = "Package")
+}
+
+
+table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
+
+
 ##' @importFrom rvest html_table
 ##' @importFrom dplyr bind_rows
 table_cran_checks.cran_checks_email <- function(parsed, ...) {
@@ -136,7 +167,7 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 cran_check_results <- function(email = whoami::email_address(), package = NULL,
                                show = c("error", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
-    show <- c("Package", toupper(show))
+    show <- c("Package", toupper(show), "has_memtest")
     res <- NULL
     if (is.null(email) && is.null(package))
         stop("You need to provide at least one value for ", sQuote("email"),
@@ -144,10 +175,12 @@ cran_check_results <- function(email = whoami::email_address(), package = NULL,
     if (!is.null(email)) {
         res_email <- parse_cran_checks_email(email)
         res <- table_cran_checks(res_email)
+        res <- add_memtest(res, res_email)
     }
     if (!is.null(package)) {
         res_pkg <- parse_cran_checks_pkg(package)
-        res <- table_cran_checks(res_pkg) %>%
+        tbl_pkg <- table_cran_checks(res_pkg)
+        res <- add_memtest(tbl_pkg, res_pkg) %>%
             dplyr::bind_rows(res)
     }
     res <- dplyr::distinct_(res, "Package", .keep_all = TRUE)
