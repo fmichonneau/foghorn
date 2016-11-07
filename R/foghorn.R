@@ -266,8 +266,11 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
             msg <- crayon::silver(x[5])
         else
             msg <- ""
-        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3])), "\n",
+        cat(## Type of CRAN message
+            format_cran(x[2], paste0(crayon::bold(paste(x[1], "-", x[2])), ": ", x[3])), "\n",
+            ## Flavors concerned
             render_flavors(x[4]), "\n",
+            ## Optionally the log output
             msg, "\n\n", sep = "")
     })
     invisible(NULL)
