@@ -57,7 +57,7 @@ library(foghorn)
 ## Graphical interface
 summary_cran_checks(email = "francois.michonneau@gmail.com")
 
-## Summary as a tibble
+## Summary as a data frame
 cran_check_results(email = "francois.michonneau@gmail.com")
 
 ## You can also have information just for some packages
@@ -67,4 +67,7 @@ cran_check_results(email = NULL,  package = c("mregions", "ridigbio"))
 ## Or both
 summary_cran_checks(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
 cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
+
+## You can also get the results details of the check results for packages:
+summary_cran_results("rotl")
 ```

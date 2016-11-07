@@ -32,41 +32,66 @@ library(foghorn)
 
 ## Graphical interface
 summary_cran_checks(email = "francois.michonneau@gmail.com")
-#> ◉ Package(s) with warnings on CRAN: rotl
-#> ★ Package(s) with notes on CRAN: rncl
+#> ◉ Package(s) with warnings on CRAN: rotl (3)
+#> ★ Package(s) with notes on CRAN: rncl (6)
 
-## Summary as a tibble
+## Summary as a data frame
 cran_check_results(email = "francois.michonneau@gmail.com")
 #>     Package ERROR WARN NOTE OK
-#> 1 phylobase    NA   NA   NA 13
-#> 2  riceware    NA   NA   NA 13
-#> 3      rncl    NA   NA    7  6
-#> 4      rotl    NA    1   NA 12
+#> 1 phylobase    NA   NA   NA 12
+#> 2  riceware    NA   NA   NA 12
+#> 3      rncl    NA   NA    6  6
+#> 4      rotl    NA    3   NA  9
 
 ## You can also have information just for some packages
 summary_cran_checks(email = NULL,  package = c("mregions", "ridigbio"))
-#> ✖ Package(s) with errors on CRAN: mregions
-#> ★ Package(s) with notes on CRAN: mregions
+#> ✖ Package(s) with errors on CRAN: mregions (1)
+#> ★ Package(s) with notes on CRAN: mregions (1)
 cran_check_results(email = NULL,  package = c("mregions", "ridigbio"))
 #> # A tibble: 2 × 5
 #>    Package ERROR  WARN  NOTE    OK
 #>      <chr> <int> <int> <int> <int>
-#> 1 mregions     1    NA     1    11
-#> 2 ridigbio    NA    NA    NA    13
+#> 1 mregions     1    NA     1    10
+#> 2 ridigbio    NA    NA    NA    12
 
 ## Or both
 summary_cran_checks(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
-#> ✖ Package(s) with errors on CRAN: mregions
-#> ◉ Package(s) with warnings on CRAN: rotl
-#> ★ Package(s) with notes on CRAN: mregions, rncl
+#> ✖ Package(s) with errors on CRAN: mregions (1)
+#> ◉ Package(s) with warnings on CRAN: rotl (3)
+#> ★ Package(s) with notes on CRAN: mregions (1), rncl (6)
 cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
 #> # A tibble: 6 × 5
 #>     Package ERROR  WARN  NOTE    OK
 #>       <chr> <int> <int> <int> <int>
-#> 1  mregions     1    NA     1    11
-#> 2  ridigbio    NA    NA    NA    13
-#> 3 phylobase    NA    NA    NA    13
-#> 4  riceware    NA    NA    NA    13
-#> 5      rncl    NA    NA     7     6
-#> 6      rotl    NA     1    NA    12
+#> 1  mregions     1    NA     1    10
+#> 2  ridigbio    NA    NA    NA    12
+#> 3 phylobase    NA    NA    NA    12
+#> 4  riceware    NA    NA    NA    12
+#> 5      rncl    NA    NA     6     6
+#> 6      rotl    NA     3    NA     9
+
+## You can also get the results details of the check results for packages:
+summary_cran_results("rotl")
+#> ◉ rotl - WARN: re-building of vignette outputs
+#>    ❯ r-devel-linux-x86_64-fedora-gcc 
+#>    ❯ r-patched-linux-x86_64 
+#> 
+#>     Error in re-building vignettes:
+#>       ...
+#>     Quitting from lines 47-58 (meta-analysis.Rmd) 
+#>     Error: processing vignette 'meta-analysis.Rmd' failed with diagnostics:
+#>     argument is of length zero
+#>     Execution halted
+#> 
+#> ◉ rotl - WARN: re-building of vignette outputs
+#>    ❯ r-patched-solaris-sparc 
+#> 
+#>     Error in re-building vignettes:
+#>       ...
+#>     Warning: It seems you should call rmarkdown::render() instead of knitr::knit2html() because data_mashups.Rmd appears to be an R Markdown v2 document.
+#>     Warning: It seems you should call rmarkdown::render() instead of knitr::knit2html() because how-to-use-rotl.Rmd appears to be an R Markdown v2 document.
+#>     Warning: It seems you should call rmarkdown::render() instead of knitr::knit2html() because meta-analysis.Rmd appears to be an R Markdown v2 document.
+#>     
+#>      *** caught segfault ***
+#>     address 821e25a0, cause 'memory not mapped'
 ```
