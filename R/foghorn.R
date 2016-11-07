@@ -257,6 +257,10 @@ render_flavors <- function(x) {
 ##' @importFrom crayon bold
 summary_cran_results <- function(pkg, verbose = TRUE) {
     res <- parse_cran_results(pkg)
+    if (nrow(res) < 1) {
+        message("All clear for ", paste(pkg, collapse = ", "))
+        return(invisible(NULL))
+    }
     apply(res, 1, function(x)  {
         if (verbose)
             msg <- crayon::silver(x[5])
