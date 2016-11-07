@@ -19,7 +19,7 @@ parse_cran_checks_email <- function(email) {
     ##  "all characters different from letters, digits, hyphens, underscores, colons, and periods replaced by underscores ..."
     email <- gsub("[^[:alnum:]_:.-]","_",email)
     url <- paste0("https://cran.r-project.org/web/checks/check_results_",
-           email, ".html")
+                  email, ".html")
     res <- lapply(url, parse_cran)
     if (length(bad <- which(is.na(res)))>0) {
         stop("Invalid email address(es): ", email[bad], call. = FALSE)
@@ -31,6 +31,9 @@ parse_cran_checks_email <- function(email) {
 parse_cran_checks_pkg <- function(pkg) {
     url <- url_pkg_res(pkg)
     res <- lapply(url, parse_cran)
+    if (length(bad <- which(is.na(res)))>0) {
+        stop("Invalid package name(s): ", pkg[bad], call. = FALSE)
+    }
     names(res) <- pkg
     class(res) <- "cran_checks_pkg"
     res
