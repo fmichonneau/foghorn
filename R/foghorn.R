@@ -41,7 +41,6 @@ parse_cran_checks_pkg <- function(pkg) {
     res
 }
 
-table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
 
 default_cran_checks <- data.frame(
     NOTE = integer(0),
@@ -57,6 +56,25 @@ get_cran_table <- function(parsed, ...) {
         tbl[[1]]
     })
     dplyr::bind_rows(res, default_cran_checks, ...)
+}
+
+all_packages <- function(parsed, ...) UseMethod("all_packages")
+
+all_packages_by_email <- function(x) {
+    xml2::xml_find_all(x, ".//h3/@id") %>%
+        xml2::xml_text()
+}
+
+all_packages.cran_checks_email <- function(parsed, ...) {
+    lapply(parsed, all_packages_by_email)
+}
+
+all_packages.cran_checks_pkg <- function(parsed, ...) {
+    lapply(parsed, function(x) {
+        res <- xml2::xml_find_all(x, ".//h2/a/text()") %>%
+            xml2::xml_text()
+        gsub("\\s", "", res)
+    })
 }
 
 ##' @importFrom rvest html_table
