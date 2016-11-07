@@ -210,7 +210,7 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
         p <- strsplit(xml2::xml_text(x), "\n")
         p <- unlist(p)
         p <- p[nzchar(p)]
-        p <- gsub("_", " ", p)
+        p <- gsub(intToUtf8(160), " ", p)
         chk_idx <- grep("^Check:", p)
         res_idx <- grep("^Result:", p)
         flv_idx <- grep("^Flavors?:", p)
@@ -242,6 +242,13 @@ format_cran <- function(type, string) {
 }
 
 
+render_flavors <- function(x) {
+    ## transform the comma separated list of platform flavors into
+    ## unordered list
+    res <- unlist(strsplit(x, ", "))
+    paste0(" * ", res, "\n")
+}
+
 summary_cran_results <- function(pkg, verbose = TRUE) {
     res <- parse_cran_results(pkg)
     apply(res, 1, function(x)  {
@@ -249,10 +256,9 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
             msg <- crayon::silver(x[5])
         else
             msg <- ""
-        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3]), "\n",
-            ## need to make the flavors as an unordered list
-                        x[4], sep = ""), "\n",
-            msg, "\n", sep = "")
+        cat(format_cran(x[2], paste0(crayon::bold(x[2]), ": ", x[3])), "\n",
+            render_flavors(x[4]), "\n",
+            msg, "\n\n", sep = "")
     })
     invisible(NULL)
 }
