@@ -279,6 +279,7 @@ visit_cran_check <- function(pkg) {
 parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
     what <- match.arg(what)
     parsed <- parse_cran_checks_pkg(pkg)
+    mem_test <- has_memtest(parsed)
 
     all_p <- lapply(parsed, function(x) {
         p <- xml2::xml_find_all(x, ".//p")
@@ -304,7 +305,9 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
         dplyr::bind_rows(msg)
     })
     names(all_p) <- pkg
-    dplyr::bind_rows(all_p, .id = "Package")
+    res <- dplyr::bind_rows(all_p, .id = "Package")
+    attr(res, "memtest") <- mem_test
+    res
 }
 
 ##' @importFrom crayon red yellow blue
@@ -344,6 +347,10 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
         message("All clear for ", paste(pkg, collapse = ", "))
         return(invisible(NULL))
     }
+    apply(attr(res, "memtest"), 1, function(x) {
+        if (x[2])
+            cat(crayon::cyan(paste(clisymbols::symbol$circle_filled, crayon::bold(x[1]), "has memtest notes")), "\n")
+    })
     apply(res, 1, function(x)  {
         if (verbose)
             msg <- crayon::silver(x[5])
