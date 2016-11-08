@@ -246,13 +246,13 @@ summary_cran_checks <- function(email = whoami::email_address(), package = NULL)
         message(crayon::red(paste(clisymbols::symbol$cross,
                                   "Package(s) with errors on CRAN:", crayon::bold(pkg_err))))
     if (!is.null(pkg_wrn))
-        message(crayon::yellow(paste(clisymbols::symbol$circle_filled,
+        message(crayon::yellow(paste(clisymbols::symbol$warning,
                                      "Package(s) with warnings on CRAN:", crayon::bold(pkg_wrn))))
     if (!is.null(pkg_note))
         message(crayon::blue(paste(clisymbols::symbol$star,
                                    "Package(s) with notes on CRAN:", crayon::bold(pkg_note))))
     if (!is.null(pkg_memtest))
-        message(crayon::cyan(paste(clisymbols::symbol$info,
+        message(crayon::cyan(paste(clisymbols::symbol$circle_filled,
                                    "Packages(s) with memtest notes:", crayon::bold(pkg_memtest))))
     invisible(res_checks)
 }
@@ -312,7 +312,7 @@ parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
 format_cran <- function(type, string) {
     col_tbl <- list(
         "ERROR" = function(x) crayon::red(paste(clisymbols::symbol$cross, x)),
-        "WARN" = function(x) crayon::yellow(paste(clisymbols::symbol$circle_filled, x)),
+        "WARN" = function(x) crayon::yellow(paste(clisymbols::symbol$warning, x)),
         "NOTE" = function(x) crayon::blue(paste(clisymbols::symbol$star, x))
     )
     col_tbl[[type]](string)
