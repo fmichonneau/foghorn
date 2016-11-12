@@ -95,7 +95,7 @@ has_memtest <- function(parsed, ...) {
         pkg_with_mem
     })
     pkg_with_mem <- unlist(pkg_with_mem)
-    res[["has_memtest"]][match(pkg_with_mem, res$Package)] <- TRUE
+    res[["has_memtest_notes"]][match(pkg_with_mem, res$Package)] <- TRUE
     res
 }
 
@@ -167,7 +167,7 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 cran_check_results <- function(email = whoami::email_address(), package = NULL,
                                show = c("error", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
-    show <- c("Package", toupper(show), "has_memtest")
+    show <- c("Package", toupper(show), "has_memtest_notes")
     res <- NULL
     if (is.null(email) && is.null(package))
         stop("You need to provide at least one value for ", sQuote("email"),
@@ -207,7 +207,7 @@ summary_functional <- function(what, show_n = TRUE) {
 summary_error <- summary_functional("ERROR", TRUE)
 summary_note <- summary_functional("NOTE", TRUE)
 summary_warning <- summary_functional("WARN", TRUE)
-summary_memtest <- summary_functional("has_memtest", FALSE)
+summary_memtest <- summary_functional("has_memtest_notes", FALSE)
 
 ##' Summary of the CRAN check results
 ##'
