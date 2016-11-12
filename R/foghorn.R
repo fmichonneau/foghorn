@@ -26,7 +26,7 @@ parse_cran_checks_email <- function(email) {
     if (length(bad <- which(is.na(res)))>0) {
         stop("Invalid email address(es): ", email[bad], call. = FALSE)
     }
-    class(res) <- "cran_checks_email"
+    class(res) <- c("cran_checks_email", class(res))
     res
 }
 
@@ -37,7 +37,7 @@ parse_cran_checks_pkg <- function(pkg) {
         stop("Invalid package name(s): ", pkg[bad], call. = FALSE)
     }
     names(res) <- pkg
-    class(res) <- "cran_checks_pkg"
+    class(res) <- c("cran_checks_pkg", class(res))
     res
 }
 
