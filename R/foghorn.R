@@ -42,12 +42,11 @@ parse_cran_checks_pkg <- function(pkg) {
 }
 
 
-default_cran_checks <- data.frame(
+default_cran_checks <- tibble::data_frame(
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
-    ERROR = integer(0),
-    stringsAsFactors = FALSE)
+    ERROR = integer(0))
 
 
 get_cran_table <- function(parsed, ...) {
@@ -83,9 +82,9 @@ has_memtest <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
     res <- lapply(pkg, function(x) {
-        data.frame(`Package` = x,
-                   `has_memtest` = rep(FALSE, length(x)),
-                   stringsAsFactors = FALSE)
+        tibble::data_frame(`Package` = x,
+                          `has_memtest_notes` = rep(FALSE, length(x))
+                          )
     })
     res <- dplyr::bind_rows(res)
     pkg_with_mem <- lapply(parsed, function(x) {
@@ -123,7 +122,7 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
             ## then, we can call the other method to parse the results of that pacakge
             table_cran_checks.cran_checks_pkg(parse_cran_checks_pkg(pkg))
         } else
-           tbl[[1]]
+           tibble::as_tibble(tbl[[1]])
     })
     dplyr::bind_rows(res, default_cran_checks, ...)
 }
