@@ -149,13 +149,8 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' of package names, returns a tibble that allows you to detect
 ##' potential issues with your packages on CRAN.
 ##'
-##' This package tries to guess your email address by using the
-##' \code{\link[whoami]{email_address}} function. You can specify email
-##' addresses manually.
-##'
 ##'
 ##' @title Table of CRAN check results
-##' @importFrom whoami email_address
 ##' @importFrom dplyr distinct_
 ##' @export
 ##' @param email email address for package maintainers (character
@@ -164,7 +159,7 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @param show columns of the data frame to show
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
-cran_check_results <- function(email = whoami::email_address(), package = NULL,
+cran_check_results <- function(email = NULL, package = NULL,
                                show = c("error", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
