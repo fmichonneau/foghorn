@@ -4,8 +4,8 @@
 \alias{cran_check_results}
 \title{Table of CRAN check results}
 \usage{
-cran_check_results(email = whoami::email_address(), package = NULL,
-  show = c("error", "warn", "note", "ok"))
+cran_check_results(email = NULL, package = NULL, show = c("error", "warn",
+  "note", "ok"))
 }
 \arguments{
 \item{email}{email address for package maintainers (character
@@ -27,9 +27,5 @@ set of packages specified by a maintainer or by names.
 Given the email address of a package maintainer, and/or a vector
 of package names, returns a tibble that allows you to detect
 potential issues with your packages on CRAN.
-
-This package tries to guess your email address by using the
-\code{\link[whoami]{email_address}} function. You can specify email
-addresses manually.
 }
 

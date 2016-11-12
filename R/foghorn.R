@@ -43,6 +43,7 @@ parse_cran_checks_pkg <- function(pkg) {
 }
 
 
+##' @importFrom tibble data_frame
 default_cran_checks <- tibble::data_frame(
     NOTE = integer(0),
     OK = integer(0),
@@ -78,7 +79,7 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
     })
 }
 
-
+##' @importFrom tibble data_frame
 has_memtest <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
@@ -111,6 +112,7 @@ table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
 
 ##' @importFrom rvest html_table
 ##' @importFrom dplyr bind_rows
+##' @importFrom tibble as_tibble
 table_cran_checks.cran_checks_email <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
         tbl <- rvest::html_table(x)
