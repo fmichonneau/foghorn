@@ -4,13 +4,17 @@
 \alias{summary_cran_checks}
 \title{Summary of the CRAN check results}
 \usage{
-summary_cran_checks(email = whoami::email_address(), package = NULL)
+summary_cran_checks(email = NULL, package = NULL, compact = FALSE)
 }
 \arguments{
 \item{email}{email address for package maintainers (character
 vector)}
 
 \item{package}{package names (character vector)}
+
+\item{compact}{if \code{TRUE}, all the packages with non-OK
+results are listed in a single line, otherwise they are listed
+on multiple lines.}
 }
 \value{
 Prints the packages that return errors, warnings, and
@@ -24,11 +28,6 @@ of package names, it displays at the console a summary of the
 check results run on the CRAN platforms. This function is designed
 to be included in your .Rprofile to be run (periodically) at start
 up.
-}
-\details{
-This package tries to guess your email address by using the
-\code{\link[whoami]{email_address}} function. You can specify email
-addresses manually.
 }
 \examples{
 \dontrun{ summary_cran_checks(email =

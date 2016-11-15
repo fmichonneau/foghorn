@@ -10,12 +10,9 @@ visit_cran_check(pkg)
 \item{pkg}{name of the package to check the results for}
 }
 \value{
-\code{TRUE} invisibly
+The URL from the CRAN check results page invisibly
 }
 \description{
 Visit the page in your web browser for a given package.
-}
-\author{
-Francois Michonneau
 }
 
