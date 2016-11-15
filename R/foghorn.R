@@ -210,6 +210,40 @@ summary_note <- summary_functional("NOTE", show_n = TRUE)
 summary_warning <- summary_functional("WARN", show_n = TRUE)
 summary_memtest <- summary_functional("has_memtest_notes", show_n = FALSE)
 
+
+foghorn_components <- list(
+    `error` = c(symbol = clisymbols::symbol$cross,
+                color = crayon::red,
+                word = "errors"
+                ),
+    `warning` = c(symbol = clisymbols::symbol$warning,
+                  color = crayon::yellow,
+                  word = "warnings"),
+    `note` = c(symbol = clisymbols::symbol$star,
+               color = crayon::blue,
+               word = "notes"),
+    `memtest` = c(symbol = clisymbols::symbol$circle_filled,
+                  color = crayon::cyan,
+                  word = "memtest")
+)
+
+print_summary_cran <- function(type = c("error", "warning", "note", "memtest"),
+                               pkgs, compact) {
+    type <- match.arg(type)
+    if (compact) {
+        nl <- character(0)
+    } else
+        nl <- "\n"
+    msg <- paste(" Package(s) with", foghorn_components[[type]]$word,
+                 "on CRAN: ")
+    message(foghorn_components[[type]]$color(
+        paste0(foghorn_components[[type]]$symbol,
+               msg, nl,
+               crayon::bold(pkgs))
+    ))
+}
+
+
 ##' Summary of the CRAN check results
 ##'
 ##' Given the email address of a package maintainer, and/or a vector
@@ -241,23 +275,15 @@ summary_cran_checks <- function(email = NULL, package = NULL, compact = FALSE) {
     pkg_wrn <- summary_warning(res_checks, compact)
     pkg_note <- summary_note(res_checks, compact)
     pkg_memtest <- summary_memtest(res_checks, compact)
-    if (compact) {
-        nl <- character(0)
-    } else
-        nl <- "\n"
     if (!is.null(pkg_err))
-        message(crayon::red(paste0(clisymbols::symbol$cross,
-                                   " Package(s) with errors on CRAN: ", nl, crayon::bold(pkg_err))))
+       print_summary_cran("error", pkg_err, compact)
     if (!is.null(pkg_wrn))
-        message(crayon::yellow(paste0(clisymbols::symbol$warning,
-                                      " Package(s) with warnings on CRAN: ", nl, crayon::bold(pkg_wrn))))
+        print_summary_cran("warning", pkg_wrn, compact)
     if (!is.null(pkg_note))
-        message(crayon::blue(paste0(clisymbols::symbol$star,
-                                    " Package(s) with notes on CRAN: ", nl, crayon::bold(pkg_note))))
+        print_summary_cran("note", pkg_note, compact)
     if (!is.null(pkg_memtest))
-        message(crayon::cyan(paste0(clisymbols::symbol$circle_filled,
-                                    " Packages(s) with memtest notes: ", nl, crayon::bold(pkg_memtest))))
-    invisible(res_checks)
+        print_summary_cran("memtest", pkg_memtest, compact)
+   invisible(res_checks)
 }
 
 url_pkg_res <- function(pkg) {
@@ -270,7 +296,6 @@ url_pkg_res <- function(pkg) {
 ##' @title Visit the CRAN check results page for a package
 ##' @param pkg name of the package to check the results for
 ##' @return The URL from the CRAN check results page invisibly
-##' @author Francois Michonneau
 ##' @export
 ##' @importFrom utils browseURL
 visit_cran_check <- function(pkg) {
