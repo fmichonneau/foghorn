@@ -215,10 +215,6 @@ summary_memtest <- summary_functional("has_memtest_notes", FALSE)
 ##' to be included in your .Rprofile to be run (periodically) at start
 ##' up.
 ##'
-##' This package tries to guess your email address by using the
-##' \code{\link[whoami]{email_address}} function. You can specify email
-##' addresses manually.
-##'
 ##' @importFrom crayon red yellow blue bold cyan
 ##' @importFrom clisymbols symbol
 ##' @export
@@ -233,7 +229,6 @@ summary_memtest <- summary_functional("has_memtest_notes", FALSE)
 ##'     notes on the CRAN platforms. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     platforms that produce these results.
-summary_cran_checks <- function(email = whoami::email_address(), package = NULL) {
     res_checks <- cran_check_results(email, package)
     pkg_err <- summary_error(res_checks)
     pkg_wrn <- summary_warning(res_checks)
