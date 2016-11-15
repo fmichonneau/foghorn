@@ -188,24 +188,27 @@ cran_check_results <- function(email = NULL, package = NULL,
 
 
 summary_functional <- function(what, show_n = TRUE) {
-    function(tbl_pkg, ...) {
+    function(tbl_pkg, compact = FALSE, ...) {
         if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
             n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
             if (show_n) {
                 n <- paste0(" (", n, ")")
             } else
-            paste0(tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
                 n <- character(0)
-                  n,
-                  collapse = ", ")
+            if (compact) {
+                sptr <- c("", ", ")
+            } else
+                sptr <- c("  - ", "\n")
+            paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+                  n, collapse = sptr[2])
         }
     }
 }
 
-summary_error <- summary_functional("ERROR", TRUE)
-summary_note <- summary_functional("NOTE", TRUE)
-summary_warning <- summary_functional("WARN", TRUE)
-summary_memtest <- summary_functional("has_memtest_notes", FALSE)
+summary_error <- summary_functional("ERROR", show_n = TRUE)
+summary_note <- summary_functional("NOTE", show_n = TRUE)
+summary_warning <- summary_functional("WARN", show_n = TRUE)
+summary_memtest <- summary_functional("has_memtest_notes", show_n = FALSE)
 
 ##' Summary of the CRAN check results
 ##'
@@ -221,6 +224,9 @@ summary_memtest <- summary_functional("has_memtest_notes", FALSE)
 ##' @param email email address for package maintainers (character
 ##'     vector)
 ##' @param package package names (character vector)
+##' @param compact if \code{TRUE}, all the packages with non-OK
+##'     results are listed in a single line, otherwise they are listed
+##'     on multiple lines.
 ##' @examples \dontrun{ summary_cran_checks(email =
 ##'     c("user1@company1.com", "user2@company2.com"))
 ##'     summary_cran_checks(email = "user1@company1.com", package =
@@ -229,23 +235,28 @@ summary_memtest <- summary_functional("has_memtest_notes", FALSE)
 ##'     notes on the CRAN platforms. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     platforms that produce these results.
+summary_cran_checks <- function(email = NULL, package = NULL, compact = FALSE) {
     res_checks <- cran_check_results(email, package)
-    pkg_err <- summary_error(res_checks)
-    pkg_wrn <- summary_warning(res_checks)
-    pkg_note <- summary_note(res_checks)
-    pkg_memtest <- summary_memtest(res_checks)
+    pkg_err <- summary_error(res_checks, compact)
+    pkg_wrn <- summary_warning(res_checks, compact)
+    pkg_note <- summary_note(res_checks, compact)
+    pkg_memtest <- summary_memtest(res_checks, compact)
+    if (compact) {
+        nl <- character(0)
+    } else
+        nl <- "\n"
     if (!is.null(pkg_err))
-        message(crayon::red(paste(clisymbols::symbol$cross,
-                                  "Package(s) with errors on CRAN:", crayon::bold(pkg_err))))
+        message(crayon::red(paste0(clisymbols::symbol$cross,
+                                   " Package(s) with errors on CRAN: ", nl, crayon::bold(pkg_err))))
     if (!is.null(pkg_wrn))
-        message(crayon::yellow(paste(clisymbols::symbol$warning,
-                                     "Package(s) with warnings on CRAN:", crayon::bold(pkg_wrn))))
+        message(crayon::yellow(paste0(clisymbols::symbol$warning,
+                                      " Package(s) with warnings on CRAN: ", nl, crayon::bold(pkg_wrn))))
     if (!is.null(pkg_note))
-        message(crayon::blue(paste(clisymbols::symbol$star,
-                                   "Package(s) with notes on CRAN:", crayon::bold(pkg_note))))
+        message(crayon::blue(paste0(clisymbols::symbol$star,
+                                    " Package(s) with notes on CRAN: ", nl, crayon::bold(pkg_note))))
     if (!is.null(pkg_memtest))
-        message(crayon::cyan(paste(clisymbols::symbol$circle_filled,
-                                   "Packages(s) with memtest notes:", crayon::bold(pkg_memtest))))
+        message(crayon::cyan(paste0(clisymbols::symbol$circle_filled,
+                                    " Packages(s) with memtest notes: ", nl, crayon::bold(pkg_memtest))))
     invisible(res_checks)
 }
 
