@@ -263,14 +263,17 @@ url_pkg_res <- function(pkg) {
 ##'
 ##' @title Visit the CRAN check results page for a package
 ##' @param pkg name of the package to check the results for
-##' @return \code{TRUE} invisibly
+##' @return The URL from the CRAN check results page invisibly
 ##' @author Francois Michonneau
 ##' @export
 ##' @importFrom utils browseURL
 visit_cran_check <- function(pkg) {
     url <- url_pkg_res(pkg)
-    utils::browseURL(url)
-    invisible(TRUE)
+    if (interactive())
+        utils::browseURL(url)
+    else
+        warning("This function is only available in interactive mode.")
+    invisible(url)
 }
 
 parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
