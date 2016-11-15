@@ -194,8 +194,8 @@ summary_functional <- function(what, show_n = TRUE) {
             if (show_n) {
                 n <- paste0(" (", n, ")")
             } else
-                n <- ""
             paste0(tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+                n <- character(0)
                   n,
                   collapse = ", ")
         }
@@ -352,7 +352,7 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
         if (verbose)
             msg <- crayon::silver(x[5])
         else
-            msg <- ""
+            msg <- character(0)
         cat(## Type of CRAN message
             format_cran(x[2], paste0(crayon::bold(paste(x[1], "-", x[2])), ": ", x[3])), "\n",
             ## Flavors concerned
