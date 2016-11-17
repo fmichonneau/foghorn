@@ -1,3 +1,21 @@
+
+url_pkg_res <- function(pkg) {
+    paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
+}
+
+url_email_res <- function(email) {
+    email_test <- sapply(email, function(x)
+        if (!grepl("\\@", x)) {
+            stop("Malformed email address: ", sQuote(email), call. = FALSE)
+        })
+    email <- gsub("\\@", "_at_", email)
+    ##  "all characters different from letters, digits, hyphens,
+    ##  underscores, colons, and periods replaced by underscores ..."
+    email <- gsub("[^[:alnum:]_:.-]","_",email)
+    paste0("https://cran.r-project.org/web/checks/check_results_",
+           email, ".html")
+}
+
 ##' @importFrom xml2 read_html
 parse_cran <- function(x) {
     .res <- try(xml2::read_html(x), silent = TRUE)
@@ -13,16 +31,7 @@ parse_cran <- function(x) {
 }
 
 parse_cran_checks_email <- function(email) {
-    email_test <- sapply(email, function(x)
-        if (!grepl("\\@", x)) {
-            stop("Malformed email address: ", sQuote(email), call. = FALSE)
-        })
-    email <- gsub("\\@", "_at_", email)
-    ##  "all characters different from letters, digits, hyphens,
-    ##  underscores, colons, and periods replaced by underscores ..."
-    email <- gsub("[^[:alnum:]_:.-]","_",email)
-    url <- paste0("https://cran.r-project.org/web/checks/check_results_",
-                  email, ".html")
+    url <- url_email_res(email)
     res <- lapply(url, parse_cran)
     if (length(bad <- which(is.na(res)))>0) {
         stop("Invalid email address(es): ", email[bad], call. = FALSE)
@@ -286,9 +295,6 @@ summary_cran_checks <- function(email = NULL, package = NULL, compact = FALSE) {
    invisible(res_checks)
 }
 
-url_pkg_res <- function(pkg) {
-    paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
-}
 
 
 ##' Visit the page in your web browser for a given package.
