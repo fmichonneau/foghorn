@@ -4,13 +4,13 @@
 \alias{summary_cran_checks}
 \title{Summary of the CRAN check results}
 \usage{
-summary_cran_checks(email = NULL, package = NULL, compact = FALSE)
+summary_cran_checks(email = NULL, pkg = NULL, compact = FALSE)
 }
 \arguments{
 \item{email}{email address for package maintainers (character
 vector)}
 
-\item{package}{package names (character vector)}
+\item{pkg}{package names (character vector)}
 
 \item{compact}{if \code{TRUE}, all the packages with non-OK
 results are listed in a single line, otherwise they are listed
@@ -32,7 +32,7 @@ up.
 \examples{
 \dontrun{ summary_cran_checks(email =
     c("user1@company1.com", "user2@company2.com"))
-    summary_cran_checks(email = "user1@company1.com", package =
+    summary_cran_checks(email = "user1@company1.com", pkg =
     c("pkg1", "pkg2")) }
 }
 

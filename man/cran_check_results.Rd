@@ -4,14 +4,14 @@
 \alias{cran_check_results}
 \title{Table of CRAN check results}
 \usage{
-cran_check_results(email = NULL, package = NULL, show = c("error", "warn",
+cran_check_results(email = NULL, pkg = NULL, show = c("error", "warn",
   "note", "ok"))
 }
 \arguments{
 \item{email}{email address for package maintainers (character
 vector)}
 
-\item{package}{package names (character vector)}
+\item{pkg}{package names (character vector)}
 
 \item{show}{columns of the data frame to show}
 }

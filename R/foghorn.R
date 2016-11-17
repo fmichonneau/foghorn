@@ -167,25 +167,25 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @export
 ##' @param email email address for package maintainers (character
 ##'     vector)
-##' @param package package names (character vector)
+##' @param pkg package names (character vector)
 ##' @param show columns of the data frame to show
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
-cran_check_results <- function(email = NULL, package = NULL,
+cran_check_results <- function(email = NULL, pkg = NULL,
                                show = c("error", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
     res <- NULL
-    if (is.null(email) && is.null(package))
+    if (is.null(email) && is.null(pkg))
         stop("You need to provide at least one value for ", sQuote("email"),
-             "or for ", sQuote("package"))
+             "or for ", sQuote("pkg"))
     if (!is.null(email)) {
         res_email <- parse_cran_checks_email(email)
         res <- table_cran_checks(res_email)
         res <- add_memtest(res, res_email)
     }
-    if (!is.null(package)) {
-        res_pkg <- parse_cran_checks_pkg(package)
+    if (!is.null(pkg)) {
+        res_pkg <- parse_cran_checks_pkg(pkg)
         tbl_pkg <- table_cran_checks(res_pkg)
         res <- add_memtest(tbl_pkg, res_pkg) %>%
             dplyr::bind_rows(res)
@@ -266,20 +266,20 @@ print_summary_cran <- function(type = c("error", "warning", "note", "memtest"),
 ##' @export
 ##' @param email email address for package maintainers (character
 ##'     vector)
-##' @param package package names (character vector)
+##' @param pkg package names (character vector)
 ##' @param compact if \code{TRUE}, all the packages with non-OK
 ##'     results are listed in a single line, otherwise they are listed
 ##'     on multiple lines.
 ##' @examples \dontrun{ summary_cran_checks(email =
 ##'     c("user1@company1.com", "user2@company2.com"))
-##'     summary_cran_checks(email = "user1@company1.com", package =
+##'     summary_cran_checks(email = "user1@company1.com", pkg =
 ##'     c("pkg1", "pkg2")) }
 ##' @return Prints the packages that return errors, warnings, and
 ##'     notes on the CRAN platforms. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     platforms that produce these results.
-summary_cran_checks <- function(email = NULL, package = NULL, compact = FALSE) {
-    res_checks <- cran_check_results(email, package)
+summary_cran_checks <- function(email = NULL, pkg = NULL, compact = FALSE) {
+    res_checks <- cran_check_results(email, pkg)
     pkg_err <- summary_error(res_checks, compact)
     pkg_wrn <- summary_warning(res_checks, compact)
     pkg_note <- summary_note(res_checks, compact)

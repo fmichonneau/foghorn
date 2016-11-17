@@ -1,7 +1,7 @@
 context("fail for invalid package name/emails")
 
 test_that("invalid package name", {
-    expect_error(cran_check_results(package = "foobarfoobar"),
+    expect_error(cran_check_results(pkg = "foobarfoobar"),
                  "Invalid package name")
 })
 
@@ -26,10 +26,10 @@ test_that("at least email or package name specified", {
 })
 
 test_that("works with one package, one address, or both", {
-    res_pkg <- cran_check_results(package = "phylobase")
+    res_pkg <- cran_check_results(pkg = "phylobase")
     res_email <- cran_check_results(email = "francois.michonneau@gmail.com")
     res_both <- cran_check_results(email = "francois.michonneau@gmail.com",
-                                   package = "ridigbio")
+                                   pkg = "ridigbio")
     expect_true(check_cran_check_results(res_pkg))
     expect_true(check_cran_check_results(res_email))
     expect_true(check_cran_check_results(res_both))
@@ -41,12 +41,12 @@ test_that("works for maintainers with a single package", {
 })
 
 test_that("works for multiple packages, multiple addresses", {
-    res_pkgs <- cran_check_results(package = c("rotl", "phylobase", "ridigbio"))
+    res_pkgs <- cran_check_results(pkg = c("rotl", "phylobase", "ridigbio"))
     res_emails <- cran_check_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"))
     res_both <- cran_check_results(email =   c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
-                                   package = c("ridigbio", "mregions", "bold"))
+                                   pkg = c("ridigbio", "mregions", "bold"))
     expect_true(check_cran_check_results(res_pkgs))
     expect_true(check_cran_check_results(res_emails))
     expect_true(check_cran_check_results(res_both))
