@@ -51,3 +51,32 @@ test_that("works for multiple packages, multiple addresses", {
     expect_true(check_cran_check_results(res_emails))
     expect_true(check_cran_check_results(res_both))
 })
+
+
+context("visit cran check")
+test_that("error if nothing is specified",  {
+    expect_error(visit_cran_check(),
+                 "needs to be specified")
+})
+
+test_that("error if both email and pkg are specified", {
+    expect_error(visit_cran_check(pkg = "foobar", email = "foobar@baz.com"),
+                 "only one package or one email address")
+})
+
+test_that("error if more than one package", {
+    msg <- "must be a string"
+    expect_error(visit_cran_check(pkg = c("foo", "bar")),
+                 msg)
+    expect_error(visit_cran_check(pkg = c(TRUE)),
+                 msg)
+})
+
+
+test_that("error if more than one email address", {
+    msg <- "must be a string"
+    expect_error(visit_cran_check(email = c("foo", "bar")),
+                 msg)
+    expect_error(visit_cran_check(email = c(TRUE)),
+                 msg)
+})

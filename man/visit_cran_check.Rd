@@ -2,17 +2,20 @@
 % Please edit documentation in R/foghorn.R
 \name{visit_cran_check}
 \alias{visit_cran_check}
-\title{Visit the CRAN check results page for a package}
+\title{Visit the CRAN check results page}
 \usage{
-visit_cran_check(pkg)
+visit_cran_check(pkg = NULL, email = NULL)
 }
 \arguments{
 \item{pkg}{name of the package to check the results for}
+
+\item{email}{email address of the package maintainer}
 }
 \value{
 The URL from the CRAN check results page invisibly
 }
 \description{
-Visit the page in your web browser for a given package.
+Visit the page in your web browser for a given package or a
+maintainer's email address
 }
 
