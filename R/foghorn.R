@@ -57,7 +57,8 @@ default_cran_checks <- tibble::data_frame(
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
-    ERROR = integer(0))
+    ERROR = integer(0),
+    FAIL = integer(0))
 
 
 get_cran_table <- function(parsed, ...) {
@@ -168,11 +169,11 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @param email email address for package maintainers (character
 ##'     vector)
 ##' @param pkg package names (character vector)
-##' @param show columns of the data frame to show
+##' @param show columns of the data frame to show (all are shown by default)
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
 cran_check_results <- function(email = NULL, pkg = NULL,
-                               show = c("error", "warn", "note", "ok")) {
+                               show = c("error", "fail", "warn", "note", "ok")) {
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
     res <- NULL
@@ -196,48 +197,52 @@ cran_check_results <- function(email = NULL, pkg = NULL,
 
 
 
-summary_functional <- function(what, show_n = TRUE) {
-    function(tbl_pkg, compact = FALSE, ...) {
-        if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
-            n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
-            if (show_n) {
-                n <- paste0(" (", n, ")")
-            } else
-                n <- character(0)
-            if (compact) {
-                sptr <- c("", ", ")
-            } else
-                sptr <- c("  - ", "\n")
-            paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
-                  n, collapse = sptr[2])
-        }
+get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
+    what <- match.arg(what, names(tbl_pkg)[-1])
+    if (what %in% c("has_memtest_notes"))
+        show_n <- FALSE
+    else show_n <- TRUE
+    if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
+        n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
+        if (show_n) {
+            n <- paste0(" (", n, ")")
+        } else
+            n <- character(0)
+        if (compact) {
+            sptr <- c("", ", ")
+        } else
+            sptr <- c("  - ", "\n")
+        paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+               n, collapse = sptr[2])
     }
 }
 
-summary_error <- summary_functional("ERROR", show_n = TRUE)
-summary_note <- summary_functional("NOTE", show_n = TRUE)
-summary_warning <- summary_functional("WARN", show_n = TRUE)
-summary_memtest <- summary_functional("has_memtest_notes", show_n = FALSE)
-
 
 foghorn_components <- list(
-    `error` = c(symbol = clisymbols::symbol$cross,
+    `ERROR` = c(symbol = clisymbols::symbol$cross,
                 color = crayon::red,
                 word = "errors"
                 ),
-    `warning` = c(symbol = clisymbols::symbol$warning,
-                  color = crayon::yellow,
-                  word = "warnings"),
-    `note` = c(symbol = clisymbols::symbol$star,
+    `FAIL` = c(symbol = clisymbols::symbol$cross,
+               color = crayon::magenta,
+               word = "fails"
+               ),
+    `WARN` = c(symbol = clisymbols::symbol$warning,
+               color = crayon::yellow,
+               word = "warnings"),
+    `NOTE` = c(symbol = clisymbols::symbol$star,
                color = crayon::blue,
                word = "notes"),
-    `memtest` = c(symbol = clisymbols::symbol$circle_filled,
-                  color = crayon::cyan,
-                  word = "memtest")
+    `has_memtest_notes` = c(symbol = clisymbols::symbol$circle_filled,
+                            color = crayon::cyan,
+                            word = "memtest")
 )
 
-print_summary_cran <- function(type = c("error", "warning", "note", "memtest"),
+print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes"),
                                pkgs, compact) {
+    if (is.null(pkgs))
+        return(NULL)
+
     type <- match.arg(type)
     if (compact) {
         nl <- character(0)
@@ -261,7 +266,7 @@ print_summary_cran <- function(type = c("error", "warning", "note", "memtest"),
 ##' to be included in your .Rprofile to be run (periodically) at start
 ##' up.
 ##'
-##' @importFrom crayon red yellow blue bold cyan
+##' @importFrom crayon red yellow blue bold cyan magenta
 ##' @importFrom clisymbols symbol
 ##' @export
 ##' @param email email address for package maintainers (character
@@ -280,18 +285,12 @@ print_summary_cran <- function(type = c("error", "warning", "note", "memtest"),
 ##'     platforms that produce these results.
 summary_cran_checks <- function(email = NULL, pkg = NULL, compact = FALSE) {
     res_checks <- cran_check_results(email, pkg)
-    pkg_err <- summary_error(res_checks, compact)
-    pkg_wrn <- summary_warning(res_checks, compact)
-    pkg_note <- summary_note(res_checks, compact)
-    pkg_memtest <- summary_memtest(res_checks, compact)
-    if (!is.null(pkg_err))
-       print_summary_cran("error", pkg_err, compact)
-    if (!is.null(pkg_wrn))
-        print_summary_cran("warning", pkg_wrn, compact)
-    if (!is.null(pkg_note))
-        print_summary_cran("note", pkg_note, compact)
-    if (!is.null(pkg_memtest))
-        print_summary_cran("memtest", pkg_memtest, compact)
+    what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes")
+    res <- lapply(what, function(x)
+        get_pkg_with_results(res_checks, x, compact))
+    mapply(function(type, pkgs, compact) {
+        print_summary_cran(type, pkgs, compact)
+    }, what, res, compact)
    invisible(res_checks)
 }
 
