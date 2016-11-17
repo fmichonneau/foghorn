@@ -15,9 +15,9 @@ test_that("invalid email address", {
 context("cran check results")
 
 check_cran_check_results <- function(x) {
-    length(x) == 6 &&
+    length(x) == 7 &&
         inherits(x, "tbl_df") &&
-        all(names(x) %in% c("Package", "ERROR", "WARN", "NOTE",  "OK", "has_memtest_notes")) &&
+        all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN", "NOTE",  "OK", "has_memtest_notes")) &&
         nrow(x) > 0
 }
 
