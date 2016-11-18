@@ -17,7 +17,11 @@ url_email_res <- function(email) {
 }
 
 ##' @importFrom xml2 read_html
+##' @importFrom curl has_internet
 parse_cran <- function(x) {
+    if (!curl::has_internet()) {
+        stop("No internet connection detected", call. = FALSE)
+    }
     .res <- try(xml2::read_html(x), silent = TRUE)
     if (inherits(.res, "try-error")) {
         ## is there a cleaner way to do this ???
