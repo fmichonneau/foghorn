@@ -26,6 +26,7 @@ test_that("at least email or package name specified", {
 })
 
 test_that("works with one package, one address, or both", {
+    skip_on_cran()
     res_pkg <- check_cran_results(pkg = "phylobase")
     res_email <- check_cran_results(email = "francois.michonneau@gmail.com")
     res_both <- check_cran_results(email = "francois.michonneau@gmail.com",
@@ -36,11 +37,13 @@ test_that("works with one package, one address, or both", {
 })
 
 test_that("works for maintainers with a single package", {
+    skip_on_cran()
     res <- check_cran_results(email = "bbolker+lme4@gmail.com")
     expect_true(validate_check_cran_results(res))
 })
 
 test_that("works for multiple packages, multiple addresses", {
+    skip_on_cran()
     res_pkgs <- check_cran_results(pkg = c("rotl", "phylobase", "ridigbio"))
     res_emails <- check_cran_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"))
@@ -60,12 +63,14 @@ test_that("error if nothing is specified",  {
 })
 
 test_that("error if both email and pkg are specified", {
+    skip_on_cran()
     expect_error(visit_cran_check(pkg = "foobar", email = "foobar@baz.com"),
                  "only one package or one email address")
 })
 
 test_that("error if more than one package", {
     msg <- "must be a string"
+    skip_on_cran()
     expect_error(visit_cran_check(pkg = c("foo", "bar")),
                  msg)
     expect_error(visit_cran_check(pkg = c(TRUE)),
@@ -75,6 +80,7 @@ test_that("error if more than one package", {
 
 test_that("error if more than one email address", {
     msg <- "must be a string"
+    skip_on_cran()
     expect_error(visit_cran_check(email = c("foo", "bar")),
                  msg)
     expect_error(visit_cran_check(email = c(TRUE)),
