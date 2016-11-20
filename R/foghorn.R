@@ -399,6 +399,8 @@ render_flavors <- function(x) {
 ##' @export
 ##' @importFrom crayon bold
 show_cran_results <- function(pkg, show_log = TRUE) {
+    if (length(pkg) != 1 || !is.character(pkg))
+        stop(sQuote("pkg"), " is not a string.", call. = FALSE)
     res <- parse_cran_results(pkg)
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))
