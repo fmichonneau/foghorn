@@ -88,6 +88,12 @@ test_that("error if more than one email address", {
                  msg)
 })
 
+test_that("check for interactive", {
+    skip_on_cran()
+    skip_if_not(!interactive())
+    expect_warning(visit_cran_check(pkg = "rotl"))
+})
+
 ## summary_cran_results --------------------------------------------------------
 
 context("summary cran results")
