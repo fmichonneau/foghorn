@@ -55,6 +55,7 @@ test_that("works for multiple packages, multiple addresses", {
     expect_true(validate_check_cran_results(res_both))
 })
 
+### visit_cran_check -----------------------------------------------------------
 
 context("visit cran check")
 test_that("error if nothing is specified",  {
@@ -85,4 +86,43 @@ test_that("error if more than one email address", {
                  msg)
     expect_error(visit_cran_check(email = c(TRUE)),
                  msg)
+})
+
+## summary_cran_results --------------------------------------------------------
+
+context("summary cran results")
+
+test_that("output of summary cran results", {
+    skip_on_cran()
+    pkgs <- c("rotl", "rncl")
+    res <- suppressMessages(summary_cran_results(pkg = pkgs))
+    expect_true(all(pkgs %in% res$Package))
+    expect_message(summary_cran_results(pkg = "rotl"),
+                  "with warnings")
+    expect_message(summary_cran_results(pkg = "rncl"),
+                  "with notes")
+    expect_message(summary_cran_results(pkg = "rncl"),
+                   "with memtest")
+    msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = TRUE))
+    expect_false(all(grepl("  -", msg)))
+    msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = FALSE))
+    expect_true(all(grepl("  -", msg)))
+})
+
+### show_cran_results ----------------------------------------------------------
+
+context("show cran results")
+
+test_that("only one package", {
+    expect_error(show_cran_results(c("pkg1", "pkg2")),
+                 "not a string")
+    expect_error(show_cran_results(TRUE),
+                 "not a string")
+})
+
+
+test_that("output of show cran results", {
+    skip_on_cran()
+    expect_output(show_cran_results("rotl", show_log = FALSE),
+                  "rotl")
 })
