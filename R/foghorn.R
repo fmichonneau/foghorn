@@ -4,10 +4,10 @@ url_pkg_res <- function(pkg) {
 }
 
 url_email_res <- function(email) {
-    email_test <- sapply(email, function(x)
+    email_test <- vapply(email, function(x)
         if (!grepl("\\@", x)) {
             stop("Malformed email address: ", sQuote(email), call. = FALSE)
-        })
+        }, character(1))
     email <- gsub("\\@", "_at_", email)
     ##  "all characters different from letters, digits, hyphens,
     ##  underscores, colons, and periods replaced by underscores ..."
