@@ -4,12 +4,12 @@
 \alias{summary_cran_results}
 \title{Summarize CRAN results for a package}
 \usage{
-summary_cran_results(pkg, verbose = TRUE)
+summary_cran_results(pkg, show_log = TRUE)
 }
 \arguments{
 \item{pkg}{name of the package on CRAN}
 
-\item{verbose}{Should the messages of the \dQuote{Check Details} be printed? (logical)}
+\item{show_log}{Should the messages of the \dQuote{Check Details} be printed? (logical)}
 }
 \value{
 \code{NULL}, used for its side effect of printing the CRAN messages
