@@ -1,0 +1,61 @@
+---
+title: "Quick start"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r example}
+## load the package
+library(foghorn)
+```
+
+`foghorn` provides a graphical summary for CRAN check results for the packages
+maintained by individuals (the number is parentheses indicates the number of R
+flavors used by CRAN that generate notes, warnings, errors):
+
+```{r graphical-interface}
+## Graphical interface
+summary_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+The information can also be summarized as a table:
+
+```{r tibble}
+## Summary as a tibble
+check_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+In addition of your own packages, you can also check the results for other
+packages that might be of interest to you:
+
+```{r package-name}
+## either by themselves
+summary_cran_results(pkg = c("ggplot2", "dplyr"))
+check_cran_results(pkg = c("ggplot2", "dplyr"))
+
+## or by combining them with email addresses
+summary_cran_results(email = "francois.michonneau@gmail.com",
+                     pkg = c("mregions", "ridigbio"))
+check_cran_results(email = "francois.michonneau@gmail.com",
+                   pkg = c("mregions", "ridigbio"))
+```
+
+You can also inspect the logs for the check results using
+`show_cran_results(pkg)`, while `visit_cran_check(pkg)` takes you to the CRAN
+webpage.
+
+```{r show-cran-results}
+show_cran_results(pkg = "tidyr")
+```
+
+## Feedback? Suggestions?
+
+Feel free to submit feedback and suggestions
+by [opening an issue](https://github.com/fmichonneau/foghorn/issues/new) on
+GitHub.

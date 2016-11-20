@@ -28,3 +28,7 @@ Suggests:
     covr
 Remotes:
   gaborcsardi/httrmock
+  covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
