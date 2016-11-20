@@ -173,11 +173,13 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @param email email address for package maintainers (character
 ##'     vector)
 ##' @param pkg package names (character vector)
-##' @param show columns of the data frame to show (all are shown by default)
+##' @param show columns of the data frame to show (all are shown by
+##'     default)
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
 cran_check_results <- function(email = NULL, pkg = NULL,
                                show = c("error", "fail", "warn", "note", "ok")) {
+    show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
     res <- NULL
