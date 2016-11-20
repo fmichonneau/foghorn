@@ -104,7 +104,8 @@ has_memtest <- function(parsed, ...) {
     })
     res <- dplyr::bind_rows(res)
     pkg_with_mem <- lapply(parsed, function(x) {
-        all_urls <- xml2::xml_text(xml2::xml_find_all(x, ".//p//child::a[@href]//@href"))
+        all_urls <- xml2::xml_text(
+                          xml2::xml_find_all(x, ".//p//child::a[@href]//@href"))
         with_mem <- grep("memtest", all_urls, value = TRUE)
         with_mem <- grep("[^Rout]$", with_mem, value = TRUE)
         pkg_with_mem <- unique(basename(with_mem))
@@ -135,8 +136,10 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
             ## authored a single package, let's look for it:
             pkg <- all_packages_by_email(x)
             if (length(pkg) > 1)
-                stop("Please file an issue on GitHub indicating the name of your package")
-            ## then, we can call the other method to parse the results of that pacakge
+                stop("Please file an issue on GitHub ",
+                     "indicating the name of your package")
+            ## then, we can call the other method to parse the results
+            ## of that pacakge
             table_cran_checks.cran_checks_pkg(parse_cran_checks_pkg(pkg))
         } else
            tibble::as_tibble(tbl[[1]])
@@ -218,7 +221,8 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
             sptr <- c("", ", ")
         } else
             sptr <- c("  - ", "\n")
-        paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0],
+        paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) &
+                                        tbl_pkg[[what]] > 0],
                n, collapse = sptr[2])
     }
 }
@@ -244,7 +248,8 @@ foghorn_components <- list(
                             word = "memtest")
 )
 
-print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes"),
+print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
+                                        "NOTE", "has_memtest_notes"),
                                pkgs, compact) {
     if (is.null(pkgs))
         return(NULL)
@@ -289,7 +294,8 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN", "NOTE", "has_me
 ##'     notes on the CRAN platforms. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     platforms that produce these results.
-summary_cran_checks <- function(email = NULL, pkg = NULL, compact = FALSE) {
+summary_cran_checks <- function(email = NULL, pkg = NULL,
+                                compact = FALSE) {
     res_checks <- cran_check_results(email, pkg)
     what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes")
     res <- lapply(what, function(x)
@@ -312,7 +318,8 @@ summary_cran_checks <- function(email = NULL, pkg = NULL, compact = FALSE) {
 ##' @importFrom utils browseURL
 visit_cran_check <- function(pkg = NULL, email = NULL) {
     if (is.null(pkg) && is.null(email)) {
-        stop("A package name or an email address needs to be specified", call. = FALSE)
+        stop("A package name or an email address needs to be specified",
+             call. = FALSE)
     }
     if (!is.null(pkg) && !is.null(email)) {
         stop("Specify only one package or one email address", call. = FALSE)
@@ -383,11 +390,13 @@ render_flavors <- function(x) {
 ##'
 ##' @title Summarize CRAN results for a package
 ##' @param pkg name of the package on CRAN
-##' @param verbose Should the messages of the \dQuote{Check Details} be printed? (logical)
-##' @return \code{NULL}, used for its side effect of printing the CRAN messages
+##' @param show_log Should the messages of the \dQuote{Check Details}
+##'     be printed? (logical)
+##' @return \code{NULL}, used for its side effect of printing the CRAN
+##'     messages
 ##' @export
-##' @importFrom crayon bold silver
-summary_cran_results <- function(pkg, verbose = TRUE) {
+##' @importFrom crayon bold
+summary_cran_results <- function(pkg, show_log = TRUE) {
     res <- parse_cran_results(pkg)
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))
