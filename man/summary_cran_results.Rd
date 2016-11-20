@@ -2,21 +2,38 @@
 % Please edit documentation in R/foghorn.R
 \name{summary_cran_results}
 \alias{summary_cran_results}
-\title{Summarize CRAN results for a package}
+\title{Summary of the CRAN check results}
 \usage{
-summary_cran_results(pkg, show_log = TRUE)
+summary_cran_results(email = NULL, pkg = NULL, compact = FALSE)
 }
 \arguments{
-\item{pkg}{name of the package on CRAN}
+\item{email}{email address for package maintainers (character
+vector)}
 
-\item{show_log}{Should the messages of the \dQuote{Check Details} be printed? (logical)}
+\item{pkg}{package names (character vector)}
+
+\item{compact}{if \code{TRUE}, all the packages with non-OK
+results are listed in a single line, otherwise they are listed
+on multiple lines.}
 }
 \value{
-\code{NULL}, used for its side effect of printing the CRAN messages
+Prints the packages that return errors, warnings, and
+    notes on the CRAN platforms. The number in parenthesis after
+    the name of the packages indicates the number of CRAN
+    platforms that produce these results.
 }
 \description{
-Given a package name published on CRAN, print the outcomes of
-checks that return notes, warnings or errors, and optionally print
-the messages.
+Given the email address of a package maintainer, and/or a vector
+of package names, it displays at the console a summary of the
+check results run on the CRAN platforms. This function is designed
+to be included in your .Rprofile to be run (periodically) at start
+up.
+}
+\examples{
+\dontrun{
+   summary_cran_results(email = c("user1@company1.com", "user2@company2.com"))
+   summary_cran_results(email = "user1@company1.com",
+                        pkg = c("pkg1", "pkg2"))
+}
 }
 

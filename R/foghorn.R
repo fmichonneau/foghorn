@@ -171,7 +171,7 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' potential issues with your packages on CRAN.
 ##'
 ##'
-##' @title Table of CRAN check results
+##' @title Table of the CRAN check results
 ##' @importFrom dplyr distinct_
 ##' @export
 ##' @param email email address for package maintainers (character
@@ -181,7 +181,7 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##'     default)
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
-cran_check_results <- function(email = NULL, pkg = NULL,
+check_cran_results <- function(email = NULL, pkg = NULL,
                                show = c("error", "fail", "warn", "note", "ok")) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
@@ -278,26 +278,27 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
 ##' to be included in your .Rprofile to be run (periodically) at start
 ##' up.
 ##'
-##' @importFrom crayon red yellow blue bold cyan magenta
-##' @importFrom clisymbols symbol
-##' @export
 ##' @param email email address for package maintainers (character
 ##'     vector)
 ##' @param pkg package names (character vector)
 ##' @param compact if \code{TRUE}, all the packages with non-OK
 ##'     results are listed in a single line, otherwise they are listed
 ##'     on multiple lines.
-##' @examples \dontrun{ summary_cran_checks(email =
-##'     c("user1@company1.com", "user2@company2.com"))
-##'     summary_cran_checks(email = "user1@company1.com", pkg =
-##'     c("pkg1", "pkg2")) }
+##' @examples \dontrun{
+##'    summary_cran_results(email = c("user1@company1.com", "user2@company2.com"))
+##'    summary_cran_results(email = "user1@company1.com",
+##'                         pkg = c("pkg1", "pkg2"))
+##' }
 ##' @return Prints the packages that return errors, warnings, and
 ##'     notes on the CRAN platforms. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     platforms that produce these results.
-summary_cran_checks <- function(email = NULL, pkg = NULL,
+##' @importFrom crayon red yellow blue bold cyan magenta
+##' @importFrom clisymbols symbol
+##' @export
+summary_cran_results <- function(email = NULL, pkg = NULL,
                                 compact = FALSE) {
-    res_checks <- cran_check_results(email, pkg)
+    res_checks <- check_cran_results(email, pkg)
     what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes")
     res <- lapply(what, function(x)
         get_pkg_with_results(res_checks, x, compact))
@@ -389,7 +390,7 @@ render_flavors <- function(x) {
 ##' checks that return notes, warnings or errors, and optionally print
 ##' the messages.
 ##'
-##' @title Summarize CRAN results for a package
+##' @title Show the CRAN check results for a package
 ##' @param pkg name of the package on CRAN
 ##' @param show_log Should the messages of the \dQuote{Check Details}
 ##'     be printed? (logical)
@@ -397,7 +398,7 @@ render_flavors <- function(x) {
 ##'     messages
 ##' @export
 ##' @importFrom crayon bold
-summary_cran_results <- function(pkg, show_log = TRUE) {
+show_cran_results <- function(pkg, show_log = TRUE) {
     res <- parse_cran_results(pkg)
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))

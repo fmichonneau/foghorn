@@ -1,20 +1,20 @@
 context("fail for invalid package name/emails")
 
 test_that("invalid package name", {
-    expect_error(cran_check_results(pkg = "foobarfoobar"),
+    expect_error(check_cran_results(pkg = "foobarfoobar"),
                  "Invalid package name")
 })
 
 test_that("invalid email address", {
-    expect_error(cran_check_results(email = "foobar"),
+    expect_error(check_cran_results(email = "foobar"),
                  "Malformed email address")
-    expect_error(cran_check_results(email = "foo@foobarbar.rrrr"),
+    expect_error(check_cran_results(email = "foo@foobarbar.rrrr"),
                  "Invalid email address")
 })
 
-context("cran check results")
+context("check cran results")
 
-check_cran_check_results <- function(x) {
+validate_check_cran_results <- function(x) {
     length(x) == 7 &&
         inherits(x, "tbl_df") &&
         all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN", "NOTE",  "OK", "has_memtest_notes")) &&
@@ -22,34 +22,34 @@ check_cran_check_results <- function(x) {
 }
 
 test_that("at least email or package name specified", {
-    expect_error(cran_check_results(), "provide at least one value for")
+    expect_error(check_cran_results(), "provide at least one value for")
 })
 
 test_that("works with one package, one address, or both", {
-    res_pkg <- cran_check_results(pkg = "phylobase")
-    res_email <- cran_check_results(email = "francois.michonneau@gmail.com")
-    res_both <- cran_check_results(email = "francois.michonneau@gmail.com",
+    res_pkg <- check_cran_results(pkg = "phylobase")
+    res_email <- check_cran_results(email = "francois.michonneau@gmail.com")
+    res_both <- check_cran_results(email = "francois.michonneau@gmail.com",
                                    pkg = "ridigbio")
-    expect_true(check_cran_check_results(res_pkg))
-    expect_true(check_cran_check_results(res_email))
-    expect_true(check_cran_check_results(res_both))
+    expect_true(validate_check_cran_results(res_pkg))
+    expect_true(validate_check_cran_results(res_email))
+    expect_true(validate_check_cran_results(res_both))
 })
 
 test_that("works for maintainers with a single package", {
-    res <- cran_check_results(email = "bbolker+lme4@gmail.com")
-    expect_true(check_cran_check_results(res))
+    res <- check_cran_results(email = "bbolker+lme4@gmail.com")
+    expect_true(validate_check_cran_results(res))
 })
 
 test_that("works for multiple packages, multiple addresses", {
-    res_pkgs <- cran_check_results(pkg = c("rotl", "phylobase", "ridigbio"))
-    res_emails <- cran_check_results(email = c("francois.michonneau@gmail.com",
+    res_pkgs <- check_cran_results(pkg = c("rotl", "phylobase", "ridigbio"))
+    res_emails <- check_cran_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"))
-    res_both <- cran_check_results(email =   c("francois.michonneau@gmail.com",
+    res_both <- check_cran_results(email =   c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
                                    pkg = c("ridigbio", "mregions", "bold"))
-    expect_true(check_cran_check_results(res_pkgs))
-    expect_true(check_cran_check_results(res_emails))
-    expect_true(check_cran_check_results(res_both))
+    expect_true(validate_check_cran_results(res_pkgs))
+    expect_true(validate_check_cran_results(res_emails))
+    expect_true(validate_check_cran_results(res_both))
 })
 
 
