@@ -8,8 +8,8 @@ output: github_document
 [![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/foghorn)
 [![Coverage Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://codecov.io/github/fmichonneau/foghorn?branch=master)
-![Work in Progress](https://img.shields.io/badge/status-work in progress-yellow.svg)
 [![](http://www.r-pkg.org/badges/version/foghorn)](http://www.r-pkg.org/pkg/foghorn)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/foghorn)](http://www.r-pkg.org/pkg/foghorn)
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -26,19 +26,16 @@ knitr::opts_chunk$set(
 >        potential hazards ahead.
 
 `foghorn` makes accessible to the R terminal the results of the CRAN check
-results for the packages maintained by individuals, or for other package of
+results for packages maintained by individuals, or for other package of
 interests. It provides a graphical summary of the results designed to added to
 your `.Rprofile` (to check regularly on the status of the published packages),
 or as a tibble.
 
 As new features are introduced in development versions of R, or new policies are
 put in place, packages that are not updated frequently may start generating
-warnings or errors when built by CRAN. `foghorn` brings this information to your
-terminal automatically so you don't have to check the CRAN check results page
-regularly.
-
-The package uses [whoami](https://cran.r-project.org/package=whoami) to guess
-your email address, but it can be specified manually.
+warnings or errors when checked on CRAN's infrastructure. `foghorn` brings this
+information to your terminal so you don't have to leave the comfort of your
+terminal to know the results of the CRAN checks for your packages.
 
 ## Installation
 
@@ -49,29 +46,58 @@ You can install foghorn from github with:
 ghit::install_github("fmichonneau/foghorn")
 ```
 
-## Example
+## Demonstration
 
 ```{r example}
 ## load the package
 library(foghorn)
-
-## Graphical interface
-summary_cran_checks(email = "francois.michonneau@gmail.com")
-
-## Summary as a data frame
-cran_check_results(email = "francois.michonneau@gmail.com")
-
-## You can also have information just for some packages
-summary_cran_checks(email = NULL,  package = c("mregions", "ridigbio"))
-cran_check_results(email = NULL,  package = c("mregions", "ridigbio"))
-
-## Or both
-summary_cran_checks(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
-cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
-
-## You can also get the results details of the check results for packages:
-summary_cran_results("rotl")
 ```
+
+`foghorn` provides a graphical summary for CRAN check results for the packages
+maintained by individuals (the number is parentheses indicates the number of R
+flavors used by CRAN that generate notes, warnings, errors):
+
+```{r graphical-interface}
+## Graphical interface
+summary_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+The information can also be summarized as a table:
+
+```{r tibble}
+## Summary as a tibble
+check_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+In addition of your own packages, you can also check the results for other
+packages that might be of interest to you:
+
+```{r package-name}
+## either by themselves
+summary_cran_results(pkg = c("ggplot2", "dplyr"))
+check_cran_results(pkg = c("ggplot2", "dplyr"))
+
+## or by combining them with email addresses
+summary_cran_results(email = "francois.michonneau@gmail.com",
+                     pkg = c("mregions", "ridigbio"))
+check_cran_results(email = "francois.michonneau@gmail.com",
+                   pkg = c("mregions", "ridigbio"))
+```
+
+You can also inspect the logs for the check results using
+`show_cran_results(pkg)`, while `visit_cran_check(pkg)` takes you to the CRAN
+webpage.
+
+```{r show-cran-results}
+show_cran_results(pkg = "tidyr")
+```
+
+## Feedback? Suggestions?
+
+Feel free to submit feedback and suggestions
+by [opening an issue](https://github.com/fmichonneau/foghorn/issues/new) on
+GitHub.
+
 ## Code of Conduct
 
 Please note that this project is released with

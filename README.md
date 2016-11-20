@@ -1,17 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/foghorn) [![Coverage Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://codecov.io/github/fmichonneau/foghorn?branch=master) ![Work in Progress](https://img.shields.io/badge/status-work%20in%20progress-yellow.svg) [![](http://www.r-pkg.org/badges/version/foghorn)](http://www.r-pkg.org/pkg/foghorn)
+[![Travis-CI Build Status](https://travis-ci.org/fmichonneau/foghorn.svg?branch=master)](https://travis-ci.org/fmichonneau/foghorn) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/foghorn) [![Coverage Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://codecov.io/github/fmichonneau/foghorn?branch=master) [![](http://www.r-pkg.org/badges/version/foghorn)](http://www.r-pkg.org/pkg/foghorn) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/foghorn)](http://www.r-pkg.org/pkg/foghorn)
 
 foghorn
 =======
 
 > **foghorn** *noun* <br> 1. Device used to facilitate navigation in foggy conditions by warning of potential hazards ahead.
 
-`foghorn` makes accessible to the R terminal the results of the CRAN check results for the packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your `.Rprofile` (to check regularly on the status of the published packages), or as a tibble.
+`foghorn` makes accessible to the R terminal the results of the CRAN check results for packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your `.Rprofile` (to check regularly on the status of the published packages), or as a tibble.
 
-As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when built by CRAN. `foghorn` brings this information to your terminal automatically so you don't have to check the CRAN check results page regularly.
-
-The package uses [whoami](https://cran.r-project.org/package=whoami) to guess your email address, but it can be specified manually.
+As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when checked on CRAN's infrastructure. `foghorn` brings this information to your terminal so you don't have to leave the comfort of your terminal to know the results of the CRAN checks for your packages.
 
 Installation
 ------------
@@ -23,112 +21,145 @@ You can install foghorn from github with:
 ghit::install_github("fmichonneau/foghorn")
 ```
 
-Example
--------
+Demonstration
+-------------
 
 ``` r
 ## load the package
 library(foghorn)
+```
 
+`foghorn` provides a graphical summary for CRAN check results for the packages maintained by individuals (the number is parentheses indicates the number of R flavors used by CRAN that generate notes, warnings, errors):
+
+``` r
 ## Graphical interface
-summary_cran_checks(email = "francois.michonneau@gmail.com")
-#> ⚠ Package(s) with warnings on CRAN: rotl (1)
-#> ★ Package(s) with notes on CRAN: rncl (3)
+summary_cran_results(email = "francois.michonneau@gmail.com")
+#> ⚠  Package with warnings on CRAN: 
+#>   - rotl (1)
+#> ★  Package with notes on CRAN: 
+#>   - rncl (3)
+#> ◉  Package with memtest on CRAN: 
+#>   - rncl
+```
 
-## Summary as a data frame
-cran_check_results(email = "francois.michonneau@gmail.com")
-#> # A tibble: 4 × 6
-#>     Package ERROR  WARN  NOTE    OK has_memtest_notes
-#>       <chr> <int> <int> <int> <int>             <lgl>
-#> 1 phylobase    NA    NA    NA    12             FALSE
-#> 2  riceware    NA    NA    NA    12             FALSE
-#> 3      rncl    NA    NA     3     9             FALSE
-#> 4      rotl    NA     1    NA    11             FALSE
+The information can also be summarized as a table:
 
-## You can also have information just for some packages
-summary_cran_checks(email = NULL,  package = c("mregions", "ridigbio"))
-#> ✖ Package(s) with errors on CRAN: mregions (1)
-cran_check_results(email = NULL,  package = c("mregions", "ridigbio"))
-#> # A tibble: 2 × 6
-#>    Package ERROR  WARN  NOTE    OK has_memtest_notes
-#>      <chr> <int> <int> <int> <int>             <lgl>
-#> 1 mregions     1    NA    NA    11             FALSE
-#> 2 ridigbio    NA    NA    NA    12             FALSE
+``` r
+## Summary as a tibble
+check_cran_results(email = "francois.michonneau@gmail.com")
+#> # A tibble: 4 × 7
+#>     Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
+#>       <chr> <int> <int> <int> <int> <int>             <lgl>
+#> 1 phylobase    NA    NA    NA    NA    13             FALSE
+#> 2  riceware    NA    NA    NA    NA    13             FALSE
+#> 3      rncl    NA    NA    NA     3    10              TRUE
+#> 4      rotl    NA    NA     1    NA    12             FALSE
+```
 
-## Or both
-summary_cran_checks(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
-#> ✖ Package(s) with errors on CRAN: mregions (1)
-#> ⚠ Package(s) with warnings on CRAN: rotl (1)
-#> ★ Package(s) with notes on CRAN: rncl (3)
-cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregions", "ridigbio"))
-#> # A tibble: 6 × 6
-#>     Package ERROR  WARN  NOTE    OK has_memtest_notes
-#>       <chr> <int> <int> <int> <int>             <lgl>
-#> 1  mregions     1    NA    NA    11             FALSE
-#> 2  ridigbio    NA    NA    NA    12             FALSE
-#> 3 phylobase    NA    NA    NA    12             FALSE
-#> 4  riceware    NA    NA    NA    12             FALSE
-#> 5      rncl    NA    NA     3     9             FALSE
-#> 6      rotl    NA     1    NA    11             FALSE
+In addition of your own packages, you can also check the results for other packages that might be of interest to you:
 
-## You can also get the results details of the check results for packages:
-summary_cran_results("rotl")
-#> ⚠ rotl - WARN: re-building of vignette outputs
-#>    ❯ r-devel-windows-ix86+x86_64 
-#> 
-#>     Error in re-building vignettes:
-#>       ...
-#>     Quitting from lines 47-58 (meta-analysis.Rmd) 
-#>     Error: processing vignette 'meta-analysis.Rmd' failed with diagnostics:
-#>     SI number '1' greater than number of detected SIs (0)
-#>     Execution halted
-#> 
-#> ⚠ rotl - WARN: re-building of vignette outputs
+``` r
+## either by themselves
+summary_cran_results(pkg = c("ggplot2", "dplyr"))
+#> ✖  Packages with errors on CRAN: 
+#>   - dplyr (2)
+#>   - ggplot2 (2)
+#> ⚠  Packages with warnings on CRAN: 
+#>   - dplyr (1)
+#>   - ggplot2 (1)
+#> ★  Packages with notes on CRAN: 
+#>   - dplyr (10)
+#>   - ggplot2 (4)
+#> ◉  Package with memtest on CRAN: 
+#>   - dplyr
+check_cran_results(pkg = c("ggplot2", "dplyr"))
+#> # A tibble: 2 × 7
+#>   Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
+#>     <chr> <int> <int> <int> <int> <int>             <lgl>
+#> 1   dplyr     2    NA     1    10    NA              TRUE
+#> 2 ggplot2     2    NA     1     4     6             FALSE
+
+## or by combining them with email addresses
+summary_cran_results(email = "francois.michonneau@gmail.com",
+                     pkg = c("mregions", "ridigbio"))
+#> ✖  Package with errors on CRAN: 
+#>   - mregions (1)
+#> ⚠  Package with warnings on CRAN: 
+#>   - rotl (1)
+#> ★  Packages with notes on CRAN: 
+#>   - mregions (1)
+#>   - rncl (3)
+#> ◉  Package with memtest on CRAN: 
+#>   - rncl
+check_cran_results(email = "francois.michonneau@gmail.com",
+                   pkg = c("mregions", "ridigbio"))
+#> # A tibble: 6 × 7
+#>     Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
+#>       <chr> <int> <int> <int> <int> <int>             <lgl>
+#> 1  mregions     1    NA    NA     1    11             FALSE
+#> 2  ridigbio    NA    NA    NA    NA    13             FALSE
+#> 3 phylobase    NA    NA    NA    NA    13             FALSE
+#> 4  riceware    NA    NA    NA    NA    13             FALSE
+#> 5      rncl    NA    NA    NA     3    10              TRUE
+#> 6      rotl    NA    NA     1    NA    12             FALSE
+```
+
+You can also inspect the logs for the check results using `show_cran_results(pkg)`, while `visit_cran_check(pkg)` takes you to the CRAN webpage.
+
+``` r
+show_cran_results(pkg = "tidyr")
+#> ★ tidyr - NOTE: data for non-ASCII characters
+#>    ❯ r-devel-linux-x86_64-fedora-clang 
+#>    ❯ r-devel-linux-x86_64-fedora-gcc 
+#>    ❯ r-devel-macos-x86_64-clang 
 #>    ❯ r-patched-solaris-sparc 
+#>    ❯ r-patched-solaris-x86 
+#>    ❯ r-release-osx-x86_64-mavericks 
+#>    ❯ r-oldrel-windows-ix86+x86_64 
 #> 
-#>     Error in re-building vignettes:
-#>       ...
-#>     Warning in engine$weave(file, quiet = quiet, encoding = enc) :
-#>       Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. Falling back to R Markdown v1.
-#>     Warning in engine$weave(file, quiet = quiet, encoding = enc) :
-#>       Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. Falling back to R Markdown v1.
-#>     Warning in engine$weave(file, quiet = quiet, encoding = enc) :
-#>       Pandoc (>= 1.12.3) and/or pandoc-citeproc not available. Falling back to R Markdown v1.
-#>     
-#>      *** caught segfault ***
-#>     address 441ec5f0, cause 'memory not mapped'
-#>     
-#>     Traceback:
-#>      1: .Call("readxl_xls_col_types", PACKAGE = "readxl", path, na, sheet,     nskip, n, has_col_names)
-#>      2: xls_col_types(path, sheet, na = na, nskip = skip, has_col_names = has_col_names)
-#>      3: read_xls(path, sheet, col_names, col_types, na, skip)
-#>      4: read_excel(xl_file)
-#>      5: eval(expr, envir, enclos)
-#>      6: eval(expr, envir, enclos)
-#>      7: withVisible(eval(expr, envir, enclos))
-#>      8: withCallingHandlers(withVisible(eval(expr, envir, enclos)), warning = wHandler,     error = eHandler, message = mHandler)
-#>      9: handle(ev <- withCallingHandlers(withVisible(eval(expr, envir,     enclos)), warning = wHandler, error = eHandler, message = mHandler))
-#>     10: timing_fn(handle(ev <- withCallingHandlers(withVisible(eval(expr,     envir, enclos)), warning = wHandler, error = eHandler, message = mHandler)))
-#>     11: evaluate_call(expr, parsed$src[[i]], envir = envir, enclos = enclos,     debug = debug, last = i == length(out), use_try = stop_on_error !=         2L, keep_warning = keep_warning, keep_message = keep_message,     output_handler = output_handler, include_timing = include_timing)
-#>     12: evaluate(code, envir = env, new_device = FALSE, keep_warning = !isFALSE(options$warning),     keep_message = !isFALSE(options$message), stop_on_error = if (options$error &&         options$include) 0L else 2L, output_handler = knit_handlers(options$render,         options))
-#>     13: in_dir(input_dir(), evaluate(code, envir = env, new_device = FALSE,     keep_warning = !isFALSE(options$warning), keep_message = !isFALSE(options$message),     stop_on_error = if (options$error && options$include) 0L else 2L,     output_handler = knit_handlers(options$render, options)))
-#>     14: block_exec(params)
-#>     15: call_block(x)
-#>     16: process_group.block(group)
-#>     17: process_group(group)
-#>     18: withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),     error = function(e) {        setwd(wd)        cat(res, sep = "\n", file = output %n% "")        message("Quitting from lines ", paste(current_lines(i),             collapse = "-"), " (", knit_concord$get("infile"),             ") ")    })
-#>     19: process_file(text, output)
-#>     20: knit(input, text = text, envir = envir, encoding = encoding,     quiet = quiet)
-#>     21: knit2html(..., force_v1 = TRUE)
-#>     22: (if (grepl("\\.[Rr]md$", file)) knit2html_v1 else if (grepl("\\.[Rr]rst$",     file)) knit2pdf else knit)(file, encoding = encoding, quiet = quiet,     envir = globalenv())
-#>     23: vweave(...)
-#>     24: engine$weave(file, quiet = quiet, encoding = enc)
-#>     25: doTryCatch(return(expr), name, parentenv, handler)
-#>     26: tryCatchOne(expr, names, parentenv, handlers[[1L]])
-#>     27: tryCatchList(expr, classes, parentenv, handlers)
-#>     28: tryCatch({    engine$weave(file, quiet = quiet, encoding = enc)    setwd(startdir)    find_vignette_product(name, by = "weave", engine = engine)}, error = function(e) {    stop(gettextf("processing vignette '%s' failed with diagnostics:\n%s",         file, conditionMessage(e)), domain = NA, call. = FALSE)})
-#>     29: buildVignettes(dir = "/home/ripley/R/packages/tests32/rotl.Rcheck/vign_test/rotl")
-#>     An irrecoverable exception occurred. R is aborting now ...
+#>       Note: found 23 marked UTF-8 strings
+#> 
+#> ✖ tidyr - ERROR: tests
+#>    ❯ r-devel-linux-x86_64-fedora-clang 
+#> 
+#>     Running the tests in ‘tests/testthat.R’ failed.
+#>     Last 13 lines of output:
+#>       Actual value: "basic_string"
+#>       
+#>       
+#>       2. Failure: elements must all be of same type (@test-unnest.R#24) --------------
+#>       error$message does not match "(incompatible type)|(numeric to character)".
+#>       Actual value: "basic_string"
+#>       
+#>       
+#>       testthat results ================================================================
+#>       OK: 191 SKIPPED: 0 FAILED: 2
+#>       1. Failure: gather throws error for POSIXlt (@test-gather.R#78) 
+#>       2. Failure: elements must all be of same type (@test-unnest.R#24) 
+#>       
+#>       Error: testthat unit tests failed
+#>       Execution halted
+#> 
+#> ✖ tidyr - ERROR: tests
+#>    ❯ r-devel-linux-x86_64-fedora-gcc 
+#> 
+#>     Running the tests in ‘tests/testthat.R’ failed.
+#>     Last 13 lines of output:
+#>       > library(testthat)
+#>       > library(tidyr)
+#>       > 
+#>       > test_check("tidyr")
+#>       1. Failure: gather throws error for POSIXlt (@test-gather.R#78) ----------------
+#>       error$message does not match "a POSIXlt".
+#>       Actual value: "basic_string::_M_replace_aux"
+#>       
+#>       
+#>       testthat results ================================================================
+#>       OK: 192 SKIPPED: 0 FAILED: 1
+#>       1. Failure: gather throws error for POSIXlt (@test-gather.R#78) 
+#>       
+#>       Error: testthat unit tests failed
+#>       Execution halted
 ```
 
 Code of Conduct
