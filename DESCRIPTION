@@ -1,10 +1,10 @@
 Package: foghorn
 Title: Summarizes CRAN Check Results in the Terminal
-Version: 0.0.0.9000
+Version: 0.2.0
 Authors@R: c(person("Francois", "Michonneau", role=c("aut", "cre"),
                     email="francois.michonneau@gmail.com"),
              person("Ben", "Bolker", role="ctb"))
-Description: A graphical summary of the CRAN check results in your R terminal.
+Description: The CRAN check results in your R terminal.
 Depends: R (>= 3.3.1)
 Imports:
   clisymbols (>= 1.0.0),
