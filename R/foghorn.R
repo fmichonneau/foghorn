@@ -368,18 +368,6 @@ parse_cran_results <- function(pkg, ...) {
     res
 }
 
-##' @importFrom crayon red yellow blue
-##' @importFrom clisymbols symbol
-format_cran <- function(type, string) {
-    col_tbl <- list(
-        "ERROR" = function(x) crayon::red(paste(clisymbols::symbol$cross, x)),
-        "WARN" = function(x) crayon::yellow(paste(clisymbols::symbol$warning, x)),
-        "NOTE" = function(x) crayon::blue(paste(clisymbols::symbol$star, x))
-    )
-    col_tbl[[type]](string)
-}
-
-
 ##' @importFrom clisymbols symbol
 render_flavors <- function(x) {
     ## transform the comma separated list of platform flavors into
@@ -407,15 +395,20 @@ summary_cran_results <- function(pkg, verbose = TRUE) {
     }
     apply(attr(res, "memtest"), 1, function(x) {
         if (x[2])
-            cat(crayon::cyan(paste(clisymbols::symbol$circle_filled, crayon::bold(x[1]), "has memtest notes")), "\n")
+            cat(foghorn_components[["has_memtest_notes"]]$color(
+                  paste(foghorn_components[["has_memtest_notes"]]$symbol,
+                        crayon::bold(x[1]), "has memtest notes")), "\n")
     })
     apply(res, 1, function(x)  {
-        if (verbose)
-            msg <- crayon::silver(x[5])
+        cmpt <- foghorn_components[[x[2]]]
+        if (show_log)
+            msg <- x[5]
         else
             msg <- character(0)
         cat(## Type of CRAN message
-            format_cran(x[2], paste0(crayon::bold(paste(x[1], "-", x[2])), ": ", x[3])), "\n",
+            cmpt$color(paste0(cmpt$symbol, " ",
+                              crayon::bold(paste0(x[1], " - ", x[2])),
+                              ": ", x[3])), "\n",
             ## Flavors concerned
             render_flavors(x[4]), "\n",
             ## Optionally the log output
