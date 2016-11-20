@@ -17,7 +17,8 @@ context("check cran results")
 validate_check_cran_results <- function(x) {
     length(x) == 7 &&
         inherits(x, "tbl_df") &&
-        all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN", "NOTE",  "OK", "has_memtest_notes")) &&
+        all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
+                            "NOTE",  "OK", "has_memtest_notes")) &&
         nrow(x) > 0
 }
 
@@ -113,6 +114,8 @@ test_that("output of summary cran results", {
     expect_false(all(grepl("  -", msg)))
     msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = FALSE))
     expect_true(all(grepl("  -", msg)))
+    expect_message(summary_cran_results(pkg = c("ggplot2", "dplyr")),
+                   "(Packages with error)|(Package with memtest)")
 })
 
 ### show_cran_results ----------------------------------------------------------
