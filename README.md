@@ -130,3 +130,8 @@ summary_cran_results("rotl")
 #>     29: buildVignettes(dir = "/home/ripley/R/packages/tests32/rotl.Rcheck/vign_test/rotl")
 #>     An irrecoverable exception occurred. R is aborting now ...
 ```
+
+Code of Conduct
+---------------
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.

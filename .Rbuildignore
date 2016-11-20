@@ -6,3 +6,4 @@
 ^README-.*\.png$
 ^appveyor\.yml$
 ^codecov\.yml$
+^CONDUCT\.md$

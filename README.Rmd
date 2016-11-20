@@ -72,3 +72,8 @@ cran_check_results(email = "francois.michonneau@gmail.com",  package = c("mregio
 ## You can also get the results details of the check results for packages:
 summary_cran_results("rotl")
 ```
+## Code of Conduct
+
+Please note that this project is released with
+a [Contributor Code of Conduct](CONDUCT.md). By participating in this project
+you agree to abide by its terms.
