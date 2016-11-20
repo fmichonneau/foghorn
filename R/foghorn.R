@@ -12,7 +12,7 @@ url_email_res <- function(email) {
     email <- gsub("\\@", "_at_", tolower(email))
     ##  "all characters different from letters, digits, hyphens,
     ##  underscores, colons, and periods replaced by underscores ..."
-    email <- gsub("[^[:alnum:]_:.-]","_",email)
+    email <- gsub("[^[:alnum:]_:.-]", "_", email)
     paste0("https://cran.r-project.org/web/checks/check_results_",
            email, ".html")
 }
@@ -26,9 +26,9 @@ parse_cran <- function(x) {
     .res <- try(xml2::read_html(x), silent = TRUE)
     if (inherits(.res, "try-error")) {
         ## is there a cleaner way to do this ???
-        ss <- showConnections(all=TRUE)
-        cc <- as.numeric(rownames(ss)[ss[,1]==x])
-        if (length(cc)>0) on.exit(close(getConnection(cc)))
+        ss <- showConnections(all = TRUE)
+        cc <- as.numeric(rownames(ss)[ss[, 1] == x])
+        if (length(cc) > 0) on.exit(close(getConnection(cc)))
         return(NA)
     }
     ## not sure whether we need to close connections ... ?
@@ -38,7 +38,7 @@ parse_cran <- function(x) {
 parse_cran_checks_email <- function(email) {
     url <- url_email_res(email)
     res <- lapply(url, parse_cran)
-    if (length(bad <- which(is.na(res)))>0) {
+    if (length(bad <- which(is.na(res))) > 0) {
         stop("Invalid email address(es): ", email[bad], call. = FALSE)
     }
     class(res) <- c("cran_checks_email", class(res))
@@ -48,7 +48,7 @@ parse_cran_checks_email <- function(email) {
 parse_cran_checks_pkg <- function(pkg) {
     url <- url_pkg_res(pkg)
     res <- lapply(url, parse_cran)
-    if (length(bad <- which(is.na(res)))>0) {
+    if (length(bad <- which(is.na(res))) > 0) {
         stop("Invalid package name(s): ", pkg[bad], call. = FALSE)
     }
     names(res) <- pkg
@@ -365,7 +365,7 @@ parse_cran_results <- function(pkg, ...) {
                 result = gsub("^Result: ", "", p[r]),
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
-                message = paste(p[(r+1):(f-1)], collapse = "\n"),
+                message = paste(p[(r + 1):(f - 1)], collapse = "\n"),
                 stringsAsFactors = FALSE
             )
         }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
