@@ -260,7 +260,13 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
         nl <- character(0)
     } else
         nl <- "\n"
-    msg <- paste(" Package(s) with", foghorn_components[[type]]$word,
+
+    if (grepl(",|\\n", pkgs))
+        pkg_string <- "Packages"
+    else
+        pkg_string <- "Package"
+
+    msg <- paste(" ", pkg_string, "with", foghorn_components[[type]]$word,
                  "on CRAN: ")
     message(foghorn_components[[type]]$color(
         paste0(foghorn_components[[type]]$symbol,
