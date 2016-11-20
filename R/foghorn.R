@@ -335,8 +335,7 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
     invisible(url)
 }
 
-parse_cran_results <- function(pkg, what = c("error", "warning", "note"), ...) {
-    what <- match.arg(what)
+parse_cran_results <- function(pkg, ...) {
     parsed <- parse_cran_checks_pkg(pkg)
     mem_test <- has_memtest(parsed)
 
