@@ -1,3 +1,13 @@
+## Re-submission
+
+Initial submission got the following on CRAN:
+
+> * checking files in ‘vignettes’ ... WARNING
+> Files in the 'vignettes' directory newer than all files in 'inst/doc':
+>   ‘quick_start.Rmd’
+
+The vignette was re-generated to remove the WARNING.
+
 ## Test environments
 
 - local Ubuntu 16.10, R 3.3.2
