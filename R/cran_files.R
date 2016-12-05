@@ -9,3 +9,15 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors"),
     download.file(url = cran_url, destfile = file.path(dest, file), ...)
     invisible(file.path(dest, file))
 }
+
+
+read_cran_rds_file <- function(file) {
+    res <- readRDS(file = file)
+    class(res) <- c("cran_db", class(res))
+    res
+}
+
+maintainer_pkg_info <- function(email, crandb) {
+    idx <- grepl(paste0("<", email, ">"), crandb[["Maintainer"]])
+    crandb[idx, ]
+}
