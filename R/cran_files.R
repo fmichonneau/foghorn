@@ -1,4 +1,4 @@
-fetch_cran_rds_file <- function(file = c("details", "results", "flavors"),
+fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
                                 dest = tempdir(), protocol = c("https", "ftp"),
                                 ...) {
     ## TODO -- need to check for internet connection
@@ -6,7 +6,10 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors"),
     file <- match.arg(file)
     protocol <- match.arg(protocol)
     is_ftp <- if (identical(protocol, "ftp")) "pub/R/" else character(0)
-    file <- paste0("check_", file, ".rds")
+    if (file != "memtest")
+        file <- paste0("check_", file, ".rds")
+    else
+        file <- "memtest_notes.rds"
     dest_files <- file.path(dest, file)
     cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
     download.file(url = cran_url, destfile = dest_files, ...)
@@ -35,4 +38,10 @@ table_cran_checks.crandb_email <- function(parsed, ...) {
         tidyr::spread_("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
         dplyr::ungroup()
+}
+
+add_memtest.crandb <- function(tbl, memtest, ...) {
+    res <- vapply(tbl[["Package"]], function(x) exists(x, memtest), logical(1),
+                  USE.NAMES = FALSE)
+    dplyr::mutate(tbl, "has_memtest" = res)
 }
