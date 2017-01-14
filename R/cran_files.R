@@ -62,4 +62,32 @@ add_memtest_crandb <- function(tbl, ...) {
     dplyr::mutate(tbl, "has_memtest_notes" = res)
 }
 
+details_cran_results <- function(pkg, ...) {
+    dt <- get_cran_rds_file("details", ...)
+    memtest <- get_cran_rds_file("memtest", ...)
+
+
+    dt <- dt[dt[["Package"]] == pkg, ]
+
+    ## remove lines that don't have any issues
+    dt <- dt[dt[["Check"]] != "*", ]
+
+    dt$Status <- gsub("WARNING", "WARN", dt$Status)
+
+    res <- dt %>%
+        group_by(Package, Output) %>%
+        mutate(flavors = paste(Flavor, collapse = ", ")) %>%
+        ungroup() %>%
+        distinct(Package, Output, .keep_all = TRUE) %>%
+        select(
+            Package,
+            result = Status,
+            check = Check,
+            flavors,
+            message = Output)  %>%
+        as.data.frame
+
+    attr(res, "memtest") <- data_frame(Package = pkg,
+                                        has_memtest_notes = exists(pkg, memtest))
+    res
 }
