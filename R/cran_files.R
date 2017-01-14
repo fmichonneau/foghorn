@@ -25,16 +25,23 @@ read_cran_rds_file <- function(file) {
     res
 }
 
-maintainer_pkg_info <- function(email, crandb) {
-    if (!exists("Maintainer", crandb))
-        stop("use `results` database")
 get_cran_rds_file <- function(file, ...) {
     f <- fetch_cran_rds_file(file, ...)
     read_cran_rds_file(f)
 }
+
+crandb_pkg_info_email <- function(email, ...) {
+    crandb <- get_cran_rds_file(file = "results", ...)
     idx <- grepl(paste0("<", email, ">"), crandb[["Maintainer"]])
     res <- crandb[idx, ]
-    class(res) <- c("crandb_email", class(res))
+    class(res) <- c("crandb", class(res))
+    res
+}
+
+crandb_pkg_info_pkg <- function(pkg, ...) {
+    crandb <- get_cran_rds_file(file = "results", ...)
+    res <- crandb[crandb[["Package"]] %in% pkg, ]
+    class(res) <- c("crandb", class(res))
     res
 }
 
