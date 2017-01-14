@@ -45,7 +45,8 @@ crandb_pkg_info_pkg <- function(pkg, ...) {
     res
 }
 
-table_cran_checks.crandb_email <- function(parsed, ...) {
+table_cran_checks.crandb <- function(parsed, ...) {
+    parsed$Status <- gsub("WARNING", "WARN", parsed$Status)
     parsed %>%
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
