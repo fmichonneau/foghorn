@@ -182,24 +182,43 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
 check_cran_results <- function(email = NULL, pkg = NULL,
-                               show = c("error", "fail", "warn", "note", "ok")) {
+                               show = c("error", "fail", "warn", "note", "ok"),
+                               source = c("website", "crandb"), ...) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
+    source <- match.arg(source)
     res <- NULL
+
     if (is.null(email) && is.null(pkg))
         stop("You need to provide at least one value for ", sQuote("email"),
              "or for ", sQuote("pkg"))
-    if (!is.null(email)) {
-        res_email <- parse_cran_checks_email(email)
-        res <- table_cran_checks(res_email)
-        res <- add_memtest(res, res_email)
-    }
-    if (!is.null(pkg)) {
-        res_pkg <- parse_cran_checks_pkg(pkg)
-        tbl_pkg <- table_cran_checks(res_pkg)
-        res <- add_memtest(tbl_pkg, res_pkg) %>%
-            dplyr::bind_rows(res)
+
+    if (identical(source, "website")) {
+        if (!is.null(email)) {
+            res_email <- parse_cran_checks_email(email)
+            res <- table_cran_checks(res_email)
+            res <- add_memtest(res, res_email)
+        }
+        if (!is.null(pkg)) {
+            res_pkg <- parse_cran_checks_pkg(pkg)
+            tbl_pkg <- table_cran_checks(res_pkg)
+            res <- add_memtest(tbl_pkg, res_pkg) %>%
+                dplyr::bind_rows(res)
+        }
+    } else if (identical(source, "crandb")) {
+        if (!is.null(email)) {
+            res_email <- crandb_pkg_info_email(email, ...)
+            res <- table_cran_checks(res_email)
+            res <- add_memtest_crandb(res)
+        }
+        if (!is.null(pkg)) {
+            res_pkg <- crandb_pkg_info_pkg(pkg, ...)
+            tbl_pkg <- table_cran_checks(res_pkg)
+            res <- add_memtest_crandb(res) %>%
+                dplyr::bind_rows(res)
+        }
+
     }
     res <- dplyr::distinct_(res, "Package", .keep_all = TRUE)
     res[, show]
@@ -303,8 +322,8 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
 ##' @importFrom clisymbols symbol
 ##' @export
 summary_cran_results <- function(email = NULL, pkg = NULL,
-                                compact = FALSE) {
-    res_checks <- check_cran_results(email, pkg)
+                                compact = FALSE, ...) {
+    res_checks <- check_cran_results(email, pkg, ...)
     what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes")
     res <- lapply(what, function(x)
         get_pkg_with_results(res_checks, x, compact))
@@ -404,10 +423,15 @@ render_flavors <- function(x) {
 ##'     messages
 ##' @export
 ##' @importFrom crayon bold
-show_cran_results <- function(pkg, show_log = TRUE) {
+show_cran_results <- function(pkg, show_log = TRUE, source = c("website", "crandb"), ...) {
     if (length(pkg) != 1 || !is.character(pkg))
         stop(sQuote("pkg"), " is not a string.", call. = FALSE)
-    res <- parse_cran_results(pkg)
+
+    if (identical(source, "website"))
+        res <- parse_cran_results(pkg)
+    else if (identical(source, "crandb"))
+        res <- details_cran_results(pkg, ...)
+
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))
         return(invisible(NULL))
