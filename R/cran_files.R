@@ -28,6 +28,10 @@ read_cran_rds_file <- function(file) {
 maintainer_pkg_info <- function(email, crandb) {
     if (!exists("Maintainer", crandb))
         stop("use `results` database")
+get_cran_rds_file <- function(file, ...) {
+    f <- fetch_cran_rds_file(file, ...)
+    read_cran_rds_file(f)
+}
     idx <- grepl(paste0("<", email, ">"), crandb[["Maintainer"]])
     res <- crandb[idx, ]
     class(res) <- c("crandb_email", class(res))
