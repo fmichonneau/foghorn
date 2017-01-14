@@ -54,8 +54,12 @@ table_cran_checks.crandb <- function(parsed, ...) {
         dplyr::ungroup()
 }
 
-add_memtest.crandb <- function(tbl, memtest, ...) {
+
+add_memtest_crandb <- function(tbl, ...) {
+    memtest <- get_cran_rds_file("memtest", ...)
     res <- vapply(tbl[["Package"]], function(x) exists(x, memtest), logical(1),
                   USE.NAMES = FALSE)
-    dplyr::mutate(tbl, "has_memtest" = res)
+    dplyr::mutate(tbl, "has_memtest_notes" = res)
+}
+
 }
