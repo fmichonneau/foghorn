@@ -66,6 +66,9 @@ add_memtest_crandb <- function(tbl, ...) {
     dplyr::mutate(tbl, "has_memtest_notes" = res)
 }
 
+##' @importFrom lazyeval interp
+##' @importFrom stats setNames
+##' @importFrom dplyr group_by_ mutate_ ungroup distinct_ select_
 details_cran_results <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
     memtest <- get_cran_rds_file("memtest", ...)
@@ -78,20 +81,21 @@ details_cran_results <- function(pkg, ...) {
 
     dt$Status <- gsub("WARNING", "WARN", dt$Status)
 
+    flvr <- setNames(list(lazyeval::interp(~paste(coln, collapse = ", "), coln = as.name("Flavor"))),
+                     "flavors")
     res <- dt %>%
-        group_by(Package, Output) %>%
-        mutate(flavors = paste(Flavor, collapse = ", ")) %>%
-        ungroup() %>%
-        distinct(Package, Output, .keep_all = TRUE) %>%
-        select(
-            Package,
-            result = Status,
-            check = Check,
-            flavors,
-            message = Output)  %>%
-        as.data.frame
+        dplyr::group_by_("Package", "Output") %>%
+        dplyr::mutate_(.dots = flvr) %>%
+        dplyr::ungroup() %>%
+        dplyr::distinct_("Package", "Output", .keep_all = TRUE) %>%
+        dplyr::select_(
+            "Package",
+            result = "Status",
+            check = "Check",
+            "flavors",
+            message = "Output")
 
-    attr(res, "memtest") <- data_frame(Package = pkg,
-                                        has_memtest_notes = exists(pkg, memtest))
+    attr(res, "memtest") <- tibble::data_frame(Package = pkg,
+                                               has_memtest_notes = exists(pkg, memtest))
     res
 }
