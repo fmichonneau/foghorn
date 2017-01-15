@@ -174,8 +174,7 @@ test_that("output of summary cran results", {
     cran_mem <- get_cran_rds_file("memtest")
 
     pkg_with_warn <- sample(cran_res$Package[cran_res$Status == "WARN"], 3)
-    expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
-                     summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
+
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    "with warnings")
     expect_message(summary_cran_results(pkg = pkg_with_warn,
