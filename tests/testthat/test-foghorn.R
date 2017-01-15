@@ -237,4 +237,7 @@ test_that("output of show cran results", {
     skip_on_cran()
     expect_output(show_cran_results("rotl", show_log = FALSE),
                   "rotl")
+    expect_output(show_cran_results("rotl", show_log = FALSE,
+                                    source = "crandb"),
+                  "rotl")
 })
