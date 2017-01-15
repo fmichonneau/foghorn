@@ -4,7 +4,7 @@
 \alias{summary_cran_results}
 \title{Summary of the CRAN check results}
 \usage{
-summary_cran_results(email = NULL, pkg = NULL, compact = FALSE)
+summary_cran_results(email = NULL, pkg = NULL, compact = FALSE, ...)
 }
 \arguments{
 \item{email}{email address for package maintainers (character
@@ -15,6 +15,10 @@ vector)}
 \item{compact}{if \code{TRUE}, all the packages with non-OK
 results are listed in a single line, otherwise they are listed
 on multiple lines.}
+
+\item{...}{additional arguments to control where the data from the
+check results are coming from and how they are downloaded from
+the CRAN servers (see Details section).}
 }
 \value{
 Prints the packages that return errors, warnings, and

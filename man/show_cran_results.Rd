@@ -4,13 +4,22 @@
 \alias{show_cran_results}
 \title{Show the CRAN check results for a package}
 \usage{
-show_cran_results(pkg, show_log = TRUE)
+show_cran_results(pkg, show_log = TRUE, src = c("website", "crandb"), ...)
 }
 \arguments{
 \item{pkg}{name of the package on CRAN}
 
 \item{show_log}{Should the messages of the \dQuote{Check Details}
 be printed? (logical)}
+
+\item{src}{if \code{"website"} the data is scrapped from the CRAN
+website, if \code{"crandb"} the data is downloaded from a RDS
+file hosted on the CRAN servers (which is used to generate the
+information found on the CRAN website).}
+
+\item{...}{additional arguments to control where the data from the
+check results are coming from and how they are downloaded from
+the CRAN servers (see Details section).}
 }
 \value{
 \code{NULL}, used for its side effect of printing the CRAN
@@ -20,5 +29,35 @@ be printed? (logical)}
 Given a package name published on CRAN, print the outcomes of
 checks that return notes, warnings or errors, and optionally print
 the messages.
+}
+\details{
+Where does the data come from?
+
+The data comes from the CRAN servers. They generate RDS files that
+contains information regarding the results of the checks for all
+the packages, and all the flavors. This data is then used to
+generate the web pages.
+
+\code{foghorn} provides access to either of these data sources. If
+you choose \code{src = "website"} the data is scrapped from the
+CRAN website. If you only need to check a few packages, this is a
+good option. If you choose \code{src = "crandb"} the RDS files
+(about 20Mb) are downloaded first from the CRAN servers.
+
+When choosing \code{src = "crandb"} you can also specify the
+following options:
+
+\itemize{
+
+  \item {dest} { a folder where to store the RDS files (\code{tempdir()}
+                 by default).}
+
+  \item {protocol} { either \code{https} (default) or \code{ftp}. }
+
+  \item {overwrite} { when \code{FALSE} (default), if the file exists in
+                      \code{dest} then it will not be downloaded again.
+                      when \code{TRUE} the file gets downloaded everytime
+                      it's needed.}
+}
 }
 
