@@ -60,4 +60,11 @@ following options:
                       it's needed.}
 }
 }
+\seealso{
+Note that the \code{tools} package contains unexported
+    functions that can be used to extract summary information from
+    the check results. Specifically
+    \code{tools:::sumarize_CRAN_check_status} is similar to
+    \code{show_cran_results}.
+}
 
