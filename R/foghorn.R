@@ -69,7 +69,9 @@ default_cran_checks <- tibble::data_frame(
 get_cran_table <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
         tbl <- rvest::html_table(x)
-        tbl[[1]]
+        tbl <- tbl[[1]]
+        tbl$Version <- as.character(tbl$Version)
+        tbl
     })
     dplyr::bind_rows(res, default_cran_checks, ...)
 }
