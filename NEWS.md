@@ -1,3 +1,3 @@
-## v0.2.2
+## v0.4.0
 
 * initial release on CRAN
