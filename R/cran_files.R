@@ -1,3 +1,4 @@
+##' @importFrom utils download.file
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
                                 dest = tempdir(), protocol = c("https", "ftp"),
                                 overwrite = FALSE, ...) {
@@ -11,7 +12,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memte
     else
         file <- "memtest_notes.rds"
     dest_file <- file.path(dest, file)
-    if (! file.exists(dest_file) && overwrite) {
+    if (! file.exists(dest_file) || overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
         download.file(url = cran_url, destfile = dest_file, ...)
     }
