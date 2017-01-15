@@ -32,8 +32,12 @@ get_cran_rds_file <- function(file, ...) {
 
 crandb_pkg_info_email <- function(email, ...) {
     crandb <- get_cran_rds_file(file = "results", ...)
-    idx <- grepl(paste0("<", email, ">"), crandb[["Maintainer"]])
-    res <- crandb[idx, ]
+    maintainer <- tolower(crandb$Maintainer)
+    idx <- lapply(tolower(email), function(x)
+        grepl(paste0("<", x, ">"), maintainer, fixed = TRUE))
+    idx <- Reduce("+", idx)
+
+    res <- crandb[as.logical(idx), ]
     class(res) <- c("crandb", class(res))
     res
 }
