@@ -215,7 +215,7 @@ check_cran_results <- function(email = NULL, pkg = NULL,
         if (!is.null(pkg)) {
             res_pkg <- crandb_pkg_info_pkg(pkg, ...)
             tbl_pkg <- table_cran_checks(res_pkg)
-            res <- add_memtest_crandb(res) %>%
+            res <- add_memtest_crandb(tbl_pkg) %>%
                 dplyr::bind_rows(res)
         }
 
