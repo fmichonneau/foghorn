@@ -1,7 +1,7 @@
 context("check source validity")
 
 test_that("invalid source name",
-          expect_error(check_cran_results(pkg = "dplyr", source = "foo")))
+          expect_error(check_cran_results(pkg = "dplyr", src = "foo")))
 
 
 context("fail for invalid package name/emails")
@@ -33,7 +33,7 @@ test_that("at least email or package name specified (website)", {
 })
 
 test_that("at least email or package name specified (crandb)", {
-    expect_error(check_cran_results(source = "crandb"), "provide at least one value for")
+    expect_error(check_cran_results(src = "crandb"), "provide at least one value for")
 })
 
 test_that("works with one package, one address, or both (website)", {
@@ -49,11 +49,11 @@ test_that("works with one package, one address, or both (website)", {
 
 test_that("works with one package, one address, or both (crandb)", {
     skip_on_cran()
-    res_pkg <- check_cran_results(pkg = "phylobase", source = "crandb")
+    res_pkg <- check_cran_results(pkg = "phylobase", src = "crandb")
     res_email <- check_cran_results(email = "francois.michonneau@gmail.com",
-                                    source = "crandb")
+                                    src = "crandb")
     res_both <- check_cran_results(email = "francois.michonneau@gmail.com",
-                                   pkg = "ridigbio", source = "crandb")
+                                   pkg = "ridigbio", src = "crandb")
     expect_true(validate_check_cran_results(res_pkg))
     expect_true(validate_check_cran_results(res_email))
     expect_true(validate_check_cran_results(res_both))
@@ -68,7 +68,7 @@ test_that("works for maintainers with a single package (website)", {
 test_that("works for maintainers with a single package (crandb)", {
     skip_on_cran()
     res <- check_cran_results(email = "bbolker+lme4@gmail.com",
-                              source = "crandb")
+                              src = "crandb")
     expect_true(validate_check_cran_results(res))
 })
 
@@ -82,9 +82,9 @@ test_that("case doesn't matter (website)", {
 test_that("case doesn't matter (crandb)", {
     skip_on_cran()
     res <- check_cran_results(email = "bBolker+Lme4@gmail.com",
-                              source = "crandb")
+                              src = "crandb")
     res_lower <- check_cran_results(email = "bbolker+lme4@gmail.com",
-                              source = "crandb")
+                              src = "crandb")
     expect_true(identical(res_lower, res))
 })
 
@@ -104,14 +104,14 @@ test_that("works for multiple packages, multiple addresses (website)", {
 test_that("works for multiple packages, multiple addresses (crandb)", {
     skip_on_cran()
     res_pkgs <- check_cran_results(pkg = c("rotl", "phylobase", "ridigbio"),
-                                   source = "crandb")
+                                   src = "crandb")
     res_emails <- check_cran_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
-                                     source = "crandb")
+                                     src = "crandb")
     res_both <- check_cran_results(email =   c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
                                    pkg = c("ridigbio", "mregions", "bold"),
-                                   source = "crandb")
+                                   src = "crandb")
     expect_true(validate_check_cran_results(res_pkgs))
     expect_true(validate_check_cran_results(res_emails))
     expect_true(validate_check_cran_results(res_both))
@@ -164,8 +164,8 @@ test_that("output of summary cran results", {
     skip_on_cran()
     set.seed(1010101)
     pkgs <- c("rotl", "rncl")
-    res_web <- suppressMessages(summary_cran_results(pkg = pkgs, source = "website"))
-    res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, source = "crandb"))
+    res_web <- suppressMessages(summary_cran_results(pkg = pkgs, src = "website"))
+    res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, src = "crandb"))
     expect_true(all(pkgs %in% res_web$Package))
     expect_true(all(pkgs %in% res_cran$Package))
     expect_identical(res_web, res_cran)
@@ -174,45 +174,45 @@ test_that("output of summary cran results", {
     cran_mem <- get_cran_rds_file("memtest")
 
     pkg_with_warn <- sample(cran_res$Package[cran_res$Status == "WARN"], 3)
-    expect_identical(summary_cran_results(pkg = pkg_with_warn, source = "website"),
-                     summary_cran_results(pkg = pkg_with_warn, source = "crandb"))
+    expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
+                     summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    "with warnings")
     expect_message(summary_cran_results(pkg = pkg_with_warn,
-                                        source = "crandb"),
+                                        src = "crandb"),
                    "with warnings")
 
     pkg_with_warn <- sample(cran_res$Package[cran_res$Status == "NOTE"], 3)
-    expect_identical(summary_cran_results(pkg = pkg_with_warn, source = "website"),
-                     summary_cran_results(pkg = pkg_with_warn, source = "crandb"))
+    expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
+                     summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    "with notes")
     expect_message(summary_cran_results(pkg = pkg_with_warn,
-                                        source = "crandb"),
+                                        src = "crandb"),
                    "with notes")
 
     pkg_with_warn <- sample(cran_res$Package[cran_res$Status == "ERROR"], 3)
-    expect_identical(summary_cran_results(pkg = pkg_with_warn, source = "website"),
-                     summary_cran_results(pkg = pkg_with_warn, source = "crandb"))
+    expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
+                     summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    "with errors")
     expect_message(summary_cran_results(pkg = pkg_with_warn,
-                                        source = "crandb"),
+                                        src = "crandb"),
                    "with errors")
 
     pkg_with_warn <- sample(cran_res$Package[cran_res$Status == "FAIL"], 3)
-    expect_identical(summary_cran_results(pkg = pkg_with_warn, source = "website"),
-                     summary_cran_results(pkg = pkg_with_warn, source = "crandb"))
+    expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
+                     summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    "with fails")
     expect_message(summary_cran_results(pkg = pkg_with_warn,
-                                        source = "crandb"),
+                                        src = "crandb"),
                    "with fails")
 
     pkg_with_memtest <- sample(names(cran_mem), 3)
-    expect_message(summary_cran_results(pkg = pkg_with_memtest, source = "website"),
+    expect_message(summary_cran_results(pkg = pkg_with_memtest, src = "website"),
                    "with memtest")
-    expect_message(summary_cran_results(pkg = pkg_with_memtest, source = "crandb"),
+    expect_message(summary_cran_results(pkg = pkg_with_memtest, src = "crandb"),
                    "with memtest")
 
     msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = TRUE))
@@ -238,6 +238,6 @@ test_that("output of show cran results", {
     expect_output(show_cran_results("rotl", show_log = FALSE),
                   "rotl")
     expect_output(show_cran_results("rotl", show_log = FALSE,
-                                    source = "crandb"),
+                                    src = "crandb"),
                   "rotl")
 })

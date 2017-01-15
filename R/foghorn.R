@@ -181,22 +181,26 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @param pkg package names (character vector)
 ##' @param show columns of the data frame to show (all are shown by
 ##'     default)
+##' @template src
+##' @template dots
+##' @template details
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
 check_cran_results <- function(email = NULL, pkg = NULL,
                                show = c("error", "fail", "warn", "note", "ok"),
-                               source = c("website", "crandb"), ...) {
+                               src = c("website", "crandb"), ...) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_memtest_notes")
-    source <- match.arg(source)
     res <- NULL
+
+    src <- match.arg(src, c("website", "crandb"))
 
     if (is.null(email) && is.null(pkg))
         stop("You need to provide at least one value for ", sQuote("email"),
              "or for ", sQuote("pkg"))
 
-    if (identical(source, "website")) {
+    if (identical(src, "website")) {
         if (!is.null(email)) {
             res_email <- parse_cran_checks_email(email)
             res <- table_cran_checks(res_email)
@@ -208,7 +212,7 @@ check_cran_results <- function(email = NULL, pkg = NULL,
             res <- add_memtest(tbl_pkg, res_pkg) %>%
                 dplyr::bind_rows(res)
         }
-    } else if (identical(source, "crandb")) {
+    } else if (identical(src, "crandb")) {
         if (!is.null(email)) {
             res_email <- crandb_pkg_info_email(email, ...)
             res <- table_cran_checks(res_email)
@@ -311,6 +315,7 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
 ##' @param compact if \code{TRUE}, all the packages with non-OK
 ##'     results are listed in a single line, otherwise they are listed
 ##'     on multiple lines.
+##' @template dots
 ##' @examples \dontrun{
 ##'    summary_cran_results(email = c("user1@company1.com", "user2@company2.com"))
 ##'    summary_cran_results(email = "user1@company1.com",
@@ -421,18 +426,23 @@ render_flavors <- function(x) {
 ##' @param pkg name of the package on CRAN
 ##' @param show_log Should the messages of the \dQuote{Check Details}
 ##'     be printed? (logical)
+##' @template src
+##' @template dots
+##' @template details
 ##' @return \code{NULL}, used for its side effect of printing the CRAN
 ##'     messages
 ##' @export
 ##' @importFrom crayon bold
-show_cran_results <- function(pkg, show_log = TRUE, source = c("website", "crandb"), ...) {
-    source <- match.arg(source)
+show_cran_results <- function(pkg, show_log = TRUE, src = c("website", "crandb"),
+                              ...) {
     if (length(pkg) != 1 || !is.character(pkg))
         stop(sQuote("pkg"), " is not a string.", call. = FALSE)
 
-    if (identical(source, "website"))
+    src <- match.arg(src, c("website", "crandb"))
+
+    if (identical(src, "website"))
         res <- parse_cran_results(pkg)
-    else if (identical(source, "crandb"))
+    else if (identical(src, "crandb"))
         res <- details_cran_results(pkg, ...)
 
     if (nrow(res) < 1) {
