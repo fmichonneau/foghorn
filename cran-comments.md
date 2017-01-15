@@ -1,19 +1,19 @@
 ## Re-submission
 
-Initial submission got the following on CRAN:
+Following feedback from Kurt Hornik at the time of initial submission (end of
+November), I included the possibility of using the RDS files hosted by CRAN as a
+possible data source for the results, in addition of scrapping the content of
+the CRAN webpages.
 
-> * checking files in ‘vignettes’ ... WARNING
-> Files in the 'vignettes' directory newer than all files in 'inst/doc':
->   ‘quick_start.Rmd’
-
-The vignette was re-generated to remove the WARNING.
+I also included a note in the documentation indicating that the tools package
+included functions to summarize information about the CRAN check results.
 
 ## Test environments
 
 - local Ubuntu 16.10, R 3.3.2
 - Ubuntu 12.04 (travis-ci), R 3.3.2
-- Windows with win-builder (R 3.3.2 and R Under development (2016-11-18 r71668)
-- local Debian, using R Under development (unstable) (2016-11-13 r71655)
+- Windows with win-builder (R 3.3.2, and R Under development 2017-01-13 r71966)
+- local Debian, using R Under development (unstable) (2017-01-08 r71938)
 
 ## R CMD check results
 
@@ -28,17 +28,11 @@ Maintainer: 'Francois Michonneau <francois.michonneau@gmail.com>'
 
 New submission
 
-License components with restrictions and base license permitting such:
-  MIT + file LICENSE
-File 'LICENSE':
-  YEAR: 2016
-  COPYRIGHT HOLDER: Francois Michonneau
-
 Possibly mis-spelled words in DESCRIPTION:
   CRAN (2:19, 7:18)
 
 Found the following (possibly) invalid URLs:
-  URL: http://www.r-pkg.org/pkg/foghorn
+  URL: http://www.r-pkg.org/pkg/foghorn (moved to https://www.r-pkg.org:443/pkg/foghorn)
     From: README.md
     Status: 404
     Message: Not Found
