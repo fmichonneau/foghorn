@@ -2,11 +2,12 @@
 
 Following feedback from Kurt Hornik at the time of initial submission (end of
 November), I included the possibility of using the RDS files hosted by CRAN as a
-possible data source for the results, in addition of scrapping the content of
-the CRAN webpages.
+data source for the results, in addition of the original approach scrapping the
+content of the CRAN webpages.
 
-I also included a note in the documentation indicating that the tools package
-included functions to summarize information about the CRAN check results.
+I also included a note in the documentation indicating that the "tools" package
+included (unexported) functions to summarize information about the CRAN check
+results.
 
 ## Test environments
 
