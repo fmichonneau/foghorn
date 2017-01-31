@@ -9,6 +9,9 @@ I also included a note in the documentation indicating that the "tools" package
 included (unexported) functions to summarize information about the CRAN check
 results.
 
+The examples are wrapped in \dontrun{} because they require an active internet
+connection to run.
+
 ## Test environments
 
 - local Ubuntu 16.10, R 3.3.2
