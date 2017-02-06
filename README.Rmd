@@ -92,11 +92,28 @@ webpage.
 show_cran_results(pkg = "tidyr")
 ```
 
+## Where does it get the data?
+
+The data from the CRAN check results used by this package are either scrapped
+from the CRAN web pages (default), or are from the CRAN database. The first
+option is faster if you want to check regularly a few packages. However, if you
+are doing statistics on a large number of packages, using the CRAN database is
+recommended. To use the CRAN database, add `src = "crandb"` in your function
+calls:
+
+```{r show-cran-db}
+check_cran_results(pkg = "nlme", src = "crandb")
+```
+
+Check out the "Details" section in the help files for more information.
+
+
 ## Feedback? Suggestions?
 
 Feel free to submit feedback and suggestions
 by [opening an issue](https://github.com/fmichonneau/foghorn/issues/new) on
 GitHub.
+
 
 ## Code of Conduct
 
