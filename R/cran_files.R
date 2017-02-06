@@ -12,7 +12,9 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memte
     else
         file <- "memtest_notes.rds"
     dest_file <- file.path(dest, file)
-    if (! file.exists(dest_file) || overwrite) {
+    if (! (file.exists(dest_file) &&
+           file.size(dest_file) > 0) ||
+        overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
         download.file(url = cran_url, destfile = dest_file, ...)
     }
@@ -21,6 +23,10 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memte
 
 
 read_cran_rds_file <- function(file) {
+    if (!file.exists(file))
+        stop(file, " can't be found...", call. = FALSE)
+    if (file.size(file) < 100) {
+        stop(file, " is corrupted. Delete it and retry")
     res <- readRDS(file = file)
     class(res) <- c("cran_db", class(res))
     res
