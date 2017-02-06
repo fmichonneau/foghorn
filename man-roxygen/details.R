@@ -19,13 +19,16 @@
 ##'   \item {dest} { a folder where to store the RDS files (\code{tempdir()}
 ##'                  by default).}
 ##'
-##'   \item {protocol} { either \code{https} (default) or \code{ftp}. }
+##'   \item {protocol} { either \code{https} (default) or \code{http}. }
 ##'
 ##'   \item {overwrite} { when \code{FALSE} (default), if the file exists in
 ##'                       \code{dest} then it will not be downloaded again.
 ##'                       when \code{TRUE} the file gets downloaded everytime
 ##'                       it's needed.}
-##' }
+##'
+##'   \item {...} { additional arguments that will be passed to
+##'                 \code{\link[httr]{GET}} function to control how
+##'                 the file will be downloaded.}
 ##'
 ##' @seealso Note that the \code{tools} package contains unexported
 ##'     functions that can be used to extract summary information from

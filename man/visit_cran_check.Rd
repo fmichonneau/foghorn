@@ -18,4 +18,3 @@ The URL from the CRAN check results page invisibly
 Visit the page in your web browser for a given package or a
 maintainer's email address
 }
-
