@@ -16,4 +16,3 @@ functions to view the logs of the CRAN check results (see
 \code{\link{show_cran_results}}), or to visit the web pages hosted
 by CRAN (see \code{\link{visit_cran_check}}).
 }
-
