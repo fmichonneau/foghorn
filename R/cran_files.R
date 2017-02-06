@@ -1,9 +1,7 @@
 ##' @importFrom utils download.file
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
-                                dest = tempdir(), protocol = c("https", "http", "ftp"),
+                                dest = tempdir(), protocol = c("http", "https", "ftp"),
                                 overwrite = FALSE, ...) {
-    ## TODO -- need to check for internet connection
-
     file <- match.arg(file)
     protocol <- match.arg(protocol)
     is_ftp <- if (identical(protocol, "ftp")) "pub/R/" else character(0)
