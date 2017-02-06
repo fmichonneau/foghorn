@@ -251,7 +251,7 @@ test_that("check output for MASS", {
     if (curl::has_internet()) {
         res <- check_cran_results(pkg = "MASS")
         validate_check_cran_results(res)
-        res <- check_cran_results(pkg = "MASS", src = "crandb")
+        res <- check_cran_results(pkg = "MASS", src = "crandb", protocol = "ftp")
         validate_check_cran_results(res)
     }
 })
