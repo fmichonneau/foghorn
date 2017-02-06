@@ -110,12 +110,12 @@ has_memtest <- function(parsed, ...) {
         all_urls <- xml2::xml_text(
                           xml2::xml_find_all(x, ".//p//child::a[@href]//@href"))
         with_mem <- grep("memtest", all_urls, value = TRUE)
-        with_mem <- grep("[^Rout]$", with_mem, value = TRUE)
         pkg_with_mem <- unique(basename(with_mem))
-        pkg_with_mem
+        if (length(pkg_with_mem) ==  0) return(NULL)
+        TRUE
     })
     pkg_with_mem <- unlist(pkg_with_mem)
-    res[["has_memtest_notes"]][match(pkg_with_mem, res$Package)] <- TRUE
+    res[["has_memtest_notes"]][match(names(pkg_with_mem), res$Package)] <- TRUE
     res
 }
 
