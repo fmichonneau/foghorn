@@ -186,6 +186,10 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
 ##' @template details
 ##' @return a data frame that tabulates the number of CRAN platforms
 ##'     that return errors, warnings, notes, or OK for the packages.
+##' @examples
+##'   if (curl::has_internet()) {
+##'     check_cran_results(pkg="MASS")
+##'   }
 check_cran_results <- function(email = NULL, pkg = NULL,
                                show = c("error", "fail", "warn", "note", "ok"),
                                src = c("website", "crandb"), ...) {
