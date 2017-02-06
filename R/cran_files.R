@@ -1,6 +1,6 @@
 ##' @importFrom utils download.file
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
-                                dest = tempdir(), protocol = c("https", "ftp"),
+                                dest = tempdir(), protocol = c("https", "http", "ftp"),
                                 overwrite = FALSE, ...) {
     ## TODO -- need to check for internet connection
 
@@ -16,7 +16,9 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memte
            file.size(dest_file) > 0) ||
         overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
-        download.file(url = cran_url, destfile = dest_file, ...)
+        d_status <- download.file(url = cran_url, destfile = dest_file, ...)
+        if (!identical(d_status, 0L))
+            stop("Non-zero download status. Try using a different protocol (http or ftp for instance).")
     }
     invisible(dest_file)
 }
