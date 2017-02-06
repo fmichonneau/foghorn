@@ -189,7 +189,7 @@ test_that("output of summary cran results", {
     expect_message(summary_cran_results(pkg = pkg_with_notes),
                    build_regexp("with notes", pkg_with_notes))
     expect_message(summary_cran_results(pkg = pkg_with_notes, src = "crandb"),
-                   build_regexp("with warnings", pkg_with_notes))
+                   build_regexp("with notes", pkg_with_notes))
 
     pkg_with_warn <- sample(unique(cran_res$Package[cran_res$Status == "WARN"]), 5)
     ## expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
@@ -199,9 +199,9 @@ test_that("output of summary cran results", {
     expect_true(all(check_cran_results(pkg = pkg_with_warn, src = "crandb")$WARN > 0))
     ## all are listed under packages with WARNING
     expect_message(summary_cran_results(pkg = pkg_with_warn),
-                   build_regexp("with notes", pkg_with_warn))
+                   build_regexp("with warnings", pkg_with_warn))
     expect_message(summary_cran_results(pkg = pkg_with_warn, src = "crandb"),
-                   build_regexp("with notes", pkg_with_warn))
+                   build_regexp("with warnings", pkg_with_warn))
 
     pkg_with_err <- sample(unique(cran_res$Package[cran_res$Status == "ERROR"]), 5)
     ##expect_identical(summary_cran_results(pkg = pkg_with_err, src = "website"),
