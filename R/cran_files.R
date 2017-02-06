@@ -25,7 +25,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memte
 read_cran_rds_file <- function(file) {
     if (!file.exists(file))
         stop(file, " can't be found...", call. = FALSE)
-    if (file.size(file) < 100) {
+    if (file.size(file) < 100)
         stop(file, " is corrupted. Delete it and retry")
     res <- readRDS(file = file)
     class(res) <- c("cran_db", class(res))
