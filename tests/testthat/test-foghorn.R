@@ -25,7 +25,9 @@ validate_check_cran_results <- function(x) {
         inherits(x, "tbl_df") &&
         all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
                             "NOTE",  "OK", "has_memtest_notes")) &&
-        nrow(x) > 0
+        nrow(x) > 0 &&
+        is.logical(x[["has_memtest_notes"]]) &&
+        any(x[1, ] > 2) # 2 allows for something other that "has_memtest_notes" to be in the table
 }
 
 test_that("at least email or package name specified (website)", {
