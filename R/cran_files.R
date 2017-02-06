@@ -1,6 +1,6 @@
 ##' @importFrom httr GET write_disk status_code
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
-                                dest = tempdir(), protocol = c("http", "https"),
+                                dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, ...) {
     file <- match.arg(file)
     protocol <- match.arg(protocol)
