@@ -29,6 +29,7 @@
 ##'   \item {...} { additional arguments that will be passed to
 ##'                 \code{\link[httr]{GET}} function to control how
 ##'                 the file will be downloaded.}
+##' }
 ##'
 ##' @seealso Note that the \code{tools} package contains unexported
 ##'     functions that can be used to extract summary information from
