@@ -1,4 +1,4 @@
-## Re-submission
+## Re-submissions
 
 ### 2017-02-06 (v0.4.2, current)
 
