@@ -34,11 +34,13 @@ library(foghorn)
 ``` r
 ## Graphical interface
 summary_cran_results(email = "francois.michonneau@gmail.com")
+#> ✖  Package with errors on CRAN: 
+#>   - foghorn (11)
 #> ⚠  Packages with warnings on CRAN: 
-#>   - rncl (4)
+#>   - rncl (3)
 #>   - rotl (1)
 #> ★  Package with notes on CRAN: 
-#>   - rncl (2)
+#>   - rncl (6)
 ```
 
 The information can also be summarized as a table:
@@ -46,13 +48,14 @@ The information can also be summarized as a table:
 ``` r
 ## Summary as a tibble
 check_cran_results(email = "francois.michonneau@gmail.com")
-#> # A tibble: 4 × 7
-#>     Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
-#>       <chr> <int> <int> <int> <int> <int>             <lgl>
-#> 1 phylobase    NA    NA    NA    NA    13             FALSE
-#> 2  riceware    NA    NA    NA    NA    13             FALSE
-#> 3      rncl    NA    NA     4     2     7             FALSE
-#> 4      rotl    NA    NA     1    NA    12             FALSE
+#> # A tibble: 5 x 7
+#>     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>       <chr> <int> <int> <int> <int> <int>            <lgl>
+#> 1   foghorn    11    NA    NA    NA     2            FALSE
+#> 2 phylobase    NA    NA    NA    NA    13            FALSE
+#> 3  riceware    NA    NA    NA    NA    13            FALSE
+#> 4      rncl    NA    NA     3     6     4            FALSE
+#> 5      rotl    NA    NA     1    NA    12            FALSE
 ```
 
 In addition of your own packages, you can also check the results for other packages that might be of interest to you:
@@ -60,43 +63,46 @@ In addition of your own packages, you can also check the results for other packa
 ``` r
 ## either by themselves
 summary_cran_results(pkg = c("ggplot2", "dplyr"))
-#> ✖  Package with errors on CRAN: 
+#> ✖  Packages with errors on CRAN: 
+#>   - dplyr (11)
 #>   - ggplot2 (2)
-#> ⚠  Packages with warnings on CRAN: 
+#> ⚠  Package with warnings on CRAN: 
 #>   - dplyr (1)
-#>   - ggplot2 (1)
 #> ★  Packages with notes on CRAN: 
-#>   - dplyr (7)
+#>   - dplyr (1)
 #>   - ggplot2 (4)
-#> ◉  Package with memtest on CRAN: 
+#> ◉  Package with other issues on CRAN: 
 #>   - dplyr
 check_cran_results(pkg = c("ggplot2", "dplyr"))
-#> # A tibble: 2 × 7
-#>   Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
-#>     <chr> <int> <int> <int> <int> <int>             <lgl>
-#> 1   dplyr    NA    NA     1     7     5              TRUE
-#> 2 ggplot2     2    NA     1     4     6             FALSE
+#> # A tibble: 2 x 7
+#>   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>     <chr> <int> <int> <int> <int> <int>            <lgl>
+#> 1   dplyr    11    NA     1     1    NA             TRUE
+#> 2 ggplot2     2    NA    NA     4     7            FALSE
 
 ## or by combining them with email addresses
 summary_cran_results(email = "francois.michonneau@gmail.com",
                      pkg = c("mregions", "ridigbio"))
+#> ✖  Package with errors on CRAN: 
+#>   - foghorn (11)
 #> ⚠  Packages with warnings on CRAN: 
-#>   - rncl (4)
+#>   - rncl (3)
 #>   - rotl (1)
 #> ★  Packages with notes on CRAN: 
-#>   - mregions (1)
-#>   - rncl (2)
+#>   - mregions (2)
+#>   - rncl (6)
 check_cran_results(email = "francois.michonneau@gmail.com",
                    pkg = c("mregions", "ridigbio"))
-#> # A tibble: 6 × 7
-#>     Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
-#>       <chr> <int> <int> <int> <int> <int>             <lgl>
-#> 1  mregions    NA    NA    NA     1    12             FALSE
-#> 2  ridigbio    NA    NA    NA    NA    13             FALSE
-#> 3 phylobase    NA    NA    NA    NA    13             FALSE
-#> 4  riceware    NA    NA    NA    NA    13             FALSE
-#> 5      rncl    NA    NA     4     2     7             FALSE
-#> 6      rotl    NA    NA     1    NA    12             FALSE
+#> # A tibble: 7 x 7
+#>     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>       <chr> <int> <int> <int> <int> <int>            <lgl>
+#> 1  mregions    NA    NA    NA     2    11            FALSE
+#> 2  ridigbio    NA    NA    NA    NA    13            FALSE
+#> 3   foghorn    11    NA    NA    NA     2            FALSE
+#> 4 phylobase    NA    NA    NA    NA    13            FALSE
+#> 5  riceware    NA    NA    NA    NA    13            FALSE
+#> 6      rncl    NA    NA     3     6     4            FALSE
+#> 7      rotl    NA    NA     1    NA    12            FALSE
 ```
 
 You can also inspect the logs for the check results using `show_cran_results(pkg)`, while `visit_cran_check(pkg)` takes you to the CRAN webpage.
@@ -106,15 +112,14 @@ show_cran_results(pkg = "tidyr")
 #> ★ tidyr - NOTE: data for non-ASCII characters
 #>    ❯ r-devel-linux-x86_64-fedora-clang 
 #>    ❯ r-devel-linux-x86_64-fedora-gcc 
-#>    ❯ r-devel-macos-x86_64-clang 
+#>    ❯ r-patched-solaris-x86 
 #> 
 #>       Note: found 23 marked UTF-8 strings
 #> 
 #> ★ tidyr - NOTE: data for non-ASCII characters
 #>    ❯ r-patched-solaris-sparc 
-#>    ❯ r-patched-solaris-x86 
-#>    ❯ r-release-osx-x86_64-mavericks 
-#>    ❯ r-oldrel-windows-ix86+x86_64 
+#>    ❯ r-release-osx-x86_64 
+#>    ❯ r-oldrel-osx-x86_64 
 #> 
 #>       Note: found 23 marked UTF-8 strings
 ```
@@ -126,10 +131,10 @@ The data from the CRAN check results used by this package are either scrapped fr
 
 ``` r
 check_cran_results(pkg = "nlme", src = "crandb")
-#> # A tibble: 1 × 7
-#>   Package ERROR  FAIL  WARN  NOTE    OK has_memtest_notes
-#>     <chr> <int> <int> <int> <int> <int>             <lgl>
-#> 1    nlme    NA    NA    NA    NA    13             FALSE
+#> # A tibble: 1 x 7
+#>   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>     <chr> <int> <int> <int> <int> <int>            <lgl>
+#> 1    nlme     1    NA    NA    NA    12            FALSE
 ```
 
 Check out the "Details" section in the help files for more information.
