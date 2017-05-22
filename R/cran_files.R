@@ -1,14 +1,11 @@
 ##' @importFrom httr GET write_disk status_code
-fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "memtest"),
+fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, ...) {
     file <- match.arg(file)
     protocol <- match.arg(protocol)
     is_ftp <- if (identical(protocol, "ftp")) "pub/R/" else character(0)
-    if (file != "memtest")
-        file <- paste0("check_", file, ".rds")
-    else
-        file <- "memtest_notes.rds"
+    file <- paste0("check_", file, ".rds")
     dest_file <- file.path(dest, file)
     if (! (file.exists(dest_file) &&
            file.size(dest_file) > 0) ||
@@ -32,7 +29,6 @@ read_cran_rds_file <- function(file) {
     class(res) <- c("cran_db", class(res))
     res
 }
-
 get_cran_rds_file <- function(file, ...) {
     f <- fetch_cran_rds_file(file, ...)
     read_cran_rds_file(f)
@@ -67,11 +63,15 @@ table_cran_checks.crandb <- function(parsed, ...) {
 }
 
 
-add_memtest_crandb <- function(tbl, ...) {
-    memtest <- get_cran_rds_file("memtest", ...)
-    res <- vapply(tbl[["Package"]], function(x) exists(x, memtest), logical(1),
-                  USE.NAMES = FALSE)
-    dplyr::mutate(tbl, "has_memtest_notes" = res)
+add_other_issues_crandb <- function(tbl, ...) {
+    issues <- get_cran_rds_file("issues", ...)
+    res <- vapply(tbl[["Package"]], function(x) {
+        pkg_issues <- issues[issues$Package == x, ]
+        if (nrow(pkg_issues) > 0) {
+            paste(pkg_issues$kind, collapse = ", ")
+        } else ""
+    }, character(1), USE.NAMES = FALSE)
+    dplyr::mutate(tbl, "has_other_issues" = nchar(res) > 0)
 }
 
 ##' @importFrom lazyeval interp
@@ -79,7 +79,7 @@ add_memtest_crandb <- function(tbl, ...) {
 ##' @importFrom dplyr group_by_ mutate_ ungroup distinct_ select_
 details_cran_results <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
-    memtest <- get_cran_rds_file("memtest", ...)
+    issues <- get_cran_rds_file("issues", ...)
 
 
     dt <- dt[dt[["Package"]] == pkg, ]
@@ -103,7 +103,7 @@ details_cran_results <- function(pkg, ...) {
             "flavors",
             message = "Output")
 
-    attr(res, "memtest") <- tibble::data_frame(Package = pkg,
-                                               has_memtest_notes = exists(pkg, memtest))
+    attr(res, "other_issues") <- tibble::data_frame(Package = pkg,
+                                              has_other_issues = pkg %in% issues$Package)
     res
 }

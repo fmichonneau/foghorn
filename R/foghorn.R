@@ -97,12 +97,12 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
 }
 
 ##' @importFrom tibble data_frame
-has_memtest <- function(parsed, ...) {
+has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
     res <- lapply(pkg, function(x) {
         tibble::data_frame(`Package` = x,
-                          `has_memtest_notes` = rep(FALSE, length(x))
+                          `has_other_issues` = rep(FALSE, length(x))
                           )
     })
     res <- dplyr::bind_rows(res)
@@ -115,13 +115,13 @@ has_memtest <- function(parsed, ...) {
         TRUE
     })
     pkg_with_mem <- unlist(pkg_with_mem)
-    res[["has_memtest_notes"]][match(names(pkg_with_mem), res$Package)] <- TRUE
+    res[["has_other_issues"]][match(names(pkg_with_mem), res$Package)] <- TRUE
     res
 }
 
-add_memtest <- function(tbl, parsed, ...) {
-    memtest <- has_memtest(parsed)
-    dplyr::left_join(tbl, memtest, by = "Package")
+add_other_issues <- function(tbl, parsed, ...) {
+    other_issues <- has_other_issues(parsed)
+    dplyr::left_join(tbl, other_issues, by = "Package")
 }
 
 
@@ -195,7 +195,7 @@ check_cran_results <- function(email = NULL, pkg = NULL,
                                src = c("website", "crandb"), ...) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
-    show <- c("Package", toupper(show), "has_memtest_notes")
+    show <- c("Package", toupper(show), "has_other_issues")
     res <- NULL
 
     src <- match.arg(src, c("website", "crandb"))
@@ -208,24 +208,24 @@ check_cran_results <- function(email = NULL, pkg = NULL,
         if (!is.null(email)) {
             res_email <- parse_cran_checks_email(email)
             res <- table_cran_checks(res_email)
-            res <- add_memtest(res, res_email)
+            res <- add_other_issues(res, res_email)
         }
         if (!is.null(pkg)) {
             res_pkg <- parse_cran_checks_pkg(pkg)
             tbl_pkg <- table_cran_checks(res_pkg)
-            res <- add_memtest(tbl_pkg, res_pkg) %>%
+            res <- add_other_issues(tbl_pkg, res_pkg) %>%
                 dplyr::bind_rows(res)
         }
     } else if (identical(src, "crandb")) {
         if (!is.null(email)) {
             res_email <- crandb_pkg_info_email(email, ...)
             res <- table_cran_checks(res_email)
-            res <- add_memtest_crandb(res)
+            res <- add_other_issues_crandb(res)
         }
         if (!is.null(pkg)) {
             res_pkg <- crandb_pkg_info_pkg(pkg, ...)
             tbl_pkg <- table_cran_checks(res_pkg)
-            res <- add_memtest_crandb(tbl_pkg) %>%
+            res <- add_other_issues_crandb(tbl_pkg) %>%
                 dplyr::bind_rows(res)
         }
 
@@ -238,7 +238,7 @@ check_cran_results <- function(email = NULL, pkg = NULL,
 
 get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
     what <- match.arg(what, names(tbl_pkg)[-1])
-    if (what %in% c("has_memtest_notes"))
+    if (what %in% c("has_other_issues"))
         show_n <- FALSE
     else show_n <- TRUE
     if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
@@ -273,13 +273,13 @@ foghorn_components <- list(
     `NOTE` = c(symbol = clisymbols::symbol$star,
                color = crayon::blue,
                word = "notes"),
-    `has_memtest_notes` = c(symbol = clisymbols::symbol$circle_filled,
+    `has_other_issues` = c(symbol = clisymbols::symbol$circle_filled,
                             color = crayon::cyan,
-                            word = "memtest")
+                            word = "other issues")
 )
 
 print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
-                                        "NOTE", "has_memtest_notes"),
+                                        "NOTE", "has_other_issues"),
                                pkgs, compact) {
     if (is.null(pkgs))
         return(NULL)
@@ -335,7 +335,7 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
 summary_cran_results <- function(email = NULL, pkg = NULL,
                                 compact = FALSE, ...) {
     res_checks <- check_cran_results(email, pkg, ...)
-    what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_memtest_notes")
+    what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
     res <- lapply(what, function(x)
         get_pkg_with_results(res_checks, x, compact))
     mapply(function(type, pkgs, compact) {
@@ -382,7 +382,7 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
 
 parse_cran_results <- function(pkg, ...) {
     parsed <- parse_cran_checks_pkg(pkg)
-    mem_test <- has_memtest(parsed)
+    mem_test <- has_other_issues(parsed)
 
     all_p <- lapply(parsed, function(x) {
         p <- xml2::xml_find_all(x, ".//p")
@@ -409,7 +409,7 @@ parse_cran_results <- function(pkg, ...) {
     })
     names(all_p) <- pkg
     res <- dplyr::bind_rows(all_p, .id = "Package")
-    attr(res, "memtest") <- mem_test
+    attr(res, "other_issues") <- mem_test
     res
 }
 
@@ -453,11 +453,12 @@ show_cran_results <- function(pkg, show_log = TRUE, src = c("website", "crandb")
         message("All clear for ", paste(pkg, collapse = ", "))
         return(invisible(NULL))
     }
-    apply(attr(res, "memtest"), 1, function(x) {
+
+    apply(attr(res, "other_issues"), 1, function(x) {
         if (x[2])
-            cat(foghorn_components[["has_memtest_notes"]]$color(
-                  paste(foghorn_components[["has_memtest_notes"]]$symbol,
-                        crayon::bold(x[1]), "has memtest notes")), "\n")
+            cat(foghorn_components[["has_other_issues"]]$color(
+                  paste(foghorn_components[["has_other_issues"]]$symbol,
+                        crayon::bold(x[1]), "has other issues")), "\n")
     })
     apply(res, 1, function(x)  {
         cmpt <- foghorn_components[[x[2]]]

@@ -24,10 +24,10 @@ validate_check_cran_results <- function(x) {
     length(x) == 7 &&
         inherits(x, "tbl_df") &&
         all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
-                            "NOTE",  "OK", "has_memtest_notes")) &&
+                            "NOTE",  "OK", "has_other_issues")) &&
         nrow(x) > 0 &&
-        is.logical(x[["has_memtest_notes"]]) &&
-        any(x[1, ] > 2) # 2 allows for something other that "has_memtest_notes" to be in the table
+        is.logical(x[["has_other_issues"]]) &&
+        any(x[1, ] > 2) # 2 allows for something other that "has_issues_notes" to be in the table
 }
 
 test_that("at least email or package name specified (website)", {
@@ -178,7 +178,7 @@ test_that("output of summary cran results", {
     expect_identical(res_web, res_cran)
 
     cran_res <- get_cran_rds_file("results")
-    cran_mem <- get_cran_rds_file("memtest")
+    cran_mem <- get_cran_rds_file("issues")
 
     pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 5)
     ## expect_identical(summary_cran_results(pkg = pkg_with_notes, src = "website"),
@@ -228,18 +228,18 @@ test_that("output of summary cran results", {
     expect_message(summary_cran_results(pkg = pkg_with_fail, src = "crandb"),
                    build_regexp("with fails", pkg_with_fail))
 
-    pkg_with_memtest <- sample(names(cran_mem), 10)
+    pkg_with_issues <- sample(unique(cran_mem$Package), 10)
     ## output from website and CRAN db identical
-    expect_identical(summary_cran_results(pkg = pkg_with_memtest, src = "website"),
-                     summary_cran_results(pkg = pkg_with_memtest, src = "crandb"))
-    ## all have TRUE listed in the column "has memtest notes"
-    expect_true(all(check_cran_results(pkg = pkg_with_memtest)[["has_memtest_notes"]]))
-    expect_true(all(check_cran_results(pkg = pkg_with_memtest, src = "crandb")[["has_memtest_notes"]]))
-    ## all packages listed under "with memtest"
-    expect_message(summary_cran_results(pkg = pkg_with_memtest, src = "website"),
-                   build_regexp("with memtest", pkg_with_memtest))
-    expect_message(summary_cran_results(pkg = pkg_with_memtest, src = "crandb"),
-                   build_regexp("with memtest", pkg_with_memtest))
+    expect_identical(summary_cran_results(pkg = pkg_with_issues, src = "website"),
+                     summary_cran_results(pkg = pkg_with_issues, src = "crandb"))
+    ## all have TRUE listed in the column "has issues notes"
+    expect_true(all(check_cran_results(pkg = pkg_with_issues)[["has_issues_notes"]]))
+    expect_true(all(check_cran_results(pkg = pkg_with_issues, src = "crandb")[["has_issues_notes"]]))
+    ## all packages listed under "with issues"
+    expect_message(summary_cran_results(pkg = pkg_with_issues, src = "website"),
+                   build_regexp("with other issues", pkg_with_issues))
+    expect_message(summary_cran_results(pkg = pkg_with_issues, src = "crandb"),
+                   build_regexp("with other issues", pkg_with_issues))
 
     msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = TRUE))
     expect_false(all(grepl("  -", msg)))
