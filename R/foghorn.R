@@ -73,7 +73,9 @@ get_cran_table <- function(parsed, ...) {
         tbl$Version <- as.character(tbl$Version)
         tbl
     })
-    dplyr::bind_rows(res, default_cran_checks, ...)
+    names(res) <- names(parsed)
+    dplyr::bind_rows(res, ...) %>%
+        dplyr::bind_rows(default_cran_checks)
 }
 
 
