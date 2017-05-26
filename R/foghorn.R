@@ -110,8 +110,8 @@ has_other_issues <- function(parsed, ...) {
     res <- dplyr::bind_rows(res)
     pkg_with_mem <- lapply(parsed, function(x) {
         all_urls <- xml2::xml_text(
-                          xml2::xml_find_all(x, ".//p//child::a[@href]//@href"))
-        with_mem <- grep("memtest", all_urls, value = TRUE)
+                          xml2::xml_find_all(x, ".//h3//child::a[@href]//@href"))
+        with_mem <- grep("check_issue_kinds", all_urls, value = TRUE)
         pkg_with_mem <- unique(basename(with_mem))
         if (length(pkg_with_mem) ==  0) return(NULL)
         TRUE
