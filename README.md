@@ -17,8 +17,7 @@ Installation
 You can install foghorn from github with:
 
 ``` r
-# install.packages("ghit")
-ghit::install_github("fmichonneau/foghorn")
+source("https://install-github.me/fmichonneau/foghorn")
 ```
 
 Demonstration
