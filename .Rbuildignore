@@ -9,3 +9,4 @@
 ^CONDUCT\.md$
 ^cran-comments.md$
 man-roxygen
+^docs$
