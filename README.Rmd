@@ -38,10 +38,16 @@ terminal to know the results of the CRAN checks for your packages.
 
 ## Installation
 
-You can install foghorn from github with:
+You can install the development version of **`foghorn`** from github with:
 
 ```{r gh-installation, eval = FALSE}
 source("https://install-github.me/fmichonneau/foghorn")
+```
+
+or the stable version from CRAN:
+
+```{r cran-install, eval=FALSE}
+install.packages("foghorn")
 ```
 
 ## Demonstration
