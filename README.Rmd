@@ -24,11 +24,9 @@ knitr::opts_chunk$set(
 >     1. Device used to facilitate navigation in foggy conditions by warning of
 >        potential hazards ahead.
 
-`foghorn` makes accessible to the R terminal the results of the CRAN check
-results for packages maintained by individuals, or for other package of
-interests. It provides a graphical summary of the results designed to added to
-your `.Rprofile` (to check regularly on the status of the published packages),
-or as a tibble.
+`foghorn` makes accessible to the R terminal the CRAN check
+results for packages maintained by individuals, or for other packages of
+interest. The results are presented as a colored summary, or as a tibble. The function that generates the summary is designed to be called from your `.Rprofile` so you can check on the status of the packages regularly.
 
 As new features are introduced in development versions of R, or new policies are
 put in place, packages that are not updated frequently may start generating
@@ -58,7 +56,7 @@ library(foghorn)
 ```
 
 `foghorn` provides a graphical summary for CRAN check results for the packages
-maintained by individuals (the number is parentheses indicates the number of R
+maintained by individuals (the number in parentheses indicates the number of R
 flavors used by CRAN that generate notes, warnings, errors):
 
 ```{r graphical-interface}
@@ -96,11 +94,11 @@ webpage.
 show_cran_results(pkg = "tidyr")
 ```
 
-## Where does it get the data?
+## Where does the data come from?
 
 The data from the CRAN check results used by this package are either scrapped
 from the CRAN web pages (default), or are from the CRAN database. The first
-option is faster if you want to check regularly a few packages. However, if you
+option is faster if you want to regularly check a few packages. However, if you
 are doing statistics on a large number of packages, using the CRAN database is
 recommended. To use the CRAN database, add `src = "crandb"` in your function
 calls:
