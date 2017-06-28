@@ -60,7 +60,7 @@
       <h1>Quick start</h1>
                         <h4 class="author">Francois Michonneau</h4>
             
-            <h4 class="date">2017-06-15</h4>
+            <h4 class="date">2017-06-27</h4>
           </div>
 
     
@@ -72,9 +72,8 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Graphical interface
 <span class="kw"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">email =</span> <span class="st">"francois.michonneau@gmail.com"</span>)</code></pre></div>
 <pre><code>## ⚠  Packages with warnings on CRAN: 
-##   - foghorn (1)
 ##   - rncl (3)
-##   - rotl (3)</code></pre>
+##   - rotl (2)</code></pre>
 <pre><code>## ★  Package with notes on CRAN: 
 ##   - rncl (6)</code></pre>
 <p>The information can also be summarized as a table:</p>
@@ -83,19 +82,19 @@
 <pre><code>## # A tibble: 5 x 7
 ##     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
 ##       &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;
-## 1   foghorn    NA    NA     1    NA    12            FALSE
+## 1   foghorn    NA    NA    NA    NA    13            FALSE
 ## 2 phylobase    NA    NA    NA    NA    13            FALSE
 ## 3  riceware    NA    NA    NA    NA    13            FALSE
 ## 4      rncl    NA    NA     3     6     4            FALSE
-## 5      rotl    NA    NA     3    NA    10            FALSE</code></pre>
+## 5      rotl    NA    NA     2    NA    11            FALSE</code></pre>
 <p>In addition of your own packages, you can also check the results for other packages that might be of interest to you:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## either by themselves
 <span class="kw"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span>))</code></pre></div>
 <pre><code>## ✖  Packages with errors on CRAN: 
-##   - dplyr (5)
+##   - dplyr (2)
 ##   - ggplot2 (2)</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
-##   - dplyr (5)
+##   - dplyr (7)
 ##   - ggplot2 (4)</code></pre>
 <pre><code>## ◉  Package with other issues on CRAN: 
 ##   - dplyr</code></pre>
@@ -103,15 +102,14 @@
 <pre><code>## # A tibble: 2 x 7
 ##   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
 ##     &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;
-## 1   dplyr     5    NA    NA     5     3             TRUE
+## 1   dplyr     2    NA    NA     7     4             TRUE
 ## 2 ggplot2     2    NA    NA     4     7            FALSE</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## or by combining them with email addresses
 <span class="kw"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">email =</span> <span class="st">"francois.michonneau@gmail.com"</span>,
                      <span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">"mregions"</span>, <span class="st">"ridigbio"</span>))</code></pre></div>
 <pre><code>## ⚠  Packages with warnings on CRAN: 
-##   - foghorn (1)
 ##   - rncl (3)
-##   - rotl (3)</code></pre>
+##   - rotl (2)</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
 ##   - mregions (2)
 ##   - rncl (6)</code></pre>
@@ -122,11 +120,11 @@
 ##       &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;
 ## 1  mregions    NA    NA    NA     2    11            FALSE
 ## 2  ridigbio    NA    NA    NA    NA    13            FALSE
-## 3   foghorn    NA    NA     1    NA    12            FALSE
+## 3   foghorn    NA    NA    NA    NA    13            FALSE
 ## 4 phylobase    NA    NA    NA    NA    13            FALSE
 ## 5  riceware    NA    NA    NA    NA    13            FALSE
 ## 6      rncl    NA    NA     3     6     4            FALSE
-## 7      rotl    NA    NA     3    NA    10            FALSE</code></pre>
+## 7      rotl    NA    NA     2    NA    11            FALSE</code></pre>
 <p>You can also inspect the logs for the check results using <code><a href="../reference/show_cran_results.html">show_cran_results(pkg)</a></code>, while <code><a href="../reference/visit_cran_check.html">visit_cran_check(pkg)</a></code> takes you to the CRAN webpage.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/show_cran_results.html">show_cran_results</a></span>(<span class="dt">pkg =</span> <span class="st">"tidyr"</span>)</code></pre></div>
 <pre><code>## ★ tidyr - NOTE: data for non-ASCII characters

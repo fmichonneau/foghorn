@@ -69,26 +69,27 @@
 <blockquote>
 <p><strong>foghorn</strong> <em>noun</em> <br> 1. Device used to facilitate navigation in foggy conditions by warning of potential hazards ahead.</p>
 </blockquote>
-<p><code>foghorn</code> makes accessible to the R terminal the results of the CRAN check results for packages maintained by individuals, or for other package of interests. It provides a graphical summary of the results designed to added to your <code>.Rprofile</code> (to check regularly on the status of the published packages), or as a tibble.</p>
+<p><code>foghorn</code> makes accessible to the R terminal the CRAN check results for packages maintained by individuals, or for other packages of interest. The results are presented as a colored summary, or as a tibble. The function that generates the summary is designed to be called from your <code>.Rprofile</code> so you can check on the status of the packages regularly.</p>
 <p>As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when checked on CRAN’s infrastructure. <code>foghorn</code> brings this information to your terminal so you don’t have to leave the comfort of your terminal to know the results of the CRAN checks for your packages.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install foghorn from github with:</p>
+<p>You can install the development version of <strong><code>foghorn</code></strong> from github with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">"https://install-github.me/fmichonneau/foghorn"</span>)</code></pre></div>
+<p>or the stable version from CRAN:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"foghorn"</span>)</code></pre></div>
 </div>
 <div id="demonstration" class="section level2">
 <h2 class="hasAnchor">
 <a href="#demonstration" class="anchor"></a>Demonstration</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load the package
 <span class="kw">library</span>(foghorn)</code></pre></div>
-<p><code>foghorn</code> provides a graphical summary for CRAN check results for the packages maintained by individuals (the number is parentheses indicates the number of R flavors used by CRAN that generate notes, warnings, errors):</p>
+<p><code>foghorn</code> provides a graphical summary for CRAN check results for the packages maintained by individuals (the number in parentheses indicates the number of R flavors used by CRAN that generate notes, warnings, errors):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Graphical interface
 <span class="kw"><a href="reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">email =</span> <span class="st">"francois.michonneau@gmail.com"</span>)
 <span class="co">#&gt; ⚠  Packages with warnings on CRAN: </span>
-<span class="co">#&gt;   - foghorn (1)</span>
 <span class="co">#&gt;   - rncl (3)</span>
-<span class="co">#&gt;   - rotl (3)</span>
+<span class="co">#&gt;   - rotl (2)</span>
 <span class="co">#&gt; ★  Package with notes on CRAN: </span>
 <span class="co">#&gt;   - rncl (6)</span></code></pre></div>
 <p>The information can also be summarized as a table:</p>
@@ -97,19 +98,19 @@
 <span class="co">#&gt; # A tibble: 5 x 7</span>
 <span class="co">#&gt;     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues</span>
 <span class="co">#&gt;       &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;</span>
-<span class="co">#&gt; 1   foghorn    NA    NA     1    NA    12            FALSE</span>
+<span class="co">#&gt; 1   foghorn    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 2 phylobase    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 3  riceware    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 4      rncl    NA    NA     3     6     4            FALSE</span>
-<span class="co">#&gt; 5      rotl    NA    NA     3    NA    10            FALSE</span></code></pre></div>
+<span class="co">#&gt; 5      rotl    NA    NA     2    NA    11            FALSE</span></code></pre></div>
 <p>In addition of your own packages, you can also check the results for other packages that might be of interest to you:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## either by themselves
 <span class="kw"><a href="reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span>))
 <span class="co">#&gt; ✖  Packages with errors on CRAN: </span>
-<span class="co">#&gt;   - dplyr (5)</span>
+<span class="co">#&gt;   - dplyr (2)</span>
 <span class="co">#&gt;   - ggplot2 (2)</span>
 <span class="co">#&gt; ★  Packages with notes on CRAN: </span>
-<span class="co">#&gt;   - dplyr (5)</span>
+<span class="co">#&gt;   - dplyr (7)</span>
 <span class="co">#&gt;   - ggplot2 (4)</span>
 <span class="co">#&gt; ◉  Package with other issues on CRAN: </span>
 <span class="co">#&gt;   - dplyr</span>
@@ -117,16 +118,15 @@
 <span class="co">#&gt; # A tibble: 2 x 7</span>
 <span class="co">#&gt;   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues</span>
 <span class="co">#&gt;     &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;</span>
-<span class="co">#&gt; 1   dplyr     5    NA    NA     5     3             TRUE</span>
+<span class="co">#&gt; 1   dplyr     2    NA    NA     7     4             TRUE</span>
 <span class="co">#&gt; 2 ggplot2     2    NA    NA     4     7            FALSE</span>
 
 ## or by combining them with email addresses
 <span class="kw"><a href="reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="dt">email =</span> <span class="st">"francois.michonneau@gmail.com"</span>,
                      <span class="dt">pkg =</span> <span class="kw">c</span>(<span class="st">"mregions"</span>, <span class="st">"ridigbio"</span>))
 <span class="co">#&gt; ⚠  Packages with warnings on CRAN: </span>
-<span class="co">#&gt;   - foghorn (1)</span>
 <span class="co">#&gt;   - rncl (3)</span>
-<span class="co">#&gt;   - rotl (3)</span>
+<span class="co">#&gt;   - rotl (2)</span>
 <span class="co">#&gt; ★  Packages with notes on CRAN: </span>
 <span class="co">#&gt;   - mregions (2)</span>
 <span class="co">#&gt;   - rncl (6)</span>
@@ -137,11 +137,11 @@
 <span class="co">#&gt;       &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;            &lt;lgl&gt;</span>
 <span class="co">#&gt; 1  mregions    NA    NA    NA     2    11            FALSE</span>
 <span class="co">#&gt; 2  ridigbio    NA    NA    NA    NA    13            FALSE</span>
-<span class="co">#&gt; 3   foghorn    NA    NA     1    NA    12            FALSE</span>
+<span class="co">#&gt; 3   foghorn    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 4 phylobase    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 5  riceware    NA    NA    NA    NA    13            FALSE</span>
 <span class="co">#&gt; 6      rncl    NA    NA     3     6     4            FALSE</span>
-<span class="co">#&gt; 7      rotl    NA    NA     3    NA    10            FALSE</span></code></pre></div>
+<span class="co">#&gt; 7      rotl    NA    NA     2    NA    11            FALSE</span></code></pre></div>
 <p>You can also inspect the logs for the check results using <code><a href="reference/show_cran_results.html">show_cran_results(pkg)</a></code>, while <code><a href="reference/visit_cran_check.html">visit_cran_check(pkg)</a></code> takes you to the CRAN webpage.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/show_cran_results.html">show_cran_results</a></span>(<span class="dt">pkg =</span> <span class="st">"tidyr"</span>)
 <span class="co">#&gt; ★ tidyr - NOTE: data for non-ASCII characters</span>
@@ -154,10 +154,10 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;       Note: found 23 marked UTF-8 strings</span></code></pre></div>
 </div>
-<div id="where-does-it-get-the-data" class="section level2">
+<div id="where-does-the-data-come-from" class="section level2">
 <h2 class="hasAnchor">
-<a href="#where-does-it-get-the-data" class="anchor"></a>Where does it get the data?</h2>
-<p>The data from the CRAN check results used by this package are either scrapped from the CRAN web pages (default), or are from the CRAN database. The first option is faster if you want to check regularly a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended. To use the CRAN database, add <code>src = "crandb"</code> in your function calls:</p>
+<a href="#where-does-the-data-come-from" class="anchor"></a>Where does the data come from?</h2>
+<p>The data from the CRAN check results used by this package are either scrapped from the CRAN web pages (default), or are from the CRAN database. The first option is faster if you want to regularly check a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended. To use the CRAN database, add <code>src = "crandb"</code> in your function calls:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/check_cran_results.html">check_cran_results</a></span>(<span class="dt">pkg =</span> <span class="st">"nlme"</span>, <span class="dt">src =</span> <span class="st">"crandb"</span>)
 <span class="co">#&gt; # A tibble: 1 x 7</span>
 <span class="co">#&gt;   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues</span>
