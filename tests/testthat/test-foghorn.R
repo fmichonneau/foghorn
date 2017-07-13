@@ -261,11 +261,13 @@ test_that("only one package", {
 
 test_that("output of show cran results", {
     skip_on_cran()
-    expect_output(show_cran_results("rotl", show_log = FALSE),
-                  "rotl")
-    expect_output(show_cran_results("rotl", show_log = FALSE,
+    cran_res <- get_cran_rds_file("results")
+    pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 1)
+    expect_output(show_cran_results(pkg_with_notes, show_log = FALSE),
+                  pkg_with_notes)
+    expect_output(show_cran_results(pkg_with_notes, show_log = FALSE,
                                     src = "crandb"),
-                  "rotl")
+                  pkg_with_notes)
 })
 
 ### CRAN tests -----------------------------------------------------------------
