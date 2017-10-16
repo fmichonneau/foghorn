@@ -48,6 +48,7 @@ check_api_res <- function(res) {
     api_parse(res)
 }
 
+##' @importFrom purrr %||%
 summary_pkg_res <- function(res) {
     res$data$checks %>%
         purrr::map_df(function(x) {
