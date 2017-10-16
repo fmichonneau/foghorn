@@ -1,6 +1,6 @@
 Package: foghorn
 Title: Summarizes CRAN Check Results in the Terminal
-Version: 0.4.6.901
+Version: 0.4.6.902
 Authors@R: c(person("Francois", "Michonneau", role=c("aut", "cre"),
                     email="francois.michonneau@gmail.com"),
              person("Ben", "Bolker", role="ctb"))
@@ -13,8 +13,10 @@ Imports:
     curl (>= 2.2),
     dplyr (>= 0.5.0),
     httr (>= 1.2.1),
+    jsonlite (>= 1.5),
     lazyeval (>= 0.2.0),
     magrittr (>= 1.5),
+    purrr (>= 0.2.3),
     rvest (>= 0.3.2),
     tibble (>= 1.2),
     tidyr (>= 0.6.0),
