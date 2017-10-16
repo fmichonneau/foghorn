@@ -1,9 +1,4 @@
-
-url_pkg_res <- function(pkg) {
-    paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
-}
-
-url_email_res <- function(email) {
+convert_email_to_cran_format <- function(email) {
     ## check email
     lapply(email, function(x)
         if (!grepl("\\@", x)) {
@@ -13,9 +8,84 @@ url_email_res <- function(email) {
     ##  "all characters different from letters, digits, hyphens,
     ##  underscores, colons, and periods replaced by underscores ..."
     email <- gsub("[^[:alnum:]_:.-]", "_", email)
+    email
+}
+
+
+url_pkg_res <- function(pkg) {
+    paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
+}
+
+url_email_res <- function(email) {
+    email <- convert_email_to_cran_format(email)
     paste0("https://cran.r-project.org/web/checks/check_results_",
            email, ".html")
 }
+
+
+api_base_url <- function() {
+    "https://cranchecks.info"
+}
+
+##' @importFrom jsonlite fromJSON
+##' @importFrom httr content
+api_parse <- function(r) {
+    if (grepl("application/json", r[["headers"]][["content-type"]])) {
+        return(jsonlite::fromJSON(httr::content(r, "text", encoding = "UTF-8"), simplifyVector = FALSE))
+    }
+    res <- httr::content(r, as="text", encoding = "UTF-8")
+    if(identical(res, "")){
+        stop("No output to parse; check your query.", call. = FALSE)
+    }
+    res
+}
+
+check_api_res <- function(res) {
+    if (res$status_code >= 400) {
+        msg <- api_parse(res)
+        stop("HTTP failure: ", res$status_code, " -- ", msg$error$message, call. = FALSE)
+    }
+    api_parse(res)
+}
+
+summary_pkg_res <- function(res) {
+    res$data$checks %>%
+        purrr::map_df(function(x) {
+                   list(Flavor = x$flavor, Version = x$version,
+                        tinstall = x$tinstall, tcheck = x$tcheck, ttotal = x$ttotal,
+                        Status = x$status, check_url = x$check_url %||% NA_character_)
+               })  %>%
+        dplyr::bind_cols(Package = rep(res$data$package, nrow(.)))
+}
+
+summary_maintainer_res <- function(res) {
+     ## TODO
+}
+
+api_call <- function(endpt, value, ...) {
+    res <- httr::GET(api_base_url(), path = paste(endpt, value, sep = "/"), ...)
+    check_api_res(res)
+}
+
+##' @importFrom purrr map_df
+api_pkg_status <- function(pkg, ...) {
+    purrr::map_df(pkg, function(p) {
+               r <- api_call(endpt = "pkgs", p, ...)
+               summary_pkg_res(r)
+           })
+}
+
+##' @importFrom purrr map_df
+api_maintainer <- function(email, ...) {
+    purrr::map_df(email, function(e) {
+               e <- convert_email_to_cran_format(email)
+               r <- api_call(endpt = "maintainers", e, ...)
+               summary_maintainer_res(r)
+           })
+}
+
+
+
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet
@@ -121,6 +191,7 @@ has_other_issues <- function(parsed, ...) {
     res
 }
 
+##' @importFrom dplyr left_join
 add_other_issues <- function(tbl, parsed, ...) {
     other_issues <- has_other_issues(parsed)
     dplyr::left_join(tbl, other_issues, by = "Package")
@@ -161,6 +232,14 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
     tbl %>%
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
+        dplyr::bind_rows(default_cran_checks) %>%
+        dplyr::ungroup()
+}
+
+table_cran_checks.api <- function(parsed, ...) {
+    parsed %>%
+        dplyr::count_(vars = c("Package", "Status")) %>%
+        tidyr::spread("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
         dplyr::ungroup()
 }
