@@ -1,3 +1,7 @@
+## 0.x.x
+
+* Add support for https://cranchecks.info
+
 ## v0.4.6
 
 * Fix bug that would display a number instead of the package name in some
