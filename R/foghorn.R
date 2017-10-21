@@ -48,7 +48,7 @@ check_api_res <- function(res) {
     api_parse(res)
 }
 
-
+##' @importFrom rlang .data
 summary_pkg_res <- function(res) {
     res$data$checks %>%
         purrr::map_df(function(x) {
@@ -56,7 +56,7 @@ summary_pkg_res <- function(res) {
                         tinstall = x$tinstall, tcheck = x$tcheck, ttotal = x$ttotal,
                         Status = x$status, check_url = x$check_url %||% NA_character_)
                })  %>%
-        dplyr::bind_cols(Package = rep(res$data$package, nrow(.)))
+        dplyr::bind_cols(Package = rep(res$data$package, nrow(rlang::.data)))
 }
 
 summary_maintainer_res <- function(res) {
@@ -221,7 +221,8 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
         } else
            tibble::as_tibble(tbl[[1]])
     })
-    dplyr::bind_rows(res, default_cran_checks, ...)
+    dplyr::bind_rows(res, default_cran_checks, ...) %>%
+        convert_nas()
 }
 
 ##' @importFrom magrittr %>%
@@ -234,7 +235,8 @@ table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup()
+        dplyr::ungroup() %>%
+        convert_nas()
 }
 
 table_cran_checks.api <- function(parsed, ...) {
@@ -242,7 +244,8 @@ table_cran_checks.api <- function(parsed, ...) {
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup()
+        dplyr::ungroup() %>%
+        convert_nas()
 }
 
 
@@ -324,7 +327,7 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
         show_n <- FALSE
     else show_n <- TRUE
     if (sum(tbl_pkg[[what]],  na.rm = TRUE) > 0) {
-        n <- tbl_pkg[[what]][!is.na(tbl_pkg[[what]])]
+        n <- tbl_pkg[[what]][tbl_pkg[[what]] > 0]
         if (show_n) {
             n <- paste0(" (", n, ")")
         } else

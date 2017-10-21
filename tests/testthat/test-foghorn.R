@@ -27,7 +27,8 @@ validate_check_cran_results <- function(x) {
                             "NOTE",  "OK", "has_other_issues")) &&
         nrow(x) > 0 &&
         is.logical(x[["has_other_issues"]]) &&
-        any(x[1, ] > 2) # 2 allows for something other that "has_issues_notes" to be in the table
+        any(x[1, ] > 2) && # 2 allows for something other that "has_issues_notes" to be in the table
+        !any(is.na(x)) ## no NAs allowed
 }
 
 test_that("at least email or package name specified (website)", {

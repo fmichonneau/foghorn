@@ -2,7 +2,7 @@
 
 * Add support for https://cranchecks.info
 
-## v0.4.6
+* Fix bug #14 reported by @hadley, no issues are now represented as 0 instead of `NA`
 
 * Fix bug that would display a number instead of the package name in some
   situations

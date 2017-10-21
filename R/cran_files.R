@@ -76,7 +76,8 @@ table_cran_checks.crandb <- function(parsed, ...) {
         dplyr::count_(vars = c("Package", "Status")) %>%
         tidyr::spread_("Status", "n") %>%
         dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup()
+        dplyr::ungroup() %>%
+        convert_nas()
 }
 
 
