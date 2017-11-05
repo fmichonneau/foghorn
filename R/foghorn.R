@@ -95,7 +95,7 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
     })
 }
 
-##' @importFrom dplyr `%>%`-
+##' @importFrom dplyr %>%
 ##' @importFrom tibble tibble
 has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
