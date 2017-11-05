@@ -8,7 +8,6 @@ url_email_res <- function(email) {
            email, ".html")
 }
 
-
 ##' @importFrom rlang .data
 summary_pkg_res <- function(res) {
     res$data$checks %>%
@@ -105,26 +104,27 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
     })
 }
 
+##' @importFrom dplyr `%>%`-
 ##' @importFrom tibble tibble
 has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
     res <- lapply(pkg, function(x) {
         tibble::tibble(`Package` = x,
-                          `has_other_issues` = rep(FALSE, length(x))
-                          )
+                       `has_other_issues` = rep(FALSE, length(x)))
     })
+
     res <- dplyr::bind_rows(res)
-    pkg_with_mem <- lapply(parsed, function(x) {
-        all_urls <- xml2::xml_text(
-                          xml2::xml_find_all(x, ".//h3//child::a[@href]//@href"))
-        with_mem <- grep("check_issue_kinds", all_urls, value = TRUE)
-        pkg_with_mem <- unique(basename(with_mem))
-        if (length(pkg_with_mem) ==  0) return(NULL)
+    pkg_with_issue <- lapply(parsed, function(x) {
+        all_urls <- xml2::xml_find_all(x, ".//h3//child::a[@href]//@href") %>%
+            xml2::xml_text()
+        with_issue <- grep("check_issue_kinds", all_urls, value = TRUE)
+        pkg_with_issue <- unique(basename(with_issue))
+        if (length(pkg_with_issue) ==  0) return(NULL)
         TRUE
     })
-    pkg_with_mem <- unlist(pkg_with_mem)
-    res[["has_other_issues"]][match(names(pkg_with_mem), res$Package)] <- TRUE
+    pkg_with_issue <- unlist(pkg_with_issue)
+    res[["has_other_issues"]][match(names(pkg_with_issue), res$Package)] <- TRUE
     res
 }
 

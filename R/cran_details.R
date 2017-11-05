@@ -1,7 +1,7 @@
 #' @importFrom tibble tibble
 cran_details_from_web <- function(pkg, ...) {
     parsed <- read_cran_web_from_pkg(pkg)
-    mem_test <- has_other_issues(parsed)
+    issue_test <- has_other_issues(parsed)
 
     all_p <- lapply(parsed, function(x) {
         p <- xml2::xml_find_all(x, ".//p")
@@ -28,7 +28,7 @@ cran_details_from_web <- function(pkg, ...) {
     })
     names(all_p) <- pkg
     res <- dplyr::bind_rows(all_p, .id = "Package")
-    attr(res, "other_issues") <- mem_test
+    attr(res, "other_issues") <- issue_test
     res
 }
 
