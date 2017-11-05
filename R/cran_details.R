@@ -50,7 +50,7 @@ cran_details_from_web <- function(pkg, ...) {
 ##' @importFrom crayon bold
 cran_details <- function(pkg, src = c("website", "crandb"),
                          ...) {
-    if (!(length(pkg) == 1 && is.character(pkg)))
+    if (!is.character(pkg))
         stop(sQuote("pkg"), " is not a string.", call. = FALSE)
 
     src <- match.arg(src, c("website", "crandb"))
