@@ -83,15 +83,16 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 summary_cran_results(email = "francois.michonneau@gmail.com",
                      pkg = c("mregions", "ridigbio"))
 cran_results(email = "francois.michonneau@gmail.com",
-                   pkg = c("mregions", "ridigbio"))
+              pkg = c("mregions", "ridigbio"))
 ```
 
 You can also inspect the logs for the check results using
-`show_cran_results(pkg)`, while `visit_cran_check(pkg)` takes you to the CRAN
+`summary(cran_details(pkg))`, while `visit_cran_check(pkg)` takes you to the CRAN
 webpage.
 
-```{r show-cran-results}
-show_cran_results(pkg = "tidyr")
+```{r cran-details}
+(tidyr_checks <- cran_details(pkg = "tidyr"))
+summary(tidyr_checks)
 ```
 
 ## Where does the data come from?
