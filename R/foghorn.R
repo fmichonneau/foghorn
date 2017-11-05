@@ -331,37 +331,3 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
         warning("This function is only available in interactive mode.")
     invisible(url)
 }
-
-#' @importFrom tibble tibble
-cran_details_from_web <- function(pkg, ...) {
-    parsed <- parse_cran_checks_pkg(pkg)
-    mem_test <- has_other_issues(parsed)
-
-    all_p <- lapply(parsed, function(x) {
-        p <- xml2::xml_find_all(x, ".//p")
-        p <- strsplit(xml2::xml_text(x), "\n")
-        p <- unlist(p)
-        p <- p[nzchar(p)]
-        p <- gsub(intToUtf8(160), " ", p)
-        chk_idx <- grep("^Check:", p)
-        res_idx <- grep("^Result:", p)
-        flv_idx <- grep("^Flavors?:", p)
-        if (!identical(length(chk_idx), length(res_idx)) &&
-            !identical(length(chk_idx), length(flv_idx)))
-            stop("File an issue on Github indicating the name of your package.")
-        msg <- mapply(function(c, r, f) {
-            tibble::tibble(
-                result = gsub("^Result: ", "", p[r]),
-                check = gsub("^Check: ", "", p[c]),
-                flavors = gsub("^Flavors?: ", "", p[f]),
-                message = paste(p[(r + 1):(f - 1)], collapse = "\n"),
-                stringsAsFactors = FALSE
-            )
-        }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-        dplyr::bind_rows(msg)
-    })
-    names(all_p) <- pkg
-    res <- dplyr::bind_rows(all_p, .id = "Package")
-    attr(res, "other_issues") <- mem_test
-    res
-}
