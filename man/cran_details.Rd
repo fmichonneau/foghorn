@@ -3,11 +3,15 @@
 \name{cran_details}
 \alias{cran_details}
 \alias{summary.cran_details}
+\alias{summary_cran_details}
 \title{Get details about the CRAN check results for packages}
 \usage{
 cran_details(pkg, src = c("website", "crandb"), ...)
 
 \method{summary}{cran_details}(object, show_log = TRUE, ...)
+
+summary_cran_details(pkg, src = c("website", "crandb"), show_log = TRUE,
+  ...)
 }
 \arguments{
 \item{pkg}{character vector of the names for the packages on CRAN}

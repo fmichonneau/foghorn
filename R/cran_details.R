@@ -38,7 +38,6 @@ cran_details_from_web <- function(pkg, ...) {
 ##'
 ##' @title Get details about the CRAN check results for packages
 ##' @param pkg character vector of the names for the packages on CRAN
-##' @param object an object created by \code{cran_details}
 ##' @template src
 ##' @template dots
 ##' @template details
@@ -74,6 +73,7 @@ render_flavors <- function(x) {
 }
 
 
+##' @param object an object created by \code{cran_details}
 ##' @param show_log Should the messages of the \dQuote{Check Details}
 ##'     be printed? (logical)
 ##' @rdname cran_details
@@ -116,4 +116,13 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
     })
 
     invisible(object)
+}
+
+
+##' @export
+##' @rdname cran_details
+summary_cran_details <- function(pkg, src = c("website", "crandb"),
+                                 show_log = TRUE, ...) {
+    res <- cran_details(pkg = pkg, src = src, ...)
+    summary(res)
 }

@@ -65,5 +65,54 @@ cran_results <- function(email = NULL, pkg = NULL,
 
     }
     res <- dplyr::distinct_(res, "Package", .keep_all = TRUE)
-    res[, show]
+    res <- res[, show]
+    class(res) <- c("cran_results", class(res))
+    res
+}
+
+
+##' Summary of the CRAN check results
+##'
+##' Given the email address of a package maintainer, and/or a vector
+##' of package names, it displays at the console a summary of the
+##' check results run on the CRAN platforms. This function is designed
+##' to be included in your .Rprofile to be run (periodically) at start
+##' up.
+##'
+##' @param email email address for package maintainers (character
+##'     vector)
+##' @param pkg package names (character vector)
+##' @param compact if \code{TRUE}, all the packages with non-OK
+##'     results are listed in a single line, otherwise they are listed
+##'     on multiple lines.
+##' @template dots
+##' @examples \dontrun{
+##'    summary_cran_results(email = c("user1@company1.com", "user2@company2.com"))
+##'    summary_cran_results(email = "user1@company1.com",
+##'                         pkg = c("pkg1", "pkg2"))
+##' }
+##' @return Prints the packages that return errors, warnings, and
+##'     notes on the CRAN platforms. The number in parenthesis after
+##'     the name of the packages indicates the number of CRAN
+##'     platforms that produce these results.
+##' @importFrom crayon red yellow blue bold cyan magenta
+##' @importFrom clisymbols symbol
+##' @export
+summary_cran_results <- function(email = NULL, pkg = NULL,
+                                compact = FALSE, ...) {
+    res_checks <- cran_results(email, pkg, ...)
+    summary(res_checks, compact = compact)
+}
+
+##' @param object an object created by \code{cran_results}
+##' @export
+##' @rdname summary_cran_results
+summary.cran_results <- function(object, compact = FALSE, ...) {
+  what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
+    res <- lapply(what, function(x)
+        get_pkg_with_results(object, x, compact))
+    mapply(function(type, pkgs, compact) {
+        print_summary_cran(type, pkgs, compact)
+    }, what, res, compact)
+   invisible(object)
 }
