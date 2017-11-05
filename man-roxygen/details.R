@@ -23,7 +23,7 @@
 ##'
 ##'   \item {overwrite} { when \code{FALSE} (default), if the file exists in
 ##'                       \code{dest} then it will not be downloaded again.
-##'                       when \code{TRUE} the file gets downloaded everytime
+##'                       When \code{TRUE} the file gets downloaded everytime
 ##'                       it's needed.}
 ##'
 ##'   \item {...} { additional arguments that will be passed to
