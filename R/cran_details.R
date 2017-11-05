@@ -75,35 +75,46 @@ render_flavors <- function(x) {
 }
 
 
+##' @param show_log Should the messages of the \dQuote{Check Details}
+##'     be printed? (logical)
+##' @rdname cran_details
+##' @export
+##' @importFrom purrr pmap
+##' @importFrom crayon green
+##' @importFrom clisymbols symbol
+summary.cran_details <- function(object, show_log = TRUE, ...) {
 
-summary.cran_details <- function(res, show_log = TRUE) {
-
-    if (nrow(res) < 1) {
-        message("All clear for ", paste(pkg, collapse = ", "))
-        return(invisible(NULL))
+    no_result <- setdiff(attr(object, "other_issues")$Package, object$Package)
+    if (length(no_result) > 0) {
+        message(crayon::green(clisymbols::symbol$tick, "All clear for ",
+                              paste0(no_result, collapse = ", "), "!"))
     }
 
+    if (nrow(object) < 1)
+        return(invisible(object))
 
-    apply(attr(res, "other_issues"), 1, function(x) {
-        if (x[2])
+    purrr::pmap(attr(object, "other_issues"), function(Package, has_other_issues) {
+        if (has_other_issues)
             cat(foghorn_components[["has_other_issues"]]$color(
                   paste(foghorn_components[["has_other_issues"]]$symbol,
-                        crayon::bold(x[1]), "has other issues")), "\n")
-    })
-    apply(res, 1, function(x)  {
-        cmpt <- foghorn_components[[x[2]]]
+                        crayon::bold(Package), "has other issues")), "\n")
+        })
+
+    purrr::pmap(object, function(Package, result, check, flavors, message)  {
+        cmpt <- foghorn_components[[result]]
         if (show_log)
-            msg <- x[5]
+            msg <- message
         else
             msg <- character(0)
         cat(## Type of CRAN message
             cmpt$color(paste0(cmpt$symbol, " ",
-                              crayon::bold(paste0(x[1], " - ", x[2])),
-                              ": ", x[3])), "\n",
+                              crayon::bold(paste0(Package, " - ", result)),
+                              ": ", check)), "\n",
             ## Flavors concerned
-            render_flavors(x[4]), "\n",
+            render_flavors(flavors), "\n",
             ## Optionally the log output
             msg, "\n\n", sep = "")
     })
-    invisible(NULL)
+
+    invisible(object)
 }
