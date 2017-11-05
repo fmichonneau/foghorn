@@ -134,60 +134,6 @@ add_other_issues <- function(tbl, parsed, ...) {
     dplyr::left_join(tbl, other_issues, by = "Package")
 }
 
-
-table_cran_checks <- function(parsed, ...) UseMethod("table_cran_checks")
-
-
-##' @importFrom rvest html_table
-##' @importFrom dplyr bind_rows
-##' @importFrom tibble as_tibble
-table_cran_checks.cran_checks_email <- function(parsed, ...) {
-    res <- lapply(parsed, function(x) {
-        tbl <- rvest::html_table(x)
-        if (length(tbl) < 1) {
-            ## If there is no table on the page, the maintainer has
-            ## authored a single package, let's look for it:
-            pkg <- all_packages_by_email(x)
-            if (length(pkg) > 1)
-                stop("Please file an issue on GitHub ",
-                     "indicating the name of your package")
-            ## then, we can call the other method to parse the results
-            ## of that pacakge
-            table_cran_checks.cran_checks_pkg(read_cran_web_from_pkg(pkg))
-        } else
-           tibble::as_tibble(tbl[[1]])
-    })
-    dplyr::bind_rows(res, default_cran_checks, ...) %>%
-        convert_nas()
-}
-
-##' @importFrom magrittr %>%
-##' @importFrom dplyr count_ bind_rows ungroup
-##' @importFrom tidyr spread
-table_cran_checks.cran_checks_pkg <- function(parsed, ...) {
-    tbl <- get_cran_table(parsed, .id = "Package")
-
-    tbl %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread_("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
-}
-
-table_cran_checks.api <- function(parsed, ...) {
-    parsed %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
-}
-
-
-
-
-
 get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
     what <- match.arg(what, names(tbl_pkg)[-1])
     if (what %in% c("has_other_issues"))

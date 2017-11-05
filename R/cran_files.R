@@ -70,15 +70,6 @@ crandb_pkg_info_pkg <- function(pkg, file = "results", ...) {
     res
 }
 
-table_cran_checks.crandb <- function(parsed, ...) {
-    parsed$Status <- gsub("WARNING", "WARN", parsed$Status)
-    parsed %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread_("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
-}
 
 
 add_other_issues_crandb <- function(tbl, ...) {
