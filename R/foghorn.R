@@ -23,7 +23,6 @@ url_email_res <- function(email) {
 }
 
 
-
 ##' @importFrom rlang .data
 summary_pkg_res <- function(res) {
     res$data$checks %>%
@@ -60,8 +59,6 @@ api_maintainer <- function(email, ...) {
                summary_maintainer_res(r)
            })
 }
-
-
 
 
 ##' @importFrom xml2 read_html
@@ -441,7 +438,7 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
     invisible(url)
 }
 
-#' @importFrom tiible as_tibble
+#' @importFrom tibble tibble
 cran_details_from_web <- function(pkg, ...) {
     parsed <- parse_cran_checks_pkg(pkg)
     mem_test <- has_other_issues(parsed)
@@ -459,7 +456,7 @@ cran_details_from_web <- function(pkg, ...) {
             !identical(length(chk_idx), length(flv_idx)))
             stop("File an issue on Github indicating the name of your package.")
         msg <- mapply(function(c, r, f) {
-            data.frame(
+            tibble::tibble(
                 result = gsub("^Result: ", "", p[r]),
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
@@ -472,7 +469,7 @@ cran_details_from_web <- function(pkg, ...) {
     names(all_p) <- pkg
     res <- dplyr::bind_rows(all_p, .id = "Package")
     attr(res, "other_issues") <- mem_test
-    tibble::as_tibble(res)
+    res
 }
 
 ##' @importFrom clisymbols symbol
