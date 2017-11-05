@@ -26,7 +26,7 @@ summary_maintainer_res <- function(res) {
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet
-parse_cran <- function(x) {
+read_cran_web <- function(x) {
     if (!curl::has_internet()) {
         stop("No internet connection detected", call. = FALSE)
     }
@@ -42,9 +42,9 @@ parse_cran <- function(x) {
     return(.res)
 }
 
-parse_cran_checks_email <- function(email) {
+read_cran_web_from_email <- function(email) {
     url <- url_email_res(email)
-    res <- lapply(url, parse_cran)
+    res <- lapply(url, read_cran_web)
     if (length(bad <- which(is.na(res))) > 0) {
         stop("Invalid email address(es): ", email[bad], call. = FALSE)
     }
@@ -52,9 +52,9 @@ parse_cran_checks_email <- function(email) {
     res
 }
 
-parse_cran_checks_pkg <- function(pkg) {
+read_cran_web_from_pkg <- function(pkg) {
     url <- url_pkg_res(pkg)
-    res <- lapply(url, parse_cran)
+    res <- lapply(url, read_cran_web)
     if (length(bad <- which(is.na(res))) > 0) {
         stop("Invalid package name(s): ", pkg[bad], call. = FALSE)
     }
@@ -153,7 +153,7 @@ table_cran_checks.cran_checks_email <- function(parsed, ...) {
                      "indicating the name of your package")
             ## then, we can call the other method to parse the results
             ## of that pacakge
-            table_cran_checks.cran_checks_pkg(parse_cran_checks_pkg(pkg))
+            table_cran_checks.cran_checks_pkg(read_cran_web_from_pkg(pkg))
         } else
            tibble::as_tibble(tbl[[1]])
     })
