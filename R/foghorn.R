@@ -466,7 +466,7 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
 }
 
 #' @importFrom tiible as_tibble
-parse_cran_results <- function(pkg, ...) {
+cran_details_from_web <- function(pkg, ...) {
     parsed <- parse_cran_checks_pkg(pkg)
     mem_test <- has_other_issues(parsed)
 
@@ -531,9 +531,9 @@ show_cran_results <- function(pkg, show_log = TRUE, src = c("website", "crandb")
     src <- match.arg(src, c("website", "crandb"))
 
     if (identical(src, "website"))
-        res <- parse_cran_results(pkg)
+        res <- cran_details_from_web(pkg)
     else if (identical(src, "crandb"))
-        res <- details_cran_results(pkg, ...)
+        res <- cran_details_from_crandb(pkg, ...)
 
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))
