@@ -63,15 +63,6 @@ read_cran_web_from_pkg <- function(pkg) {
 }
 
 
-##' @importFrom tibble tibble
-default_cran_checks <- tibble::tibble(
-    NOTE = integer(0),
-    OK = integer(0),
-    WARN = integer(0),
-    ERROR = integer(0),
-    FAIL = integer(0))
-
-
 get_cran_table <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
         tbl <- rvest::html_table(x)
@@ -154,27 +145,6 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
                n, collapse = sptr[2])
     }
 }
-
-
-foghorn_components <- list(
-    `ERROR` = c(symbol = clisymbols::symbol$cross,
-                color = crayon::red,
-                word = "errors"
-                ),
-    `FAIL` = c(symbol = clisymbols::symbol$cross,
-               color = crayon::magenta,
-               word = "fails"
-               ),
-    `WARN` = c(symbol = clisymbols::symbol$warning,
-               color = crayon::yellow,
-               word = "warnings"),
-    `NOTE` = c(symbol = clisymbols::symbol$star,
-               color = crayon::blue,
-               word = "notes"),
-    `has_other_issues` = c(symbol = clisymbols::symbol$circle_filled,
-                            color = crayon::cyan,
-                            word = "other issues")
-)
 
 print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
                                         "NOTE", "has_other_issues"),
