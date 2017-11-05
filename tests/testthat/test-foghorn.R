@@ -1,26 +1,26 @@
 context("check source validity")
 
 test_that("invalid source name",
-          expect_error(check_cran_results(pkg = "dplyr", src = "foo")))
+          expect_error(cran_results(pkg = "dplyr", src = "foo")))
 
 
 context("fail for invalid package name/emails")
 
 test_that("invalid package name", {
-    expect_error(check_cran_results(pkg = "foobarfoobar"),
+    expect_error(cran_results(pkg = "foobarfoobar"),
                  "Invalid package name")
 })
 
 test_that("invalid email address", {
-    expect_error(check_cran_results(email = "foobar"),
+    expect_error(cran_results(email = "foobar"),
                  "Malformed email address")
-    expect_error(check_cran_results(email = "foo@foobarbar.rrrr"),
+    expect_error(cran_results(email = "foo@foobarbar.rrrr"),
                  "Invalid email address")
 })
 
 context("check cran results")
 
-validate_check_cran_results <- function(x) {
+validate_cran_results <- function(x) {
     length(x) == 7 &&
         inherits(x, "tbl_df") &&
         all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
@@ -32,92 +32,92 @@ validate_check_cran_results <- function(x) {
 }
 
 test_that("at least email or package name specified (website)", {
-    expect_error(check_cran_results(), "provide at least one value for")
+    expect_error(cran_results(), "provide at least one value for")
 })
 
 test_that("at least email or package name specified (crandb)", {
-    expect_error(check_cran_results(src = "crandb"), "provide at least one value for")
+    expect_error(cran_results(src = "crandb"), "provide at least one value for")
 })
 
 test_that("works with one package, one address, or both (website)", {
     skip_on_cran()
-    res_pkg <- check_cran_results(pkg = "phylobase")
-    res_email <- check_cran_results(email = "francois.michonneau@gmail.com")
-    res_both <- check_cran_results(email = "francois.michonneau@gmail.com",
+    res_pkg <- cran_results(pkg = "phylobase")
+    res_email <- cran_results(email = "francois.michonneau@gmail.com")
+    res_both <- cran_results(email = "francois.michonneau@gmail.com",
                                    pkg = "ridigbio")
-    expect_true(validate_check_cran_results(res_pkg))
-    expect_true(validate_check_cran_results(res_email))
-    expect_true(validate_check_cran_results(res_both))
+    expect_true(validate_cran_results(res_pkg))
+    expect_true(validate_cran_results(res_email))
+    expect_true(validate_cran_results(res_both))
 })
 
 test_that("works with one package, one address, or both (crandb)", {
     skip_on_cran()
-    res_pkg <- check_cran_results(pkg = "phylobase", src = "crandb")
-    res_email <- check_cran_results(email = "francois.michonneau@gmail.com",
+    res_pkg <- cran_results(pkg = "phylobase", src = "crandb")
+    res_email <- cran_results(email = "francois.michonneau@gmail.com",
                                     src = "crandb")
-    res_both <- check_cran_results(email = "francois.michonneau@gmail.com",
+    res_both <- cran_results(email = "francois.michonneau@gmail.com",
                                    pkg = "ridigbio", src = "crandb")
-    expect_true(validate_check_cran_results(res_pkg))
-    expect_true(validate_check_cran_results(res_email))
-    expect_true(validate_check_cran_results(res_both))
+    expect_true(validate_cran_results(res_pkg))
+    expect_true(validate_cran_results(res_email))
+    expect_true(validate_cran_results(res_both))
 })
 
 test_that("works for maintainers with a single package (website)", {
     skip_on_cran()
-    res <- check_cran_results(email = "bbolker+lme4@gmail.com")
-    expect_true(validate_check_cran_results(res))
+    res <- cran_results(email = "bbolker+lme4@gmail.com")
+    expect_true(validate_cran_results(res))
 })
 
 test_that("works for maintainers with a single package (crandb)", {
     skip_on_cran()
-    res <- check_cran_results(email = "bbolker+lme4@gmail.com",
+    res <- cran_results(email = "bbolker+lme4@gmail.com",
                               src = "crandb")
-    expect_true(validate_check_cran_results(res))
+    expect_true(validate_cran_results(res))
 })
 
 test_that("case doesn't matter (website)", {
     skip_on_cran()
-    res_lower <- check_cran_results(email = "bbolker+lme4@gmail.com")
-    res <- check_cran_results(email = "bBolker+Lme4@gmail.com")
+    res_lower <- cran_results(email = "bbolker+lme4@gmail.com")
+    res <- cran_results(email = "bBolker+Lme4@gmail.com")
     expect_true(identical(res_lower, res))
 })
 
 test_that("case doesn't matter (crandb)", {
     skip_on_cran()
-    res <- check_cran_results(email = "bBolker+Lme4@gmail.com",
+    res <- cran_results(email = "bBolker+Lme4@gmail.com",
                               src = "crandb")
-    res_lower <- check_cran_results(email = "bbolker+lme4@gmail.com",
+    res_lower <- cran_results(email = "bbolker+lme4@gmail.com",
                               src = "crandb")
     expect_true(identical(res_lower, res))
 })
 
 test_that("works for multiple packages, multiple addresses (website)", {
     skip_on_cran()
-    res_pkgs <- check_cran_results(pkg = c("rotl", "phylobase", "ridigbio"))
-    res_emails <- check_cran_results(email = c("francois.michonneau@gmail.com",
+    res_pkgs <- cran_results(pkg = c("rotl", "phylobase", "ridigbio"))
+    res_emails <- cran_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"))
-    res_both <- check_cran_results(email =   c("francois.michonneau@gmail.com",
+    res_both <- cran_results(email =   c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
                                    pkg = c("ridigbio", "mregions", "bold"))
-    expect_true(validate_check_cran_results(res_pkgs))
-    expect_true(validate_check_cran_results(res_emails))
-    expect_true(validate_check_cran_results(res_both))
+    expect_true(validate_cran_results(res_pkgs))
+    expect_true(validate_cran_results(res_emails))
+    expect_true(validate_cran_results(res_both))
 })
 
 test_that("works for multiple packages, multiple addresses (crandb)", {
     skip_on_cran()
-    res_pkgs <- check_cran_results(pkg = c("rotl", "phylobase", "ridigbio"),
+    res_pkgs <- cran_results(pkg = c("rotl", "phylobase", "ridigbio"),
                                    src = "crandb")
-    res_emails <- check_cran_results(email = c("francois.michonneau@gmail.com",
+    res_emails <- cran_results(email = c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
                                      src = "crandb")
-    res_both <- check_cran_results(email =   c("francois.michonneau@gmail.com",
+    res_both <- cran_results(email =   c("francois.michonneau@gmail.com",
                                                "hadley@rstudio.com"),
                                    pkg = c("ridigbio", "mregions", "bold"),
                                    src = "crandb")
-    expect_true(validate_check_cran_results(res_pkgs))
-    expect_true(validate_check_cran_results(res_emails))
-    expect_true(validate_check_cran_results(res_both))
+    expect_true(validate_cran_results(res_pkgs))
+    expect_true(validate_cran_results(res_emails))
+    expect_true(validate_cran_results(res_both))
 })
 
 ### visit_cran_check -----------------------------------------------------------
@@ -185,8 +185,8 @@ test_that("output of summary cran results", {
     ## expect_identical(summary_cran_results(pkg = pkg_with_notes, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_notes, src = "crandb"))
     ## all have >= 1 values in column NOTES
-    expect_true(all(check_cran_results(pkg = pkg_with_notes, src = "website")$NOTE > 0))
-    expect_true(all(check_cran_results(pkg = pkg_with_notes, src = "crandb")$NOTE > 0))
+    expect_true(all(cran_results(pkg = pkg_with_notes, src = "website")$NOTE > 0))
+    expect_true(all(cran_results(pkg = pkg_with_notes, src = "crandb")$NOTE > 0))
     expect_message(summary_cran_results(pkg = pkg_with_notes),
                    build_regexp("with notes", pkg_with_notes))
     expect_message(summary_cran_results(pkg = pkg_with_notes, src = "crandb"),
@@ -196,8 +196,8 @@ test_that("output of summary cran results", {
     ## expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     ## all have >= 1 values in column WARNING
-    expect_true(all(check_cran_results(pkg = pkg_with_warn, src = "website")$WARN > 0))
-    expect_true(all(check_cran_results(pkg = pkg_with_warn, src = "crandb")$WARN > 0))
+    expect_true(all(cran_results(pkg = pkg_with_warn, src = "website")$WARN > 0))
+    expect_true(all(cran_results(pkg = pkg_with_warn, src = "crandb")$WARN > 0))
     ## all are listed under packages with WARNING
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    build_regexp("with warnings", pkg_with_warn))
@@ -208,8 +208,8 @@ test_that("output of summary cran results", {
     ##expect_identical(summary_cran_results(pkg = pkg_with_err, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_err, src = "crandb"))
     ## all have >= 1 values in column ERROR
-    expect_true(all(check_cran_results(pkg = pkg_with_err, src = "website")$ERROR > 0))
-    expect_true(all(check_cran_results(pkg = pkg_with_err, src = "crandb")$ERROR > 0))
+    expect_true(all(cran_results(pkg = pkg_with_err, src = "website")$ERROR > 0))
+    expect_true(all(cran_results(pkg = pkg_with_err, src = "crandb")$ERROR > 0))
     ## all packages are listed under WARNING
     expect_message(summary_cran_results(pkg = pkg_with_err),
                    build_regexp("with errors", pkg_with_err))
@@ -221,8 +221,8 @@ test_that("output of summary cran results", {
     #expect_identical(summary_cran_results(pkg = pkg_with_fail, src = "website"),
     #                 summary_cran_results(pkg = pkg_with_fail, src = "crandb"))
     ## all have >= 1 values in column FAIL:
-    expect_true(all(check_cran_results(pkg = pkg_with_fail, src = "website")$FAIL > 0))
-    expect_true(all(check_cran_results(pkg = pkg_with_fail, src = "crandb")$FAIL > 0))
+    expect_true(all(cran_results(pkg = pkg_with_fail, src = "website")$FAIL > 0))
+    expect_true(all(cran_results(pkg = pkg_with_fail, src = "crandb")$FAIL > 0))
     ## all packages are listed under FAIL:
     expect_message(summary_cran_results(pkg = pkg_with_fail),
                    build_regexp("with fails", pkg_with_fail))
@@ -234,8 +234,8 @@ test_that("output of summary cran results", {
     expect_identical(summary_cran_results(pkg = pkg_with_issues, src = "website"),
                      summary_cran_results(pkg = pkg_with_issues, src = "crandb"))
     ## all have TRUE listed in the column "has issues notes"
-    expect_true(all(check_cran_results(pkg = pkg_with_issues)[["has_issues_notes"]]))
-    expect_true(all(check_cran_results(pkg = pkg_with_issues, src = "crandb")[["has_issues_notes"]]))
+    expect_true(all(cran_results(pkg = pkg_with_issues)[["has_issues_notes"]]))
+    expect_true(all(cran_results(pkg = pkg_with_issues, src = "crandb")[["has_issues_notes"]]))
     ## all packages listed under "with issues"
     expect_message(summary_cran_results(pkg = pkg_with_issues, src = "website"),
                    build_regexp("with other issues", pkg_with_issues))
@@ -248,14 +248,14 @@ test_that("output of summary cran results", {
     expect_true(all(grepl("  -", msg)))
 })
 
-### show_cran_results ----------------------------------------------------------
+### cran_details  ----------------------------------------------------------
 
 context("show cran results")
 
 test_that("only one package", {
-    expect_error(show_cran_results(c("pkg1", "pkg2")),
+    expect_error(cran_details(c("pkg1", "pkg2")),
                  "not a string")
-    expect_error(show_cran_results(TRUE),
+    expect_error(cran_details(TRUE),
                  "not a string")
 })
 
@@ -264,10 +264,10 @@ test_that("output of show cran results", {
     skip_on_cran()
     cran_res <- get_cran_rds_file("results")
     pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 1)
-    expect_output(show_cran_results(pkg_with_notes, show_log = FALSE),
+    expect_output(summary(show_cran_results(pkg_with_notes, show_log = FALSE)),
                   pkg_with_notes)
-    expect_output(show_cran_results(pkg_with_notes, show_log = FALSE,
-                                    src = "crandb"),
+    expect_output(summary(show_cran_results(pkg_with_notes, show_log = FALSE,
+                                    src = "crandb")),
                   pkg_with_notes)
 })
 
@@ -277,9 +277,9 @@ context("non-skipped tests")
 
 test_that("check output for MASS", {
     if (curl::has_internet()) {
-        res <- check_cran_results(pkg = "MASS")
-        validate_check_cran_results(res)
-        res <- check_cran_results(pkg = "MASS", src = "crandb")
-        validate_check_cran_results(res)
+        res <- cran_results(pkg = "MASS")
+        validate_cran_results(res)
+        res <- cran_results(pkg = "MASS", src = "crandb")
+        validate_cran_results(res)
     }
 })

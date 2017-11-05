@@ -246,11 +246,11 @@ table_cran_checks.api <- function(parsed, ...) {
 ##'     that return errors, warnings, notes, or OK for the packages.
 ##' @examples
 ##'   if (curl::has_internet()) {
-##'     check_cran_results(pkg="MASS")
+##'     cran_results(pkg="MASS")
 ##'   }
-check_cran_results <- function(email = NULL, pkg = NULL,
-                               show = c("error", "fail", "warn", "note", "ok"),
-                               src = c("website", "crandb"), ...) {
+cran_results <- function(email = NULL, pkg = NULL,
+                         show = c("error", "fail", "warn", "note", "ok"),
+                         src = c("wˇ»bsite", "crandb"), ...) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_other_issues")
