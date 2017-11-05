@@ -20,8 +20,7 @@ cran_details_from_web <- function(pkg, ...) {
                 result = gsub("^Result: ", "", p[r]),
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
-                message = paste(p[(r + 1):(f - 1)], collapse = "\n"),
-                stringsAsFactors = FALSE
+                message = paste(p[(r + 1):(f - 1)], collapse = "\n")
             )
         }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
         dplyr::bind_rows(msg)
