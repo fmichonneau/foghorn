@@ -202,7 +202,7 @@ print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
 ##' @export
 summary_cran_results <- function(email = NULL, pkg = NULL,
                                 compact = FALSE, ...) {
-    res_checks <- check_cran_results(email, pkg, ...)
+    res_checks <- cran_results(email, pkg, ...)
     what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
     res <- lapply(what, function(x)
         get_pkg_with_results(res_checks, x, compact))

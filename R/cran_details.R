@@ -33,19 +33,18 @@ cran_details_from_web <- function(pkg, ...) {
 
 
 
-##' Given a package name published on CRAN, print the outcomes of
-##' checks that return notes, warnings or errors, and optionally print
-##' the messages.
+##' Given the names of packages published on CRAN, return the output of
+##' checks that return notes, warnings or errors.
 ##'
-##' @title Show the CRAN check results for a package
-##' @param pkg name of the package on CRAN
-##' @param show_log Should the messages of the \dQuote{Check Details}
-##'     be printed? (logical)
+##' @title Get details about the CRAN check results for packages
+##' @param pkg character vector of the names for the packages on CRAN
+##' @param object an object created by \code{cran_details}
 ##' @template src
 ##' @template dots
 ##' @template details
-##' @return \code{NULL}, used for its side effect of printing the CRAN
-##'     messages
+##' @return a \code{tibble} listing the names of the packages that have non- OK
+##'     check results, the nature of the result (\code{WARN}, \code{ERROR},
+##'     \code{FAIL}, \code{NOTE}, or other issues).
 ##' @export
 ##' @importFrom crayon bold
 cran_details <- function(pkg, src = c("website", "crandb"),

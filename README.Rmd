@@ -68,7 +68,7 @@ The information can also be summarized as a table:
 
 ```{r tibble}
 ## Summary as a tibble
-check_cran_results(email = "francois.michonneau@gmail.com")
+cran_results(email = "francois.michonneau@gmail.com")
 ```
 
 In addition of your own packages, you can also check the results for other
@@ -77,12 +77,12 @@ packages that might be of interest to you:
 ```{r package-name}
 ## either by themselves
 summary_cran_results(pkg = c("ggplot2", "dplyr"))
-check_cran_results(pkg = c("ggplot2", "dplyr"))
+cran_results(pkg = c("ggplot2", "dplyr"))
 
 ## or by combining them with email addresses
 summary_cran_results(email = "francois.michonneau@gmail.com",
                      pkg = c("mregions", "ridigbio"))
-check_cran_results(email = "francois.michonneau@gmail.com",
+cran_results(email = "francois.michonneau@gmail.com",
                    pkg = c("mregions", "ridigbio"))
 ```
 
@@ -104,7 +104,7 @@ recommended. To use the CRAN database, add `src = "crandb"` in your function
 calls:
 
 ```{r show-cran-db}
-check_cran_results(pkg = "nlme", src = "crandb")
+cran_results(pkg = "nlme", src = "crandb")
 ```
 
 Check out the "Details" section in the help files for more information.
