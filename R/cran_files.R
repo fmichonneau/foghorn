@@ -95,10 +95,10 @@ add_other_issues_crandb <- function(tbl, ...) {
 ##' @importFrom lazyeval interp
 ##' @importFrom stats setNames
 ##' @importFrom dplyr group_by_ mutate_ ungroup distinct_ select_
+##' @importFrom tibble tibble
 cran_details_from_crandb <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
     issues <- get_cran_rds_file("issues", ...)
-
 
     dt <- dt[dt[["Package"]] == pkg, ]
 
@@ -121,7 +121,7 @@ cran_details_from_crandb <- function(pkg, ...) {
             "flavors",
             message = "Output")
 
-    attr(res, "other_issues") <- tibble::data_frame(Package = pkg,
-                                              has_other_issues = pkg %in% issues$Package)
+    attr(res, "other_issues") <- tibble::tibble(Package = pkg,
+                                                has_other_issues = pkg %in% issues$Package)
     res
 }

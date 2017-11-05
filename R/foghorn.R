@@ -64,8 +64,8 @@ read_cran_web_from_pkg <- function(pkg) {
 }
 
 
-##' @importFrom tibble data_frame
-default_cran_checks <- tibble::data_frame(
+##' @importFrom tibble tibble
+default_cran_checks <- tibble::tibble(
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
@@ -105,12 +105,12 @@ all_packages.cran_checks_pkg <- function(parsed, ...) {
     })
 }
 
-##' @importFrom tibble data_frame
+##' @importFrom tibble tibble
 has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
     res <- lapply(pkg, function(x) {
-        tibble::data_frame(`Package` = x,
+        tibble::tibble(`Package` = x,
                           `has_other_issues` = rep(FALSE, length(x))
                           )
     })
