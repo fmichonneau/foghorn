@@ -465,6 +465,7 @@ visit_cran_check <- function(pkg = NULL, email = NULL) {
     invisible(url)
 }
 
+#' @importFrom tiible as_tibble
 parse_cran_results <- function(pkg, ...) {
     parsed <- parse_cran_checks_pkg(pkg)
     mem_test <- has_other_issues(parsed)
@@ -495,7 +496,7 @@ parse_cran_results <- function(pkg, ...) {
     names(all_p) <- pkg
     res <- dplyr::bind_rows(all_p, .id = "Package")
     attr(res, "other_issues") <- mem_test
-    res
+    tibble::as_tibble(res)
 }
 
 ##' @importFrom clisymbols symbol
