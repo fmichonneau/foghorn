@@ -1,17 +1,3 @@
-convert_email_to_cran_format <- function(email) {
-    ## check email
-    lapply(email, function(x)
-        if (!grepl("\\@", x)) {
-            stop("Malformed email address: ", sQuote(email), call. = FALSE)
-        })
-    email <- gsub("\\@", "_at_", tolower(email))
-    ##  "all characters different from letters, digits, hyphens,
-    ##  underscores, colons, and periods replaced by underscores ..."
-    email <- gsub("[^[:alnum:]_:.-]", "_", email)
-    email
-}
-
-
 url_pkg_res <- function(pkg) {
     paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
 }
