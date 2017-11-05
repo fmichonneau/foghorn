@@ -496,9 +496,9 @@ render_flavors <- function(x) {
 ##'     messages
 ##' @export
 ##' @importFrom crayon bold
-show_cran_results <- function(pkg, show_log = TRUE, src = c("website", "crandb"),
-                              ...) {
-    if (length(pkg) != 1 || !is.character(pkg))
+cran_details <- function(pkg, src = c("website", "crandb"),
+                         ...) {
+    if (!(length(pkg) == 1 && is.character(pkg)))
         stop(sQuote("pkg"), " is not a string.", call. = FALSE)
 
     src <- match.arg(src, c("website", "crandb"))
@@ -508,10 +508,18 @@ show_cran_results <- function(pkg, show_log = TRUE, src = c("website", "crandb")
     else if (identical(src, "crandb"))
         res <- cran_details_from_crandb(pkg, ...)
 
+    class(res) <- c("cran_details", class(res))
+    res
+}
+
+
+summary.cran_details <- function(res, show_log = TRUE) {
+
     if (nrow(res) < 1) {
         message("All clear for ", paste(pkg, collapse = ", "))
         return(invisible(NULL))
     }
+
 
     apply(attr(res, "other_issues"), 1, function(x) {
         if (x[2])
