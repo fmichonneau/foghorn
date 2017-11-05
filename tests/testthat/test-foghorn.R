@@ -21,7 +21,7 @@ test_that("invalid email address", {
 context("check cran results")
 
 validate_cran_results <- function(x) {
-    length(x) == 7 &&
+    length(x) == 7L &&
         inherits(x, "tbl_df") &&
         all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
                             "NOTE",  "OK", "has_other_issues")) &&
@@ -29,6 +29,13 @@ validate_cran_results <- function(x) {
         is.logical(x[["has_other_issues"]]) &&
         any(x[1, ] > 2) && # 2 allows for something other that "has_issues_notes" to be in the table
         !any(is.na(x)) ## no NAs allowed
+}
+
+validate_cran_details <- function(x) {
+    length(x) == 5L &&
+        inherits(x, "tbl_df") &&
+        all(names(x) %in% c("Package", "result", "check",
+                            "flavors", "message"))
 }
 
 test_that("at least email or package name specified (website)", {
@@ -252,23 +259,53 @@ test_that("output of summary cran results", {
 
 context("show cran results")
 
-test_that("only one package", {
-    expect_error(cran_details(c("pkg1", "pkg2")),
-                 "not a string")
+test_that("input is character", {
     expect_error(cran_details(TRUE),
                  "not a string")
 })
 
 
-test_that("output of show cran results", {
+test_that("output of cran_details", {
     skip_on_cran()
     cran_res <- get_cran_rds_file("results")
+
+    pkg_with_ok <- sample(unique(cran_res$Package[cran_res$Status == "OK"]), 2)
     pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 1)
-    expect_output(summary(show_cran_results(pkg_with_notes, show_log = FALSE)),
+    pkg_with_err <- sample(unique(cran_res$Package[cran_res$Status == "ERROR"]), 3)
+
+    ## results from web scrapping
+    web_pkg_with_ok <- cran_details(pkg_with_ok, src = "website")
+    web_pkg_with_notes <- cran_details(pkg_with_notes, src = "website")
+    web_pkg_with_err <- cran_details(pkg_with_err, src = "website")
+
+    ## this doesn't pass: expect_true(validate_cran_details(web_pkg_with_ok))
+    expect_true(validate_cran_details(web_pkg_with_notes))
+    expect_true(validate_cran_details(web_pkg_with_err))
+
+    expect_output(summary(web_pkg_with_notes, show_log = FALSE),
                   pkg_with_notes)
-    expect_output(summary(show_cran_results(pkg_with_notes, show_log = FALSE,
-                                    src = "crandb")),
+    expect_output(summary(web_pkg_with_notes, show_log = TRUE),
                   pkg_with_notes)
+    expect_message(summary(web_pkg_with_ok, show_log = TRUE),
+                  "All clear")
+
+
+    ## results from CRAN db
+    cran_pkg_with_ok <- cran_details(pkg_with_ok, src = "crandb")
+    cran_pkg_with_notes <- cran_details(pkg_with_notes, src = "crandb")
+    cran_pkg_with_err <- cran_details(pkg_with_err, src = "crandb")
+
+    ## this doesn't pass: expect_true(validate_cran_details(cran_pkg_with_ok))
+    expect_true(validate_cran_details(cran_pkg_with_notes))
+    expect_true(validate_cran_details(cran_pkg_with_err))
+
+    expect_output(summary(cran_pkg_with_notes, show_log = FALSE),
+                  pkg_with_notes)
+    expect_output(summary(cran_pkg_with_notes, show_log = TRUE),
+                  pkg_with_notes)
+    expect_message(summary(cran_pkg_with_ok, show_log = TRUE),
+                  "All clear")
+
 })
 
 ### CRAN tests -----------------------------------------------------------------
