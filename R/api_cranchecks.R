@@ -2,6 +2,29 @@ api_base_url <- function() {
     "https://cranchecks.info"
 }
 
+api_call <- function(endpt, value, ...) {
+    res <- httr::GET(api_base_url(), path = paste(endpt, value, sep = "/"), ...)
+    check_api_res(res)
+}
+
+##' @importFrom purrr map_df
+api_pkg_status <- function(pkg, ...) {
+    purrr::map_df(pkg, function(p) {
+               r <- api_call(endpt = "pkgs", p, ...)
+               summary_pkg_res(r)
+           })
+}
+
+##' @importFrom purrr map_df
+api_maintainer <- function(email, ...) {
+    purrr::map_df(email, function(e) {
+               e <- convert_email_to_cran_format(email)
+               r <- api_call(endpt = "maintainers", e, ...)
+               summary_maintainer_res(r)
+           })
+}
+
+
 ##' @importFrom jsonlite fromJSON
 ##' @importFrom httr content
 api_parse <- function(r) {
