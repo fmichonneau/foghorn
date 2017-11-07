@@ -88,7 +88,7 @@ cran_details_from_crandb <- function(pkg, ...) {
         dplyr::select(Package = .data$Package,
                       result = .data$Status,
                       check = .data$Check,
-                      flavors = .data$flvors,
+                      flavors = .data$flavors,
                       message = .data$Output) %>%
         dplyr::mutate_if(is.factor, as.character)
 
