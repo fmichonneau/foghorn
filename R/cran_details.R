@@ -1,7 +1,27 @@
+##' @importFrom xml2 xml_find_all xml_text
+##' @importFrom dplyr %>% bind_rows
+##' @importFrom tibble tibble
+has_other_issues_details <- function(parsed, ...) {
+      pkg <- all_packages(parsed)
+
+      lapply(parsed, function(x) {
+          other_issues_pth <-  xml2::xml_find_all(x, ".//h3/a/following::p[1]//a")
+          issue_type <- xml2::xml_text(other_issues_pth)
+          issue_url <- xml2::xml_find_all(other_issues_pth, "@href") %>% xml2::xml_text()
+          tibble::tibble(result = "other_issue", check = issue_type,
+                         flavors = NA_character_,
+                         message = paste0("See: <", issue_url, ">"))
+      }) %>%
+          dplyr::bind_rows(.id = "Package")
+
+}
+
+
 #' @importFrom tibble tibble
+#' @importFrom dplyr bind_rows arrange
 cran_details_from_web <- function(pkg, ...) {
     parsed <- read_cran_web_from_pkg(pkg)
-    issue_test <- has_other_issues(parsed)
+    issue_test <- has_other_issues_details(parsed)
 
     all_p <- lapply(parsed, function(x) {
         p <- xml2::xml_find_all(x, ".//p")
@@ -26,11 +46,66 @@ cran_details_from_web <- function(pkg, ...) {
         dplyr::bind_rows(msg)
     })
     names(all_p) <- pkg
-    res <- dplyr::bind_rows(all_p, .id = "Package")
-    attr(res, "other_issues") <- issue_test
+    res <- dplyr::bind_rows(all_p, .id = "Package") %>%
+        dplyr::bind_rows(issue_test) %>%
+        dplyr::arrange(.data$Package)
     res
 }
 
+
+
+add_other_issues_crandb <- function(tbl, ...) {
+    issues <- get_cran_rds_file("issues", ...)
+    res <- vapply(tbl[["Package"]], function(x) {
+        pkg_issues <- issues[issues$Package == x, ]
+        if (nrow(pkg_issues) > 0) {
+            paste(pkg_issues$kind, collapse = ", ")
+        } else ""
+    }, character(1), USE.NAMES = FALSE)
+    dplyr::mutate(tbl, "has_other_issues" = nchar(res) > 0)
+}
+
+##' @importFrom dplyr group_by ungroup distinct mutate_if select mutate bind_rows arrange
+##' @importFrom tibble tibble
+##' @importFrom rlang .data
+cran_details_from_crandb <- function(pkg, ...) {
+    dt <- get_cran_rds_file("details", ...)
+    issues <- get_cran_rds_file("issues", ...)
+
+    dt <- dt[dt[["Package"]] %in%  pkg, ]
+
+    ## remove lines that don't have any issues
+    dt <- dt[dt[["Check"]] != "*", ]
+
+    dt$Status <- gsub("WARNING", "WARN", dt$Status)
+
+    res <- dt %>%
+        tibble::as_tibble() %>%
+        dplyr::group_by(.data$Package, .data$Output) %>%
+        dplyr::mutate(flavors = paste(.data$Flavor, collapse = ", ")) %>%
+        dplyr::ungroup() %>%
+        dplyr::distinct(.data$Package, .data$Output, .keep_all = TRUE) %>%
+        dplyr::select(Package = .data$Package,
+                      result = .data$Status,
+                      check = .data$Check,
+                      flavors = .data$flvors,
+                      message = .data$Output) %>%
+        dplyr::mutate_if(is.factor, as.character)
+
+    other_issues <- dplyr::filter(issues, .data$Package %in% pkg) %>%
+        tibble::as_tibble() %>%
+        dplyr::mutate_if(is.factor, as.character) %>%
+        dplyr::select(Package = .data$Package,
+                      check = .data$kind,
+                      message = .data$href) %>%
+        dplyr::mutate(
+                   result = "other_issue",
+                   flavors = NA_character_)
+
+    res <- dplyr::bind_rows(res, other_issues) %>%
+        dplyr::arrange(.data$Package)
+    res
+}
 
 
 ##' Given the names of packages published on CRAN, return the output of
@@ -59,6 +134,7 @@ cran_details <- function(pkg, src = c("website", "crandb"),
         res <- cran_details_from_crandb(pkg, ...)
 
     class(res) <- c("cran_details", class(res))
+    attr(res, "pkgs") <- pkg
     res
 }
 
@@ -68,8 +144,10 @@ cran_details <- function(pkg, src = c("website", "crandb"),
 render_flavors <- function(x) {
     ## transform the comma separated list of platform flavors into
     ## unordered list
-    res <- unlist(strsplit(x, ", "))
-    paste("  ", clisymbols::symbol$pointer, res, "\n")
+    if (!is.na(x)) {
+        res <- unlist(strsplit(x, ", "))
+        paste("  ", clisymbols::symbol$pointer, res, "\n")
+    } else ""
 }
 
 
@@ -83,21 +161,14 @@ render_flavors <- function(x) {
 ##' @importFrom clisymbols symbol
 summary.cran_details <- function(object, show_log = TRUE, ...) {
 
-    no_result <- setdiff(attr(object, "other_issues")$Package, object$Package)
+    no_result <- setdiff(attr(object, "pkgs"), object$Package)
     if (length(no_result) > 0) {
-        message(crayon::green(clisymbols::symbol$tick, "All clear for ",
+        message(crayon::green(clisymbols::symbol$tick, "All clear for",
                               paste0(no_result, collapse = ", "), "!"))
     }
 
     if (nrow(object) < 1)
         return(invisible(object))
-
-    purrr::pmap(attr(object, "other_issues"), function(Package, has_other_issues) {
-        if (has_other_issues)
-            cat(foghorn_components[["has_other_issues"]]$color(
-                  paste(foghorn_components[["has_other_issues"]]$symbol,
-                        crayon::bold(Package), "has other issues")), "\n")
-        })
 
     purrr::pmap(object, function(Package, result, check, flavors, message)  {
         cmpt <- foghorn_components[[result]]

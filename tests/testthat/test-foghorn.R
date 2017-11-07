@@ -268,8 +268,14 @@ test_that("input is character", {
 test_that("output of cran_details", {
     skip_on_cran()
     cran_res <- get_cran_rds_file("results")
+    cran_issues <- get_cran_rds_file("issues")
 
-    pkg_with_ok <- sample(unique(cran_res$Package[cran_res$Status == "OK"]), 2)
+    ## find package with results = OK and no other issues
+    pkg_with_ok <- character(0)
+    while (length(pkg_with_ok) < 1) {
+        pkg_with_ok <- sample(unique(cran_res$Package[cran_res$Status == "OK"]), 5)
+        pkg_with_ok <- setdiff(pkg_with_ok, cran_issues$Package)
+    }
     pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 1)
     pkg_with_err <- sample(unique(cran_res$Package[cran_res$Status == "ERROR"]), 3)
 

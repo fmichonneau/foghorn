@@ -8,6 +8,9 @@ default_cran_checks <- tibble::tibble(
 )
 
 
+##' @importFrom tibble tibble
+##' @importFrom clisymbols symbol
+##' @importFrom crayon red magenta yellow blue cyan
 foghorn_components <- list(
     `ERROR` = c(symbol = clisymbols::symbol$cross,
                 color = crayon::red,
@@ -25,5 +28,8 @@ foghorn_components <- list(
                word = "notes"),
     `has_other_issues` = c(symbol = clisymbols::symbol$circle_filled,
                             color = crayon::cyan,
-                            word = "other issues")
+                           word = "other issues"),
+    `other_issue` = c(symbol = clisymbols::symbol$circle_filled,
+                       color = crayon::cyan,
+                       word = "additional issues")
 )
