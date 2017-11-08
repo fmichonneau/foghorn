@@ -45,3 +45,14 @@ check_api_res <- function(res) {
     }
     api_parse(res)
 }
+
+##' @importFrom rlang .data
+summary_pkg_res <- function(res) {
+    res$data$checks %>%
+        purrr::map_df(function(x) {
+                   list(Flavor = x$flavor, Version = x$version,
+                        tinstall = x$tinstall, tcheck = x$tcheck, ttotal = x$ttotal,
+                        Status = x$status, check_url = x$check_url %||% NA_character_)
+               })  %>%
+        dplyr::bind_cols(Package = rep(res$data$package, nrow(rlang::.data)))
+}

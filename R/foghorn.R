@@ -8,16 +8,6 @@ url_email_res <- function(email) {
            email, ".html")
 }
 
-##' @importFrom rlang .data
-summary_pkg_res <- function(res) {
-    res$data$checks %>%
-        purrr::map_df(function(x) {
-                   list(Flavor = x$flavor, Version = x$version,
-                        tinstall = x$tinstall, tcheck = x$tcheck, ttotal = x$ttotal,
-                        Status = x$status, check_url = x$check_url %||% NA_character_)
-               })  %>%
-        dplyr::bind_cols(Package = rep(res$data$package, nrow(rlang::.data)))
-}
 
 summary_maintainer_res <- function(res) {
      ## TODO
