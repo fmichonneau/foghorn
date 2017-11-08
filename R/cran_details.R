@@ -4,21 +4,23 @@
 has_other_issues_details <- function(parsed, ...) {
       pkg <- all_packages(parsed)
 
-      lapply(parsed, function(x) {
+      res <- lapply(parsed, function(x) {
           other_issues_pth <-  xml2::xml_find_all(x, ".//h3/a/following::p[1]//a")
           issue_type <- xml2::xml_text(other_issues_pth)
           issue_url <- xml2::xml_find_all(other_issues_pth, "@href") %>% xml2::xml_text()
           tibble::tibble(result = "other_issue", check = issue_type,
                          flavors = NA_character_,
                          message = paste0("See: <", issue_url, ">"))
-      }) %>%
-          dplyr::bind_rows(.id = "Package")
+      })
 
+      pkgs <- rep(unlist(pkg), vapply(res, function(x) nrow(x) %||% 0L, integer(1)))
+      res <- do.call("rbind", res)
+      res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
+      tibble::as.tibble(res)
 }
 
 
 #' @importFrom tibble tibble
-#' @importFrom dplyr bind_rows arrange
 cran_details_from_web <- function(pkg, ...) {
     parsed <- read_cran_web_from_pkg(pkg)
     issue_test <- has_other_issues_details(parsed)
@@ -43,13 +45,14 @@ cran_details_from_web <- function(pkg, ...) {
                 message = paste(p[(r + 1):(f - 1)], collapse = "\n")
             )
         }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-        dplyr::bind_rows(msg)
+        do.call("rbind", msg)
     })
-    names(all_p) <- pkg
-    res <- dplyr::bind_rows(all_p, .id = "Package") %>%
-        dplyr::bind_rows(issue_test) %>%
-        dplyr::arrange(.data$Package)
-    res
+
+    pkgs <- rep(pkg, vapply(all_p, function(x) nrow(x) %||% 0L, integer(1)))
+    res <- do.call("rbind", all_p)
+    res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
+    res <- rbind(res, issue_test)
+    tibble::as.tibble(res[order(res$Package), , drop = FALSE])
 }
 
 
@@ -65,7 +68,6 @@ add_other_issues_crandb <- function(tbl, ...) {
     dplyr::mutate(tbl, "has_other_issues" = nchar(res) > 0)
 }
 
-##' @importFrom dplyr group_by ungroup distinct mutate_if select mutate bind_rows arrange
 ##' @importFrom tibble tibble
 ##' @importFrom rlang .data
 cran_details_from_crandb <- function(pkg, ...) {
@@ -79,32 +81,45 @@ cran_details_from_crandb <- function(pkg, ...) {
 
     dt$Status <- gsub("WARNING", "WARN", dt$Status)
 
-    res <- dt %>%
-        tibble::as_tibble() %>%
-        dplyr::group_by(.data$Package, .data$Output) %>%
-        dplyr::mutate(flavors = paste(.data$Flavor, collapse = ", ")) %>%
-        dplyr::ungroup() %>%
-        dplyr::distinct(.data$Package, .data$Output, .keep_all = TRUE) %>%
-        dplyr::select(Package = .data$Package,
-                      result = .data$Status,
-                      check = .data$Check,
-                      flavors = .data$flavors,
-                      message = .data$Output) %>%
-        dplyr::mutate_if(is.factor, as.character)
+    grp_by <- function(x, grp) {
+        as.character(tapply(x, grp, function(.x) unique(as.character(.x)), simplify = FALSE))
+    }
+    grps <- list(dt$Package, dt$Output)
 
-    other_issues <- dplyr::filter(issues, .data$Package %in% pkg) %>%
-        tibble::as_tibble() %>%
-        dplyr::mutate_if(is.factor, as.character) %>%
-        dplyr::select(Package = .data$Package,
-                      check = .data$kind,
-                      message = .data$href) %>%
-        dplyr::mutate(
-                   result = "other_issue",
-                   flavors = NA_character_)
+    .res_pkg <- grp_by(dt$Package, grps)
+    .res_res <- grp_by(dt$Status, grps)
+    .res_chk <- grp_by(dt$Check, grps)
+    .res_flvr <- as.character(tapply(dt$Flavor, list(dt$Package, dt$Output),
+                                     function(x) paste(as.character(x),
+                                                       collapse = ", ")))
+    .res_msg <- grp_by(dt$Output, grps)
+    .res <- tibble::tibble(
+                        Package = .res_pkg,
+                        result = .res_res,
+                        check = .res_chk,
+                        flavors = .res_flvr,
+                        message = .res_msg
+                    )
 
-    res <- dplyr::bind_rows(res, other_issues) %>%
-        dplyr::arrange(.data$Package)
-    res
+    issues <- issues[issues[["Package"]] %in% pkg, ]
+    issues <- tibble::as.tibble(issues)
+    .iss_pkg <- as.character(issues$Package)
+    .iss_chk <- as.character(issues$kind)
+    .iss_msg <- as.character(issues$href)
+    .iss_res <- rep("other_issue", nrow(issues))
+    .iss_flvr <- character(nrow(issues))
+
+    .iss <- tibble::tibble(
+                        Package = .iss_pkg,
+                        result = .iss_res,
+                        check = .iss_chk,
+                        flavors = .iss_flvr,
+                        message = .iss_msg
+                    )
+
+    res <- rbind(.res, .iss)
+    res[order(res$Package), ]
+
 }
 
 
