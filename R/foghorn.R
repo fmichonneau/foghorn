@@ -52,7 +52,7 @@ read_cran_web_from_pkg <- function(pkg) {
     res
 }
 
-
+##' @importFrom tibble as.tibble
 get_cran_table <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
         tbl <- rvest::html_table(x)
@@ -61,16 +61,17 @@ get_cran_table <- function(parsed, ...) {
         tbl
     })
     names(res) <- names(parsed)
-    dplyr::bind_rows(res, ...) %>%
-        dplyr::bind_rows(default_cran_checks)
+    pkg_col <- rep(names(res), vapply(res, nrow, integer(1)))
+    res <- do.call("rbind", res)
+    res <- cbind(Package = pkg_col, res, stringsAsFactors = FALSE)
+    tibble::as.tibble(res)
 }
 
 
 all_packages <- function(parsed, ...) UseMethod("all_packages")
 
 all_packages_by_email <- function(x) {
-    xml2::xml_find_all(x, ".//h3/@id") %>%
-        xml2::xml_text()
+    xml2::xml_text(xml2::xml_find_all(x, ".//h3/@id"))
 }
 
 all_packages.cran_checks_email <- function(parsed, ...) {
@@ -79,13 +80,12 @@ all_packages.cran_checks_email <- function(parsed, ...) {
 
 all_packages.cran_checks_pkg <- function(parsed, ...) {
     lapply(parsed, function(x) {
-        res <- xml2::xml_find_all(x, ".//h2/a/text()") %>%
-            xml2::xml_text()
-        gsub("\\s", "", res)
+        res <- xml2::xml_find_all(x, ".//h2/a/text()")
+        gsub("\\s", "", xml2::xml_text(res))
     })
 }
 
-##' @importFrom dplyr %>%
+##' @importFrom xml2 xml_find_all xml_text
 ##' @importFrom tibble tibble
 has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
@@ -95,10 +95,10 @@ has_other_issues <- function(parsed, ...) {
                        `has_other_issues` = rep(FALSE, length(x)))
     })
 
-    res <- dplyr::bind_rows(res)
+    res <- do.call("rbind", res)
     pkg_with_issue <- lapply(parsed, function(x) {
-        all_urls <- xml2::xml_find_all(x, ".//h3//child::a[@href]//@href") %>%
-            xml2::xml_text()
+        all_urls <- xml2::xml_find_all(x, ".//h3//child::a[@href]//@href")
+        all_urls <- xml2::xml_text(all_urls)
         with_issue <- grep("check_issue_kinds", all_urls, value = TRUE)
         pkg_with_issue <- unique(basename(with_issue))
         if (length(pkg_with_issue) ==  0) return(NULL)
@@ -109,10 +109,10 @@ has_other_issues <- function(parsed, ...) {
     res
 }
 
-##' @importFrom dplyr left_join
+##' @importFrom tibble tibble
 add_other_issues <- function(tbl, parsed, ...) {
     other_issues <- has_other_issues(parsed)
-    dplyr::left_join(tbl, other_issues, by = "Package")
+    tibble::as.tibble(merge(tbl, other_issues, by = "Package"))
 }
 
 get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
