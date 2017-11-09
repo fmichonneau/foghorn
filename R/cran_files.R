@@ -13,8 +13,10 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
         d_status <- httr::GET(url = cran_url,
                               httr::write_disk(dest_file, overwrite = overwrite), ...)
-        if (!identical(httr::status_code(d_status), 200L))
+        if (!identical(httr::status_code(d_status), 200L)) {
+            unlink(dest_file)
             stop("Can't get ", cran_url, " (status code: ", httr::status_code(d_status), ")", call. = FALSE)
+        }
     }
     invisible(dest_file)
 }
