@@ -1,5 +1,4 @@
 ##' @importFrom xml2 xml_find_all xml_text
-##' @importFrom dplyr %>% bind_rows
 ##' @importFrom tibble tibble
 has_other_issues_details <- function(parsed, ...) {
       pkg <- all_packages(parsed)
@@ -65,7 +64,8 @@ add_other_issues_crandb <- function(tbl, ...) {
             paste(pkg_issues$kind, collapse = ", ")
         } else ""
     }, character(1), USE.NAMES = FALSE)
-    dplyr::mutate(tbl, "has_other_issues" = nchar(res) > 0)
+    tbl$has_other_issues <- nchar(res) > 0
+    tbl
 }
 
 ##' @importFrom tibble tibble

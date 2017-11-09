@@ -20,3 +20,10 @@ convert_email_to_cran_format <- function(email) {
     email <- gsub("[^[:alnum:]_:.-]", "_", email)
     email
 }
+
+add_cols <- function(tbl, to_add) {
+    col_to_add <- replicate(length(to_add), list(rep(0L, nrow(tbl))))
+    names(col_to_add) <- to_add
+    col_to_add <- as.tibble(col_to_add)
+    cbind(tbl, col_to_add)[, c("Package", names(default_cran_checks))]
+}

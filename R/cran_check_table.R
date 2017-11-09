@@ -2,7 +2,6 @@ cran_checks_table <- function(parsed, ...) UseMethod("cran_checks_table")
 
 
 ##' @importFrom rvest html_table
-##' @importFrom dplyr bind_rows
 ##' @importFrom tibble as_tibble
 cran_checks_table.cran_checks_email <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
@@ -20,8 +19,10 @@ cran_checks_table.cran_checks_email <- function(parsed, ...) {
         } else
            tibble::as_tibble(tbl[[1]])
     })
-    dplyr::bind_rows(res, default_cran_checks, ...) %>%
-        convert_nas()
+    res <- do.call("rbind", res)
+    res <- add_cols(res, setdiff(names(default_cran_checks), names(res)))
+    res <- convert_nas(res)
+    res
 }
 
 ##' @importFrom dplyr %>%

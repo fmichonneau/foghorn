@@ -47,8 +47,8 @@ cran_results <- function(email = NULL, pkg = NULL,
         if (!is.null(pkg)) {
             res_pkg <- read_cran_web_from_pkg(pkg)
             tbl_pkg <- cran_checks_table(res_pkg)
-            res <- add_other_issues(tbl_pkg, res_pkg) %>%
-                dplyr::bind_rows(res)
+            res_pkg <- add_other_issues(tbl_pkg, res_pkg)
+            res <- rbind(res, res_pkg)
         }
     } else if (identical(src, "crandb")) {
         if (!is.null(email)) {
@@ -59,12 +59,12 @@ cran_results <- function(email = NULL, pkg = NULL,
         if (!is.null(pkg)) {
             res_pkg <- crandb_pkg_info_pkg(pkg, ...)
             tbl_pkg <- cran_checks_table(res_pkg)
-            res <- add_other_issues_crandb(tbl_pkg) %>%
-                dplyr::bind_rows(res)
+            res_pkg <- add_other_issues_crandb(tbl_pkg)
+            rbind(res_pkg, res)
         }
 
     }
-    res <- dplyr::distinct_(res, "Package", .keep_all = TRUE)
+    res <- res[!duplicated(res$Package), ]
     res <- res[, show]
     class(res) <- c("cran_results", class(res))
     res
