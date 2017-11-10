@@ -6,7 +6,7 @@ has_other_issues_details <- function(parsed, ...) {
       res <- lapply(parsed, function(x) {
           other_issues_pth <-  xml2::xml_find_all(x, ".//h3/a/following::p[1]//a")
           issue_type <- xml2::xml_text(other_issues_pth)
-          issue_url <- xml2::xml_find_all(other_issues_pth, "@href") %>% xml2::xml_text()
+          issue_url <- xml2::xml_text(xml2::xml_find_all(other_issues_pth, "@href"))
           tibble::tibble(result = "other_issue", check = issue_type,
                          flavors = NA_character_,
                          message = paste0("See: <", issue_url, ">"))
@@ -48,10 +48,13 @@ cran_details_from_web <- function(pkg, ...) {
     })
 
     pkgs <- rep(pkg, vapply(all_p, function(x) nrow(x) %||% 0L, integer(1)))
-    res <- do.call("rbind", all_p)
-    res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
-    res <- rbind(res, issue_test)
-    tibble::as.tibble(res[order(res$Package), , drop = FALSE])
+
+    if (length(pkgs) > 0L) {
+        res <- do.call("rbind", all_p)
+        res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
+        res <- rbind(res, issue_test)
+        tibble::as.tibble(res[order(res$Package), , drop = FALSE])
+    } else default_cran_details
 }
 
 
@@ -69,7 +72,6 @@ add_other_issues_crandb <- function(tbl, ...) {
 }
 
 ##' @importFrom tibble tibble
-##' @importFrom rlang .data
 cran_details_from_crandb <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
     issues <- get_cran_rds_file("issues", ...)
@@ -171,7 +173,6 @@ render_flavors <- function(x) {
 ##'     be printed? (logical)
 ##' @rdname cran_details
 ##' @export
-##' @importFrom purrr pmap
 ##' @importFrom crayon green
 ##' @importFrom clisymbols symbol
 summary.cran_details <- function(object, show_log = TRUE, ...) {
@@ -185,7 +186,7 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
     if (nrow(object) < 1)
         return(invisible(object))
 
-    purrr::pmap(object, function(Package, result, check, flavors, message)  {
+    mapply(function(Package, result, check, flavors, message)  {
         cmpt <- foghorn_components[[result]]
         if (show_log)
             msg <- message
@@ -199,7 +200,8 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
             render_flavors(flavors), "\n",
             ## Optionally the log output
             msg, "\n\n", sep = "")
-    })
+    }, object$Package, object$result, object$check,
+    object$flavors, object$message)
 
     invisible(object)
 }

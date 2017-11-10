@@ -8,7 +8,6 @@
 ##'
 ##'
 ##' @title Table of the CRAN check results
-##' @importFrom dplyr distinct_
 ##' @export
 ##' @param email email address for package maintainers (character
 ##'     vector)
@@ -60,7 +59,7 @@ cran_results <- function(email = NULL, pkg = NULL,
             res_pkg <- crandb_pkg_info_pkg(pkg, ...)
             tbl_pkg <- cran_checks_table(res_pkg)
             res_pkg <- add_other_issues_crandb(tbl_pkg)
-            rbind(res_pkg, res)
+            res <- rbind(res_pkg, res)
         }
 
     }

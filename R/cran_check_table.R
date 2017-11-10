@@ -15,47 +15,37 @@ cran_checks_table.cran_checks_email <- function(parsed, ...) {
                      "indicating the name of your package")
             ## then, we can call the other method to parse the results
             ## of that pacakge
-            cran_checks_table.cran_checks_pkg(read_cran_web_from_pkg(pkg))
+            .res <- cran_checks_table.cran_checks_pkg(read_cran_web_from_pkg(pkg))
         } else
-           tibble::as_tibble(tbl[[1]])
+            .res <- tibble::as_tibble(tbl[[1]])
+        add_cols(.res)
     })
-    res <- do.call("rbind", res)
-    res <- add_cols(res, setdiff(names(default_cran_checks), names(res)))
-    res <- convert_nas(res)
-    res
+    do.call("rbind", res)
 }
 
-##' @importFrom dplyr %>%
-##' @importFrom dplyr count_ bind_rows ungroup
-##' @importFrom tidyr spread
+process_cran_table <- function(tbl) {
+    ctbl <- tapply(tbl$Package, list(tbl$Package, tbl$Status), length,
+                   simplify = TRUE)
+    ctbl <- as.data.frame(ctbl)
+    ctbl$Package <- rownames(ctbl)
+    ctbl <- lapply(ctbl, unlist)
+    ctbl <- tibble::as_tibble(ctbl)
+    add_cols(ctbl)
+}
+
 cran_checks_table.cran_checks_pkg <- function(parsed, ...) {
     tbl <- get_cran_table(parsed, .id = "Package")
-
-    tbl %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread_("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
+    process_cran_table(tbl)
 }
 
 
 cran_checks_table.crandb <- function(parsed, ...) {
-    parsed$Status <- gsub("WARNING", "WARN", parsed$Status)
-    parsed %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread_("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
+    tbl <- parsed
+    tbl$Status <- gsub("WARNING", "WARN", tbl$Status)
+    process_cran_table(tbl)
 }
 
 
 cran_checks_table.api <- function(parsed, ...) {
-    parsed %>%
-        dplyr::count_(vars = c("Package", "Status")) %>%
-        tidyr::spread("Status", "n") %>%
-        dplyr::bind_rows(default_cran_checks) %>%
-        dplyr::ungroup() %>%
-        convert_nas()
+    process_cran_table(parsed)
 }

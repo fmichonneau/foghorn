@@ -1,10 +1,18 @@
 ##' @importFrom tibble tibble
-default_cran_checks <- tibble::tibble(
+default_cran_results <- tibble::tibble(
     NOTE = integer(0),
     OK = integer(0),
     WARN = integer(0),
     ERROR = integer(0),
     FAIL = integer(0)
+    )
+
+default_cran_details <- tibble::tibble(
+   Package = character(0),
+   result = character(0),
+   check = character(0),
+   flavors = character(0),
+   message = character(0)
 )
 
 

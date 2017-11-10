@@ -7,21 +7,21 @@ api_call <- function(endpt, value, ...) {
     check_api_res(res)
 }
 
-##' @importFrom purrr map_df
 api_pkg_status <- function(pkg, ...) {
-    purrr::map_df(pkg, function(p) {
-               r <- api_call(endpt = "pkgs", p, ...)
-               summary_pkg_res(r)
-           })
+    res <- lapply(pkg, function(p) {
+        r <- api_call(endpt = "pkgs", p, ...)
+        summary_pkg_res(r)
+    })
+    do.call("rbind", res)
 }
 
-##' @importFrom purrr map_df
 api_maintainer <- function(email, ...) {
-    purrr::map_df(email, function(e) {
+    res <- lapply(email, function(e) {
                e <- convert_email_to_cran_format(email)
                r <- api_call(endpt = "maintainers", e, ...)
                summary_maintainer_res(r)
-           })
+    })
+    do.call("rbind", res)
 }
 
 
@@ -46,13 +46,15 @@ check_api_res <- function(res) {
     api_parse(res)
 }
 
-##' @importFrom rlang .data
 summary_pkg_res <- function(res) {
-    res$data$checks %>%
-        purrr::map_df(function(x) {
+    res <- res$data$checks
+    pkg <- res$data$package
+    res <- lapply(res, function(x) {
                    list(Flavor = x$flavor, Version = x$version,
                         tinstall = x$tinstall, tcheck = x$tcheck, ttotal = x$ttotal,
                         Status = x$status, check_url = x$check_url %||% NA_character_)
-               })  %>%
-        dplyr::bind_cols(Package = rep(res$data$package, nrow(rlang::.data)))
+    })
+    res <- do.call("rbind", res)
+    res$Package <- rep(pkg, nrow(res))
+    add_cols(res)
 }
