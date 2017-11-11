@@ -267,6 +267,7 @@ test_that("input is character", {
 
 test_that("output of cran_details", {
     skip_on_cran()
+    library(dplyr)
     cran_res <- get_cran_rds_file("results")
     cran_issues <- get_cran_rds_file("issues")
 
