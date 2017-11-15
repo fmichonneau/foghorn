@@ -71,3 +71,15 @@ read_crandb_from_pkg <- function(pkg, file = "results", ...) {
     class(res) <- c("crandb", class(res))
     res
 }
+
+add_other_issues_crandb <- function(tbl, ...) {
+    issues <- get_cran_rds_file("issues", ...)
+    res <- vapply(tbl[["Package"]], function(x) {
+        pkg_issues <- issues[issues$Package == x, ]
+        if (nrow(pkg_issues) > 0) {
+            paste(pkg_issues$kind, collapse = ", ")
+        } else ""
+    }, character(1), USE.NAMES = FALSE)
+    tbl$has_other_issues <- nchar(res) > 0
+    tbl
+}

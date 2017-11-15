@@ -59,18 +59,6 @@ cran_details_from_web <- function(pkg, ...) {
 
 
 
-add_other_issues_crandb <- function(tbl, ...) {
-    issues <- get_cran_rds_file("issues", ...)
-    res <- vapply(tbl[["Package"]], function(x) {
-        pkg_issues <- issues[issues$Package == x, ]
-        if (nrow(pkg_issues) > 0) {
-            paste(pkg_issues$kind, collapse = ", ")
-        } else ""
-    }, character(1), USE.NAMES = FALSE)
-    tbl$has_other_issues <- nchar(res) > 0
-    tbl
-}
-
 ##' @importFrom tibble tibble
 cran_details_from_crandb <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
