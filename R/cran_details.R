@@ -83,18 +83,18 @@ cran_details_from_crandb <- function(pkg, ...) {
 
     dt$Status <- gsub("WARNING", "WARN", dt$Status)
 
-    grp_by <- function(x, grp) {
+    cnt_by <- function(x, grp) {
         as.character(tapply(x, grp, function(.x) unique(as.character(.x)), simplify = FALSE))
     }
     grps <- list(dt$Package, dt$Output)
 
-    .res_pkg <- grp_by(dt$Package, grps)
-    .res_res <- grp_by(dt$Status, grps)
-    .res_chk <- grp_by(dt$Check, grps)
+    .res_pkg <- cnt_by(dt$Package, grps)
+    .res_res <- cnt_by(dt$Status, grps)
+    .res_chk <- cnt_by(dt$Check, grps)
     .res_flvr <- as.character(tapply(dt$Flavor, list(dt$Package, dt$Output),
                                      function(x) paste(as.character(x),
                                                        collapse = ", ")))
-    .res_msg <- grp_by(dt$Output, grps)
+    .res_msg <- cnt_by(dt$Output, grps)
     .res <- tibble::tibble(
                         Package = .res_pkg,
                         result = .res_res,

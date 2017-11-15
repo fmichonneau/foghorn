@@ -53,7 +53,7 @@ get_cran_rds_file <- function(file, ...) {
     read_cran_rds_file(f)
 }
 
-crandb_pkg_info_email <- function(email, file = "results", ...) {
+read_crandb_from_email <- function(email, file = "results", ...) {
     crandb <- get_cran_rds_file(file = file, ...)
     maintainer <- tolower(crandb$Maintainer)
     idx <- lapply(tolower(email), function(x)
@@ -65,7 +65,7 @@ crandb_pkg_info_email <- function(email, file = "results", ...) {
     res
 }
 
-crandb_pkg_info_pkg <- function(pkg, file = "results", ...) {
+read_crandb_from_pkg <- function(pkg, file = "results", ...) {
     crandb <- get_cran_rds_file(file = file, ...)
     res <- crandb[crandb[["Package"]] %in% pkg, ]
     class(res) <- c("crandb", class(res))
