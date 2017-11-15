@@ -1,3 +1,37 @@
+cran_results_web <- function(email, pkg, ...) {
+    res <- NULL
+    if (!is.null(email)) {
+        res_email <- read_cran_web_from_email(email, ...)
+        res <- cran_checks_table(res_email)
+        res <- add_other_issues(res, res_email)
+    }
+    if (!is.null(pkg)) {
+        res_pkg <- read_cran_web_from_pkg(pkg, ...)
+        tbl_pkg <- cran_checks_table(res_pkg)
+        res_pkg <- add_other_issues(tbl_pkg, res_pkg)
+        res <- rbind(res, res_pkg)
+    }
+    res
+}
+
+
+cran_results_crandb <- function(email, pkg, ...) {
+    res <- NULL
+    if (!is.null(email)) {
+        res_email <- read_crandb_from_email(email, ...)
+        res <- cran_checks_table(res_email)
+        res <- add_other_issues_crandb(res)
+    }
+    if (!is.null(pkg)) {
+        res_pkg <- read_crandb_from_pkg(pkg, ...)
+        tbl_pkg <- cran_checks_table(res_pkg)
+        res_pkg <- add_other_issues_crandb(tbl_pkg)
+        res <- rbind(res_pkg, res)
+    }
+    res
+}
+
+
 ##' Make a table that summarizes the results of the CRAN checks for a
 ##' set of packages specified by a maintainer or by names.
 ##'
@@ -29,7 +63,6 @@ cran_results <- function(email = NULL, pkg = NULL,
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
     show <- c("Package", toupper(show), "has_other_issues")
-    res <- NULL
 
     src <- match.arg(src, c("website", "crandb"))
 
@@ -38,30 +71,9 @@ cran_results <- function(email = NULL, pkg = NULL,
              "or for ", sQuote("pkg"))
 
     if (identical(src, "website")) {
-        if (!is.null(email)) {
-            res_email <- read_cran_web_from_email(email)
-            res <- cran_checks_table(res_email)
-            res <- add_other_issues(res, res_email)
-        }
-        if (!is.null(pkg)) {
-            res_pkg <- read_cran_web_from_pkg(pkg)
-            tbl_pkg <- cran_checks_table(res_pkg)
-            res_pkg <- add_other_issues(tbl_pkg, res_pkg)
-            res <- rbind(res, res_pkg)
-        }
+        res <- cran_results_web(email, pkg, ...)
     } else if (identical(src, "crandb")) {
-        if (!is.null(email)) {
-            res_email <- crandb_pkg_info_email(email, ...)
-            res <- cran_checks_table(res_email)
-            res <- add_other_issues_crandb(res)
-        }
-        if (!is.null(pkg)) {
-            res_pkg <- crandb_pkg_info_pkg(pkg, ...)
-            tbl_pkg <- cran_checks_table(res_pkg)
-            res_pkg <- add_other_issues_crandb(tbl_pkg)
-            res <- rbind(res_pkg, res)
-        }
-
+        res <- cran_results_crandb(email, pkg, ...)
     }
     res <- res[!duplicated(res$Package), ]
     res <- res[, show]
