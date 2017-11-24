@@ -30,6 +30,9 @@ the CRAN servers (see Details section).}
 
 \item{show_log}{Should the messages of the \dQuote{Check Details}
 be printed? (logical)}
+
+\item{print_ok}{if \code{TRUE} the summary method will print a "all clear"
+message for package(s) that have an OK status for all CRAN checks.}
 }
 \value{
 a \code{tibble} listing the names of the packages that have non- OK
