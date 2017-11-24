@@ -1,3 +1,7 @@
+## maximum number of CRAN check results that can be expected.
+## As of 2017-11-23, 12 platforms listed https://cran.r-project.org/web/checks/check_flavors.html
+n_cran_platforms <- 12L
+
 url_pkg_res <- function(pkg) {
     paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
 }
