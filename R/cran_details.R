@@ -167,8 +167,7 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
 
     no_result <- setdiff(attr(object, "pkgs"), object$Package)
     if (length(no_result) > 0) {
-        message(crayon::green(clisymbols::symbol$tick, "All clear for",
-                              paste0(no_result, collapse = ", "), "!"))
+        print_all_clear(no_result)
     }
 
     if (nrow(object) < 1)

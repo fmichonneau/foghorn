@@ -119,6 +119,11 @@ add_other_issues <- function(tbl, parsed, ...) {
     tibble::as.tibble(merge(tbl, other_issues, by = "Package"))
 }
 
+print_all_clear <- function(pkgs) {
+    message(crayon::green(paste0(clisymbols::symbol$tick, " All clear for ",
+                                 paste0(pkgs, collapse = ", "), "!")))
+}
+
 get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
     what <- match.arg(what, names(tbl_pkg)[-1])
     if (what %in% c("has_other_issues"))
