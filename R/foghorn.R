@@ -124,8 +124,17 @@ print_all_clear <- function(pkgs) {
                                  paste0(pkgs, collapse = ", "), "!")))
 }
 
-get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
+get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) {
+
     what <- match.arg(what, names(tbl_pkg)[-1])
+
+    if (identical(what, "OK")) {
+        pkg_all_clear <- tbl_pkg[["Package"]][tbl_pkg[["OK"]] == n_cran_platforms]
+        if (length(pkg_all_clear) && print_ok)
+            print_all_clear(pkg_all_clear)
+        return(NULL)
+    }
+
     if (what %in% c("has_other_issues"))
         show_n <- FALSE
     else show_n <- TRUE
@@ -139,10 +148,11 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, ...) {
             sptr <- c("", ", ")
         } else
             sptr <- c("  - ", "\n")
-        paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) &
+        res <- paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) &
                                         tbl_pkg[[what]] > 0],
                n, collapse = sptr[2])
-    }
+    } else res <- NULL
+    print_summary_cran(what, res, compact)
 }
 
 print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",

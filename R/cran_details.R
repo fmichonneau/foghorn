@@ -187,8 +187,8 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
             render_flavors(flavors), "\n",
             ## Optionally the log output
             msg, "\n\n", sep = "")
-    }, object$Package, object$result, object$check,
-    object$flavors, object$message)
+    }, res_others$Package, res_others$result, res_others$check,
+    res_others$flavors, res_others$message)
 
     invisible(object)
 }
@@ -197,7 +197,7 @@ summary.cran_details <- function(object, show_log = TRUE, ...) {
 ##' @export
 ##' @rdname cran_details
 summary_cran_details <- function(pkg, src = c("website", "crandb"),
-                                 show_log = TRUE, ...) {
+                                 show_log = TRUE, print_ok = TRUE, ...) {
     res <- cran_details(pkg = pkg, src = src, ...)
     summary(res)
 }

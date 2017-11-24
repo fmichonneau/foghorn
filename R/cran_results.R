@@ -90,12 +90,11 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##' to be included in your .Rprofile to be run (periodically) at start
 ##' up.
 ##'
-##' @param email email address for package maintainers (character
-##'     vector)
+##' @param email email address for package maintainers (character vector)
 ##' @param pkg package names (character vector)
-##' @param compact if \code{TRUE}, all the packages with non-OK
-##'     results are listed in a single line, otherwise they are listed
-##'     on multiple lines.
+##' @param compact if \code{TRUE}, all the packages with non-OK results are
+##'     listed in a single line, otherwise they are listed on multiple lines.
+##' @template print_ok
 ##' @template dots
 ##' @examples \dontrun{
 ##'    summary_cran_results(email = c("user1@company1.com", "user2@company2.com"))
@@ -110,9 +109,9 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##' @importFrom clisymbols symbol
 ##' @export
 summary_cran_results <- function(email = NULL, pkg = NULL,
-                                compact = FALSE, ...) {
+                                compact = FALSE, print_ok = TRUE, ...) {
     res_checks <- cran_results(email, pkg, ...)
-    summary(res_checks, compact = compact)
+    summary(res_checks, compact = compact, print_ok = print_ok)
 }
 
 ##' @param object an object created by \code{cran_results}
