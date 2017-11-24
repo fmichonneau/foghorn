@@ -3,8 +3,13 @@
     x
 }
 
-convert_nas <- function(tbl) {
-    tbl[is.na(tbl)] <- 0L
+`%~~%` <- function(x, y) {
+    if (length(x) == 0L) return(y)
+    x
+}
+
+convert_nas <- function(tbl, replace_with = 0L) {
+    tbl[is.na(tbl)] <- replace_with
     tbl
 }
 

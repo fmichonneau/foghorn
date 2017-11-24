@@ -117,12 +117,9 @@ summary_cran_results <- function(email = NULL, pkg = NULL,
 ##' @param object an object created by \code{cran_results}
 ##' @export
 ##' @rdname summary_cran_results
-summary.cran_results <- function(object, compact = FALSE, ...) {
-  what <- c("ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
-    res <- lapply(what, function(x)
-        get_pkg_with_results(object, x, compact))
-    mapply(function(type, pkgs, compact) {
-        print_summary_cran(type, pkgs, compact)
-    }, what, res, compact)
+summary.cran_results <- function(object, compact = FALSE, print_ok = TRUE, ...) {
+    what <- c("OK", "ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
+    lapply(what, function(x)
+        get_pkg_with_results(object, x, compact, print_ok))
    invisible(object)
 }

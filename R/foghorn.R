@@ -13,9 +13,9 @@ url_email_res <- function(email) {
 }
 
 
-## summary_maintainer_res <- function(res) {
+summary_maintainer_res <- function(res) {
 ##      ## TODO
-## }
+}
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet

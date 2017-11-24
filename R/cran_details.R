@@ -24,37 +24,45 @@ cran_details_from_web <- function(pkg, ...) {
     parsed <- read_cran_web_from_pkg(pkg)
     issue_test <- has_other_issues_details(parsed)
 
-    all_p <- lapply(parsed, function(x) {
+    all_p <- mapply(function(x, pkg_nm) {
         p <- xml2::xml_find_all(x, ".//p")
         p <- strsplit(xml2::xml_text(x), "\n")
         p <- unlist(p)
         p <- p[nzchar(p)]
         p <- gsub(intToUtf8(160), " ", p)
         chk_idx <- grep("^Check:", p)
+        vrs_idx <- grep("^Version:", p)
         res_idx <- grep("^Result:", p)
         flv_idx <- grep("^Flavors?:", p)
         if (!identical(length(chk_idx), length(res_idx)) &&
             !identical(length(chk_idx), length(flv_idx)))
             stop("File an issue on Github indicating the name of your package.")
-        msg <- mapply(function(c, r, f) {
+        msg <- mapply(function(c, v, r, f) {
             tibble::tibble(
                 result = gsub("^Result: ", "", p[r]),
+                version = gsub("^Version: ", "", p[v]),
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
                 message = paste(p[(r + 1):(f - 1)], collapse = "\n")
             )
-        }, chk_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-        do.call("rbind", msg)
-    })
+        }, chk_idx, vrs_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
-    pkgs <- rep(pkg, vapply(all_p, function(x) nrow(x) %||% 0L, integer(1)))
-
-    if (length(pkgs) > 0L) {
-        res <- do.call("rbind", all_p)
-        res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
-        res <- rbind(res, issue_test)
-        tibble::as.tibble(res[order(res$Package), , drop = FALSE])
-    } else default_cran_details
+        r <- do.call("rbind", msg)
+        if (!is.null(r)) {
+            r <- cbind(Package = rep(pkg_nm, nrow(r)), r, stringsAsFactors = FALSE)
+        } else {
+            r <- tibble::add_row(default_cran_details,
+                                 Package = pkg_nm,
+                                 ## TODO -- get version number
+                                 version = " ",
+                                 result = "OK",
+                                 check = "",
+                                 flavors = "",
+                                 message = "")
+        }
+    }, parsed, names(parsed), SIMPLIFY = FALSE)
+    res <- do.call("rbind", all_p)
+    tibble::as.tibble(res[order(res$Package), ])
 }
 
 
@@ -64,36 +72,47 @@ cran_details_from_crandb <- function(pkg, ...) {
     dt <- get_cran_rds_file("details", ...)
     issues <- get_cran_rds_file("issues", ...)
 
+    col_is_factor <- vapply(dt, is.factor, logical(1))
+
+    for (i in seq_along(col_is_factor)) {
+        if (col_is_factor[i])
+            dt[[i]] <- as.character(dt[[i]])
+    }
+
     dt <- dt[dt[["Package"]] %in%  pkg, ]
+    dt$Status <- gsub("WARNING", "WARN", dt$Status)
+    .res <- default_cran_details
+
+    for (.p in unique(dt$Package)) {
+        for (.v in unique(dt$Version)) {
+            for (.c in unique(dt$Check)) {
+                .sub <- dt[dt$Package == .p &
+                           dt$Version == .v &
+                           dt$Check == .c, ]
+                .rslt <- unique(.sub$Status)
+                if (length(.rslt) > 1)
+                    stop("report on github")
+
+                .res <- tibble::add_row(.res,
+                    Package = .p,
+                    version = .v,
+                    result = .rslt %~~% "",
+                    check = .c,
+                    flavors = paste(.sub$Flavor, collapse = ", ") %~~% "",
+                    message = .sub$Output[1]
+
+                    )
+            }
+        }
+    }
 
     ## remove lines that don't have any issues
-    dt <- dt[dt[["Check"]] != "*", ]
-
-    dt$Status <- gsub("WARNING", "WARN", dt$Status)
-
-    cnt_by <- function(x, grp) {
-        as.character(tapply(x, grp, function(.x) unique(as.character(.x)), simplify = FALSE))
-    }
-    grps <- list(dt$Package, dt$Output)
-
-    .res_pkg <- cnt_by(dt$Package, grps)
-    .res_res <- cnt_by(dt$Status, grps)
-    .res_chk <- cnt_by(dt$Check, grps)
-    .res_flvr <- as.character(tapply(dt$Flavor, list(dt$Package, dt$Output),
-                                     function(x) paste(as.character(x),
-                                                       collapse = ", ")))
-    .res_msg <- cnt_by(dt$Output, grps)
-    .res <- tibble::tibble(
-                        Package = .res_pkg,
-                        result = .res_res,
-                        check = .res_chk,
-                        flavors = .res_flvr,
-                        message = .res_msg
-                    )
+    .res$check <- replace(.res$check, .res$check == "*", "")
 
     issues <- issues[issues[["Package"]] %in% pkg, ]
     issues <- tibble::as.tibble(issues)
     .iss_pkg <- as.character(issues$Package)
+    .iss_vrs <- as.character(issues$Version)
     .iss_chk <- as.character(issues$kind)
     .iss_msg <- as.character(issues$href)
     .iss_res <- rep("other_issue", nrow(issues))
@@ -101,6 +120,7 @@ cran_details_from_crandb <- function(pkg, ...) {
 
     .iss <- tibble::tibble(
                         Package = .iss_pkg,
+                        version = .iss_vrs,
                         result = .iss_res,
                         check = .iss_chk,
                         flavors = .iss_flvr,
@@ -108,7 +128,7 @@ cran_details_from_crandb <- function(pkg, ...) {
                     )
 
     res <- rbind(.res, .iss)
-    res[order(res$Package), ]
+    convert_nas(res[order(res$Package), ], replace_with = "")
 
 }
 
@@ -159,18 +179,21 @@ render_flavors <- function(x) {
 ##' @param object an object created by \code{cran_details}
 ##' @param show_log Should the messages of the \dQuote{Check Details}
 ##'     be printed? (logical)
+##' @template print_ok
 ##' @rdname cran_details
 ##' @export
 ##' @importFrom crayon green
 ##' @importFrom clisymbols symbol
-summary.cran_details <- function(object, show_log = TRUE, ...) {
+summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) {
 
-    no_result <- setdiff(attr(object, "pkgs"), object$Package)
-    if (length(no_result) > 0) {
-        print_all_clear(no_result)
+    res_ok <- object[object[["result"]] == "OK", ]
+    if (nrow(res_ok) > 0) {
+        print_all_clear(res_ok[["Package"]])
     }
 
-    if (nrow(object) < 1)
+    res_others <- object[object[["result"]] != "OK", ]
+
+    if (nrow(res_others) < 1)
         return(invisible(object))
 
     mapply(function(Package, result, check, flavors, message)  {
