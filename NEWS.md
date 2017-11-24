@@ -1,6 +1,7 @@
 ## 0.x.x
 
-* Add support for https://cranchecks.info
+* Add initial support for https://cranchecks.info as a data source (not
+  exported/tested at this stage).
 
 * Fix bug #14 reported by @hadley, no issues are now represented as 0 instead of `NA`
 
@@ -9,6 +10,12 @@
 
 * Take into consideration issues other than memtest when parsing the HTML CRAN
   check page.
+  
+* `check_cran_results` and `show_cran_results` are deprecated.
+
+* Add argument `print_ok` to `summary()` method for `cran_results` that can
+  optionally print an "all clear" message when all CRAN checks return "OK" for a
+  package.
 
 ## v0.4.4
 

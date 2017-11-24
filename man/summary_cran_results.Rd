@@ -5,19 +5,22 @@
 \alias{summary.cran_results}
 \title{Summary of the CRAN check results}
 \usage{
-summary_cran_results(email = NULL, pkg = NULL, compact = FALSE, ...)
+summary_cran_results(email = NULL, pkg = NULL, compact = FALSE,
+  print_ok = TRUE, ...)
 
-\method{summary}{cran_results}(object, compact = FALSE, ...)
+\method{summary}{cran_results}(object, compact = FALSE, print_ok = TRUE,
+  ...)
 }
 \arguments{
-\item{email}{email address for package maintainers (character
-vector)}
+\item{email}{email address for package maintainers (character vector)}
 
 \item{pkg}{package names (character vector)}
 
-\item{compact}{if \code{TRUE}, all the packages with non-OK
-results are listed in a single line, otherwise they are listed
-on multiple lines.}
+\item{compact}{if \code{TRUE}, all the packages with non-OK results are
+listed in a single line, otherwise they are listed on multiple lines.}
+
+\item{print_ok}{if \code{TRUE} the summary method will print a "all clear"
+message for package(s) that have an OK status for all CRAN checks.}
 
 \item{...}{additional arguments to control where the data from the
 check results are coming from and how they are downloaded from
