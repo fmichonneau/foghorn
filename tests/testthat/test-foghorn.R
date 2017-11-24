@@ -32,9 +32,9 @@ validate_cran_results <- function(x) {
 }
 
 validate_cran_details <- function(x) {
-    length(x) == 5L &&
+    length(x) == 6L &&
         inherits(x, "tbl_df") &&
-        all(names(x) %in% c("Package", "result", "check",
+        all(names(x) %in% c("Package", "version", "result", "check",
                             "flavors", "message"))
 }
 
@@ -289,7 +289,7 @@ test_that("output of cran_details", {
     web_pkg_with_notes <- cran_details(pkg_with_notes, src = "website")
     web_pkg_with_err <- cran_details(pkg_with_err, src = "website")
 
-    ## this doesn't pass: expect_true(validate_cran_details(web_pkg_with_ok))
+    expect_true(validate_cran_details(web_pkg_with_ok))
     expect_true(validate_cran_details(web_pkg_with_notes))
     expect_true(validate_cran_details(web_pkg_with_err))
 
@@ -297,8 +297,9 @@ test_that("output of cran_details", {
                   pkg_with_notes)
     expect_output(summary(web_pkg_with_notes, show_log = TRUE),
                   pkg_with_notes)
-    expect_message(summary(web_pkg_with_ok, show_log = TRUE),
-                  "All clear")
+    expect_message(summary(web_pkg_with_ok, show_log = TRUE, print_ok = TRUE),
+                   "All clear")
+    expect_silent(summary(web_pkg_with_ok, show_log = TRUE,  print_ok = FALSE))
 
 
     ## results from CRAN db

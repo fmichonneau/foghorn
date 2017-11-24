@@ -9,6 +9,7 @@ default_cran_results <- tibble::tibble(
 
 default_cran_details <- tibble::tibble(
    Package = character(0),
+   version = character(0),
    result = character(0),
    check = character(0),
    flavors = character(0),
