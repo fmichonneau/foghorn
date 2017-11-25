@@ -54,8 +54,7 @@ cran_details_from_web <- function(pkg, ...) {
         } else {
             r <- tibble::add_row(default_cran_details,
                                  Package = pkg_nm,
-                                 ## TODO -- get version number
-                                 version = " ",
+                                 version = paste(unique(get_cran_table(parsed[pkg_nm])$Version), collapse = ", "),
                                  result = "OK",
                                  check = "",
                                  flavors = "",
