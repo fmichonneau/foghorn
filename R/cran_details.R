@@ -39,10 +39,11 @@ cran_details_from_web <- function(pkg, ...) {
             stop("File an issue on Github indicating the name of your package.")
         msg <- mapply(function(c, v, r, f) {
             tibble::tibble(
-                result = gsub("^Result: ", "", p[r]),
                 version = gsub("^Version: ", "", p[v]),
+                result = gsub("^Result: ", "", p[r]),
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
+                n_flavors = length(unlist(gregexpr(",", p[f]))) + 1,
                 message = paste(p[(r + 1):(f - 1)], collapse = "\n")
             )
         }, chk_idx, vrs_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
@@ -58,6 +59,7 @@ cran_details_from_web <- function(pkg, ...) {
                                  result = "OK",
                                  check = "",
                                  flavors = "",
+                                 n_flavors = n_cran_platforms,
                                  message = "")
         }
     }, parsed, names(parsed), SIMPLIFY = FALSE)
@@ -84,11 +86,11 @@ cran_details_from_crandb <- function(pkg, ...) {
     .res <- default_cran_details
 
     for (.p in unique(dt$Package)) {
-        for (.v in unique(dt$Version)) {
-            for (.c in unique(dt$Check)) {
-                .sub <- dt[dt$Package == .p &
-                           dt$Version == .v &
-                           dt$Check == .c, ]
+        dt_p <- dt[dt$Package == .p, ]
+        for (.v in unique(dt_p$Version)) {
+            dt_v <- dt_p[dt_p$Version == .v, ]
+            for (.c in unique(dt_v$Check)) {
+                .sub <- dt_v[dt_v$Check == .c, ]
                 .rslt <- unique(.sub$Status)
                 if (length(.rslt) > 1)
                     stop("report on github")
@@ -99,6 +101,7 @@ cran_details_from_crandb <- function(pkg, ...) {
                     result = .rslt %~~% "",
                     check = .c,
                     flavors = paste(.sub$Flavor, collapse = ", ") %~~% "",
+                    n_flavors = length(.sub$Flavor),
                     message = .sub$Output[1]
 
                     )
@@ -117,6 +120,7 @@ cran_details_from_crandb <- function(pkg, ...) {
     .iss_msg <- as.character(issues$href)
     .iss_res <- rep("other_issue", nrow(issues))
     .iss_flvr <- character(nrow(issues))
+    .iss_n_flvr <- integer(nrow(issues))
 
     .iss <- tibble::tibble(
                         Package = .iss_pkg,
@@ -124,6 +128,7 @@ cran_details_from_crandb <- function(pkg, ...) {
                         result = .iss_res,
                         check = .iss_chk,
                         flavors = .iss_flvr,
+                        n_flavors = .iss_n_flvr,
                         message = .iss_msg
                     )
 
@@ -186,8 +191,8 @@ render_flavors <- function(x) {
 ##' @importFrom clisymbols symbol
 summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) {
 
-    res_ok <- object[object[["result"]] == "OK", ]
-    if (nrow(res_ok) > 0) {
+    res_ok <- object[object[["result"]] == "OK" & object[["n_flavors"]] == n_cran_platforms, ]
+    if (nrow(res_ok) > 0 && print_ok) {
         print_all_clear(res_ok[["Package"]])
     }
 
@@ -222,5 +227,5 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
 summary_cran_details <- function(pkg, src = c("website", "crandb"),
                                  show_log = TRUE, print_ok = TRUE, ...) {
     res <- cran_details(pkg = pkg, src = src, ...)
-    summary(res)
+    summary(res, print_ok = print_ok)
 }

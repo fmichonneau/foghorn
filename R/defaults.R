@@ -13,6 +13,7 @@ default_cran_details <- tibble::tibble(
    result = character(0),
    check = character(0),
    flavors = character(0),
+   n_flavors = integer(0),
    message = character(0)
 )
 
