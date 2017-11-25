@@ -59,8 +59,7 @@ read_cran_web_from_pkg <- function(pkg) {
 ##' @importFrom tibble as.tibble
 get_cran_table <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
-        tbl <- rvest::html_table(x)
-        tbl <- tbl[[1]]
+        tbl <- rvest::html_table(x)[[1]]
         tbl$Version <- as.character(tbl$Version)
         tbl
     })
