@@ -92,7 +92,7 @@ cran_details_from_crandb <- function(pkg, ...) {
                 .sub <- dt_v[dt_v$check == .c, ]
                 .rslt <- unique(.sub$status)
                 if (length(.rslt) > 1)
-                    stop("report on github")
+                    stop("report on github, package causing issues is: ", .p)
 
                 .res <- tibble::add_row(.res,
                     package = .p,
