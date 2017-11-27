@@ -23,8 +23,8 @@ context("check cran results")
 validate_cran_results <- function(x) {
     length(x) == 7L &&
         inherits(x, "tbl_df") &&
-        all(names(x) %in% c("Package", "ERROR", "FAIL", "WARN",
-                            "NOTE",  "OK", "has_other_issues")) &&
+        all(names(x) %in% c("package", "error", "fail", "warn",
+                            "note",  "ok", "has_other_issues")) &&
         nrow(x) > 0 &&
         is.logical(x[["has_other_issues"]]) &&
         any(x[1, ] > 2) && # 2 allows for something other that "has_issues_notes" to be in the table
@@ -32,10 +32,10 @@ validate_cran_results <- function(x) {
 }
 
 validate_cran_details <- function(x) {
-    length(x) == 6L &&
+    length(x) == 7L &&
         inherits(x, "tbl_df") &&
-        all(names(x) %in% c("Package", "version", "result", "check",
-                            "flavors", "message"))
+        all(names(x) %in% c("package", "version", "result", "check",
+                            "flavors", "n_flavors", "message"))
 }
 
 test_that("at least email or package name specified (website)", {
@@ -181,62 +181,63 @@ test_that("output of summary cran results", {
     pkgs <- c("rotl", "rncl")
     res_web <- suppressMessages(summary_cran_results(pkg = pkgs, src = "website"))
     res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, src = "crandb"))
-    expect_true(all(pkgs %in% res_web$Package))
-    expect_true(all(pkgs %in% res_cran$Package))
+    expect_true(all(pkgs %in% res_web$package))
+    expect_true(all(pkgs %in% res_cran$package))
     expect_identical(res_web, res_cran)
 
     cran_res <- get_cran_rds_file("results")
+    cran_res <- cran_res[!is.na(cran_res$status), ]
     cran_mem <- get_cran_rds_file("issues")
 
-    pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 5)
+    pkg_with_notes <- sample(unique(cran_res$package[cran_res$status == "NOTE"]), 5)
     ## expect_identical(summary_cran_results(pkg = pkg_with_notes, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_notes, src = "crandb"))
     ## all have >= 1 values in column NOTES
-    expect_true(all(cran_results(pkg = pkg_with_notes, src = "website")$NOTE > 0))
-    expect_true(all(cran_results(pkg = pkg_with_notes, src = "crandb")$NOTE > 0))
+    expect_true(all(cran_results(pkg = pkg_with_notes, src = "website")$note > 0))
+    expect_true(all(cran_results(pkg = pkg_with_notes, src = "crandb")$note > 0))
     expect_message(summary_cran_results(pkg = pkg_with_notes),
                    build_regexp("with notes", pkg_with_notes))
     expect_message(summary_cran_results(pkg = pkg_with_notes, src = "crandb"),
                    build_regexp("with notes", pkg_with_notes))
 
-    pkg_with_warn <- sample(unique(cran_res$Package[cran_res$Status == "WARN"]), 5)
+    pkg_with_warn <- sample(unique(cran_res$package[cran_res$status == "WARN"]), 5)
     ## expect_identical(summary_cran_results(pkg = pkg_with_warn, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_warn, src = "crandb"))
     ## all have >= 1 values in column WARNING
-    expect_true(all(cran_results(pkg = pkg_with_warn, src = "website")$WARN > 0))
-    expect_true(all(cran_results(pkg = pkg_with_warn, src = "crandb")$WARN > 0))
+    expect_true(all(cran_results(pkg = pkg_with_warn, src = "website")$warn > 0))
+    expect_true(all(cran_results(pkg = pkg_with_warn, src = "crandb")$warn > 0))
     ## all are listed under packages with WARNING
     expect_message(summary_cran_results(pkg = pkg_with_warn),
                    build_regexp("with warnings", pkg_with_warn))
     expect_message(summary_cran_results(pkg = pkg_with_warn, src = "crandb"),
                    build_regexp("with warnings", pkg_with_warn))
 
-    pkg_with_err <- sample(unique(cran_res$Package[cran_res$Status == "ERROR"]), 5)
+    pkg_with_err <- sample(unique(cran_res$package[cran_res$status == "ERROR"]), 5)
     ##expect_identical(summary_cran_results(pkg = pkg_with_err, src = "website"),
     ##                 summary_cran_results(pkg = pkg_with_err, src = "crandb"))
     ## all have >= 1 values in column ERROR
-    expect_true(all(cran_results(pkg = pkg_with_err, src = "website")$ERROR > 0))
-    expect_true(all(cran_results(pkg = pkg_with_err, src = "crandb")$ERROR > 0))
+    expect_true(all(cran_results(pkg = pkg_with_err, src = "website")$error > 0))
+    expect_true(all(cran_results(pkg = pkg_with_err, src = "crandb")$error > 0))
     ## all packages are listed under WARNING
     expect_message(summary_cran_results(pkg = pkg_with_err),
                    build_regexp("with errors", pkg_with_err))
     expect_message(summary_cran_results(pkg = pkg_with_err, src = "crandb"),
                    build_regexp("with errors", pkg_with_err))
 
-    pkg_with_fail <- sample(unique(cran_res$Package[cran_res$Status == "FAIL"]), 5)
+    pkg_with_fail <- sample(unique(cran_res$package[cran_res$status == "FAIL"]), 5)
     ## output from website and CRAN db identical
     #expect_identical(summary_cran_results(pkg = pkg_with_fail, src = "website"),
     #                 summary_cran_results(pkg = pkg_with_fail, src = "crandb"))
     ## all have >= 1 values in column FAIL:
-    expect_true(all(cran_results(pkg = pkg_with_fail, src = "website")$FAIL > 0))
-    expect_true(all(cran_results(pkg = pkg_with_fail, src = "crandb")$FAIL > 0))
+    expect_true(all(cran_results(pkg = pkg_with_fail, src = "website")$fail > 0))
+    expect_true(all(cran_results(pkg = pkg_with_fail, src = "crandb")$fail > 0))
     ## all packages are listed under FAIL:
     expect_message(summary_cran_results(pkg = pkg_with_fail),
                    build_regexp("with fails", pkg_with_fail))
     expect_message(summary_cran_results(pkg = pkg_with_fail, src = "crandb"),
                    build_regexp("with fails", pkg_with_fail))
 
-    pkg_with_issues <- sample(unique(cran_mem$Package), 10)
+    pkg_with_issues <- sample(unique(cran_mem$package), 10)
     ## output from website and CRAN db identical
     expect_identical(summary_cran_results(pkg = pkg_with_issues, src = "website"),
                      summary_cran_results(pkg = pkg_with_issues, src = "crandb"))
@@ -269,20 +270,21 @@ test_that("output of cran_details", {
     skip_on_cran()
     library(dplyr)
     cran_res <- get_cran_rds_file("results")
+    cran_res <- cran_res[!is.na(cran_res$status), ]
     cran_issues <- get_cran_rds_file("issues")
 
     ## find package with results = OK and no other issues
     pkg_with_ok <- character(0)
     while (length(pkg_with_ok) < 1) {
         pkg_with_ok <- cran_res %>%
-            dplyr::count(Package, Status) %>%
-            dplyr::filter(Status == "OK" & n == 12) %>%
+            dplyr::count(package, status) %>%
+            dplyr::filter(status == "OK" & n == 12) %>%
             dplyr::sample_n(5) %>%
-            dplyr::pull(Package)
-        pkg_with_ok <- setdiff(pkg_with_ok, cran_issues$Package)
+            dplyr::pull(package)
+        pkg_with_ok <- setdiff(pkg_with_ok, cran_issues$package)
     }
-    pkg_with_notes <- sample(unique(cran_res$Package[cran_res$Status == "NOTE"]), 1)
-    pkg_with_err <- sample(unique(cran_res$Package[cran_res$Status == "ERROR"]), 3)
+    pkg_with_notes <- sample(unique(cran_res$package[cran_res$status == "NOTE"]), 1)
+    pkg_with_err <- sample(unique(cran_res$package[cran_res$status == "ERROR"]), 3)
 
     ## results from web scrapping
     web_pkg_with_ok <- cran_details(pkg_with_ok, src = "website")
@@ -316,7 +318,8 @@ test_that("output of cran_details", {
     expect_output(summary(cran_pkg_with_notes, show_log = TRUE),
                   pkg_with_notes)
     expect_message(summary(cran_pkg_with_ok, show_log = TRUE),
-                  "All clear")
+                   "All clear")
+    expect_silent(summary(cran_pkg_with_ok, show_log = TRUE, print_ok= FALSE))
 
 })
 

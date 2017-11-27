@@ -36,6 +36,7 @@ check_cran_rds_file <- function(file, return_logical = FALSE) {
 
 read_cran_rds_file <- function(file) {
     res <- check_cran_rds_file(file)
+    names(res) <- tolower(names(res))
     class(res) <- c("cran_db", class(res))
     res
 }
@@ -55,7 +56,7 @@ get_cran_rds_file <- function(file, ...) {
 
 read_crandb_from_email <- function(email, file = "results", ...) {
     crandb <- get_cran_rds_file(file = file, ...)
-    maintainer <- tolower(crandb$Maintainer)
+    maintainer <- tolower(crandb$maintainer)
     idx <- lapply(tolower(email), function(x)
         grepl(paste0("<", x, ">"), maintainer, fixed = TRUE))
     idx <- Reduce("+", idx)
@@ -67,15 +68,15 @@ read_crandb_from_email <- function(email, file = "results", ...) {
 
 read_crandb_from_pkg <- function(pkg, file = "results", ...) {
     crandb <- get_cran_rds_file(file = file, ...)
-    res <- crandb[crandb[["Package"]] %in% pkg, ]
+    res <- crandb[crandb[["package"]] %in% pkg, ]
     class(res) <- c("crandb", class(res))
     res
 }
 
 add_other_issues_crandb <- function(tbl, ...) {
     issues <- get_cran_rds_file("issues", ...)
-    res <- vapply(tbl[["Package"]], function(x) {
-        pkg_issues <- issues[issues$Package == x, ]
+    res <- vapply(tbl[["package"]], function(x) {
+        pkg_issues <- issues[issues$package == x, ]
         if (nrow(pkg_issues) > 0) {
             paste(pkg_issues$kind, collapse = ", ")
         } else ""

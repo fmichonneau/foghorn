@@ -60,13 +60,14 @@ read_cran_web_from_pkg <- function(pkg) {
 get_cran_table <- function(parsed, ...) {
     res <- lapply(parsed, function(x) {
         tbl <- rvest::html_table(x)[[1]]
-        tbl$Version <- as.character(tbl$Version)
+        names(tbl) <- tolower(names(tbl))
+        tbl$version <- as.character(tbl$version)
         tbl
     })
     names(res) <- names(parsed)
     pkg_col <- rep(names(res), vapply(res, nrow, integer(1)))
     res <- do.call("rbind", res)
-    res <- cbind(Package = pkg_col, res, stringsAsFactors = FALSE)
+    res <- cbind(package = pkg_col, res, stringsAsFactors = FALSE)
     tibble::as.tibble(res)
 }
 
@@ -94,7 +95,7 @@ has_other_issues <- function(parsed, ...) {
     pkg <- all_packages(parsed)
 
     res <- lapply(pkg, function(x) {
-        tibble::tibble(`Package` = x,
+        tibble::tibble(`package` = x,
                        `has_other_issues` = rep(FALSE, length(x)))
     })
 
@@ -108,14 +109,14 @@ has_other_issues <- function(parsed, ...) {
         TRUE
     })
     pkg_with_issue <- unlist(pkg_with_issue)
-    res[["has_other_issues"]][match(names(pkg_with_issue), res$Package)] <- TRUE
+    res[["has_other_issues"]][match(names(pkg_with_issue), res$package)] <- TRUE
     res
 }
 
 ##' @importFrom tibble tibble
 add_other_issues <- function(tbl, parsed, ...) {
     other_issues <- has_other_issues(parsed)
-    tibble::as.tibble(merge(tbl, other_issues, by = "Package"))
+    tibble::as.tibble(merge(tbl, other_issues, by = "package"))
 }
 
 print_all_clear <- function(pkgs) {
@@ -127,8 +128,8 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
 
     what <- match.arg(what, names(tbl_pkg)[-1])
 
-    if (identical(what, "OK")) {
-        pkg_all_clear <- tbl_pkg[["Package"]][tbl_pkg[["OK"]] == n_cran_platforms]
+    if (identical(what, "ok")) {
+        pkg_all_clear <- tbl_pkg[["package"]][tbl_pkg[["ok"]] == n_cran_platforms]
         if (length(pkg_all_clear) && print_ok)
             print_all_clear(pkg_all_clear)
         return(NULL)
@@ -147,15 +148,15 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
             sptr <- c("", ", ")
         } else
             sptr <- c("  - ", "\n")
-        res <- paste0(sptr[1], tbl_pkg$Package[!is.na(tbl_pkg[[what]]) &
+        res <- paste0(sptr[1], tbl_pkg$package[!is.na(tbl_pkg[[what]]) &
                                         tbl_pkg[[what]] > 0],
                n, collapse = sptr[2])
     } else res <- NULL
     print_summary_cran(what, res, compact)
 }
 
-print_summary_cran <- function(type = c("ERROR", "FAIL", "WARN",
-                                        "NOTE", "has_other_issues"),
+print_summary_cran <- function(type = c("ok", "error", "fail", "warn",
+                                        "note", "has_other_issues"),
                                pkgs, compact) {
     if (is.null(pkgs))
         return(NULL)

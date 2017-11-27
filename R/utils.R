@@ -27,6 +27,7 @@ convert_email_to_cran_format <- function(email) {
 }
 
 add_cols <- function(tbl) {
+    names(tbl)[match("Package", names(tbl))] <- "package"
     to_add <- setdiff(names(default_cran_results), names(tbl))
     if (length(to_add) > 0) {
         col_to_add <- replicate(length(to_add), list(rep(0L, nrow(tbl))))
@@ -35,5 +36,5 @@ add_cols <- function(tbl) {
         res <- cbind(tbl, col_to_add)
         tbl <- tibble::as.tibble(res)
     }
-    convert_nas(tbl)[, c("Package", names(default_cran_results))]
+    convert_nas(tbl)[, names(default_cran_results)]
 }

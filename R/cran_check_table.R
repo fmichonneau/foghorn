@@ -16,8 +16,11 @@ cran_checks_table.cran_checks_email <- function(parsed, ...) {
             ## then, we can call the other method to parse the results
             ## of that pacakge
             .res <- cran_checks_table.cran_checks_pkg(read_cran_web_from_pkg(pkg))
-        } else
-            .res <- tibble::as_tibble(tbl[[1]])
+        } else {
+            .res <- tbl[[1]]
+            names(.res) <- tolower(names(.res))
+            .res <- tibble::as_tibble(.res)
+        }
         add_cols(.res)
     })
     do.call("rbind", res)
@@ -38,14 +41,14 @@ process_cran_table <- function(tbl) {
 }
 
 cran_checks_table.cran_checks_pkg <- function(parsed, ...) {
-    tbl <- get_cran_table(parsed, .id = "Package")
+    tbl <- get_cran_table(parsed, ...)
     process_cran_table(tbl)
 }
 
 
 cran_checks_table.crandb <- function(parsed, ...) {
     tbl <- parsed
-    tbl$Status <- gsub("WARNING", "WARN", tbl$Status)
+    tbl$status <- gsub("WARNING", "WARN", tbl$status)
     process_cran_table(tbl)
 }
 

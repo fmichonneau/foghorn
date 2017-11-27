@@ -55,6 +55,6 @@ summary_pkg_res <- function(res) {
                         Status = x$status, check_url = x$check_url %||% NA_character_)
     })
     res <- do.call("rbind", res)
-    res$Package <- rep(pkg, nrow(res))
+    res$package <- rep(pkg, nrow(res))
     add_cols(res)
 }

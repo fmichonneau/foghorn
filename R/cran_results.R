@@ -62,7 +62,7 @@ cran_results <- function(email = NULL, pkg = NULL,
                          src = c("website", "crandb"), ...) {
     show <- tolower(show)
     show <- match.arg(show, several.ok = TRUE)
-    show <- c("Package", toupper(show), "has_other_issues")
+    show <- c("package", show, "has_other_issues")
 
     src <- match.arg(src, c("website", "crandb"))
 
@@ -75,8 +75,8 @@ cran_results <- function(email = NULL, pkg = NULL,
     } else if (identical(src, "crandb")) {
         res <- cran_results_crandb(email, pkg, ...)
     }
-    res <- res[!duplicated(res$Package), ]
-    res <- res[, show]
+    res <- res[!duplicated(res$package), ]
+    res <- res[order(res$package), show]
     class(res) <- c("cran_results", class(res))
     res
 }
@@ -118,7 +118,7 @@ summary_cran_results <- function(email = NULL, pkg = NULL,
 ##' @export
 ##' @rdname summary_cran_results
 summary.cran_results <- function(object, compact = FALSE, print_ok = TRUE, ...) {
-    what <- c("OK", "ERROR", "FAIL", "WARN", "NOTE", "has_other_issues")
+    what <- c("ok", "error", "fail", "warn", "note", "has_other_issues")
     lapply(what, function(x)
         get_pkg_with_results(object, x, compact, print_ok))
    invisible(object)

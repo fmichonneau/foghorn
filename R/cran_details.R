@@ -14,7 +14,7 @@ has_other_issues_details <- function(parsed, ...) {
 
       pkgs <- rep(unlist(pkg), vapply(res, function(x) nrow(x) %||% 0L, integer(1)))
       res <- do.call("rbind", res)
-      res <- cbind(Package = pkgs, res, stringsAsFactors = FALSE)
+      res <- cbind(package = pkgs, res, stringsAsFactors = FALSE)
       tibble::as.tibble(res)
 }
 
@@ -50,11 +50,11 @@ cran_details_from_web <- function(pkg, ...) {
 
         r <- do.call("rbind", msg)
         if (!is.null(r)) {
-            r <- cbind(Package = rep(pkg_nm, nrow(r)), r, stringsAsFactors = FALSE)
+            r <- cbind(package = rep(pkg_nm, nrow(r)), r, stringsAsFactors = FALSE)
         } else {
             r <- tibble::add_row(default_cran_details,
-                                 Package = pkg_nm,
-                                 version = paste(unique(get_cran_table(parsed[pkg_nm])$Version), collapse = ", "),
+                                 package = pkg_nm,
+                                 version = paste(unique(get_cran_table(parsed[pkg_nm])$version), collapse = ", "),
                                  result = "OK",
                                  check = "",
                                  flavors = "",
@@ -63,7 +63,7 @@ cran_details_from_web <- function(pkg, ...) {
         }
     }, parsed, names(parsed), SIMPLIFY = FALSE)
     res <- do.call("rbind", all_p)
-    tibble::as.tibble(res[order(res$Package), ])
+    tibble::as.tibble(res[order(res$package), ])
 }
 
 
@@ -80,29 +80,28 @@ cran_details_from_crandb <- function(pkg, ...) {
             dt[[i]] <- as.character(dt[[i]])
     }
 
-    dt <- dt[dt[["Package"]] %in%  pkg, ]
-    dt$Status <- gsub("WARNING", "WARN", dt$Status)
+    dt <- dt[dt[["package"]] %in%  pkg, ]
+    dt$status <- gsub("WARNING", "WARN", dt$status)
     .res <- default_cran_details
 
-    for (.p in unique(dt$Package)) {
-        dt_p <- dt[dt$Package == .p, ]
-        for (.v in unique(dt_p$Version)) {
-            dt_v <- dt_p[dt_p$Version == .v, ]
-            for (.c in unique(dt_v$Check)) {
-                .sub <- dt_v[dt_v$Check == .c, ]
-                .rslt <- unique(.sub$Status)
+    for (.p in unique(dt$package)) {
+        dt_p <- dt[dt$package == .p, ]
+        for (.v in unique(dt_p$version)) {
+            dt_v <- dt_p[dt_p$version == .v, ]
+            for (.c in unique(dt_v$check)) {
+                .sub <- dt_v[dt_v$check == .c, ]
+                .rslt <- unique(.sub$status)
                 if (length(.rslt) > 1)
                     stop("report on github")
 
                 .res <- tibble::add_row(.res,
-                    Package = .p,
+                    package = .p,
                     version = .v,
                     result = .rslt %~~% "",
                     check = .c,
-                    flavors = paste(.sub$Flavor, collapse = ", ") %~~% "",
-                    n_flavors = length(.sub$Flavor),
-                    message = .sub$Output[1]
-
+                    flavors = paste(.sub$flavor, collapse = ", ") %~~% "",
+                    n_flavors = length(.sub$flavor),
+                    message = .sub$output[1]
                     )
             }
         }
@@ -111,28 +110,21 @@ cran_details_from_crandb <- function(pkg, ...) {
     ## remove lines that don't have any issues
     .res$check <- replace(.res$check, .res$check == "*", "")
 
-    issues <- issues[issues[["Package"]] %in% pkg, ]
+    issues <- issues[issues[["package"]] %in% pkg, ]
     issues <- tibble::as.tibble(issues)
-    .iss_pkg <- as.character(issues$Package)
-    .iss_vrs <- as.character(issues$Version)
-    .iss_chk <- as.character(issues$kind)
-    .iss_msg <- as.character(issues$href)
-    .iss_res <- rep("other_issue", nrow(issues))
-    .iss_flvr <- character(nrow(issues))
-    .iss_n_flvr <- integer(nrow(issues))
 
     .iss <- tibble::tibble(
-                        Package = .iss_pkg,
-                        version = .iss_vrs,
-                        result = .iss_res,
-                        check = .iss_chk,
-                        flavors = .iss_flvr,
-                        n_flavors = .iss_n_flvr,
-                        message = .iss_msg
+                        package = as.character(issues$package),
+                        version = as.character(issues$version),
+                        result = rep("other_issue", nrow(issues)),
+                        check = as.character(issues$kind),
+                        flavors = character(nrow(issues)),
+                        n_flavors =  integer(nrow(issues)),
+                        message = as.character(issues$href)
                     )
 
     res <- rbind(.res, .iss)
-    convert_nas(res[order(res$Package), ], replace_with = "")
+    convert_nas(res[order(res$package), ], replace_with = "")
 
 }
 
@@ -192,7 +184,7 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
 
     res_ok <- object[object[["result"]] == "OK" & object[["n_flavors"]] == n_cran_platforms, ]
     if (nrow(res_ok) > 0 && print_ok) {
-        print_all_clear(res_ok[["Package"]])
+        print_all_clear(res_ok[["package"]])
     }
 
     res_others <- object[object[["result"]] != "OK", ]
@@ -200,7 +192,7 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
     if (nrow(res_others) < 1)
         return(invisible(object))
 
-    mapply(function(Package, result, check, flavors, message)  {
+    mapply(function(package, result, check, flavors, message)  {
         cmpt <- foghorn_components[[result]]
         if (show_log)
             msg <- message
@@ -208,13 +200,13 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
             msg <- character(0)
         cat(## Type of CRAN message
             cmpt$color(paste0(cmpt$symbol, " ",
-                              crayon::bold(paste0(Package, " - ", result)),
+                              crayon::bold(paste0(package, " - ", result)),
                               ": ", check)), "\n",
             ## Flavors concerned
             render_flavors(flavors), "\n",
             ## Optionally the log output
             msg, "\n\n", sep = "")
-    }, res_others$Package, res_others$result, res_others$check,
+    }, res_others$package, tolower(res_others$result), res_others$check,
     res_others$flavors, res_others$message)
 
     invisible(object)
