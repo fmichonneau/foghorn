@@ -177,7 +177,7 @@ build_regexp <- function(what, pkg) {
 
 test_that("output of summary cran results", {
     skip_on_cran()
-    set.seed(1010101)
+
     pkgs <- c("rotl", "rncl")
     res_web <- suppressMessages(summary_cran_results(pkg = pkgs, src = "website"))
     res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, src = "crandb"))
