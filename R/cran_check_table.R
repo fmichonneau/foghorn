@@ -23,12 +23,16 @@ cran_checks_table.cran_checks_email <- function(parsed, ...) {
     do.call("rbind", res)
 }
 
+##' @importFrom stats reshape xtabs
 process_cran_table <- function(tbl) {
-    ctbl <- tapply(tbl$Package, list(tbl$Package, tbl$Status), length,
-                   simplify = TRUE)
-    ctbl <- as.data.frame(ctbl)
-    ctbl$Package <- rownames(ctbl)
-    ctbl <- lapply(ctbl, unlist)
+    ctbl <- xtabs(~ package + version + status, data = tbl)
+    ctbl <- as.data.frame(ctbl, stringsAsFactors = FALSE)
+    ctbl <- ctbl[ctbl$Freq > 0, ]
+    ctbl <- stats::reshape(ctbl, idvar = c("package", "version"),
+                           timevar = "status", direction = "wide",
+                           v.name = "Freq")
+    names(ctbl) <- gsub("Freq\\.", "", names(ctbl))
+    names(ctbl) <- tolower(names(ctbl))
     ctbl <- tibble::as_tibble(ctbl)
     add_cols(ctbl)
 }
