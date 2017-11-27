@@ -44,7 +44,7 @@ cran_details_from_web <- function(pkg, ...) {
                 check = gsub("^Check: ", "", p[c]),
                 flavors = gsub("^Flavors?: ", "", p[f]),
                 n_flavors = length(unlist(gregexpr(",", p[f]))) + 1,
-                message = paste(p[(r + 1):(f - 1)], collapse = "\n")
+                message = paste(gsub("^\\s+", "     ", p[(r + 1):(f - 1)]), collapse = "\n")
             )
         }, chk_idx, vrs_idx, res_idx, flv_idx, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
@@ -101,7 +101,7 @@ cran_details_from_crandb <- function(pkg, ...) {
                     check = .c,
                     flavors = paste(.sub$flavor, collapse = ", ") %~~% "",
                     n_flavors = length(.sub$flavor),
-                    message = .sub$output[1]
+                    message = gsub("\\n", "\n   ", paste("  ", .sub$output[1]))
                     )
             }
         }
@@ -158,7 +158,6 @@ cran_details <- function(pkg, src = c("website", "crandb"),
     attr(res, "pkgs") <- pkg
     res
 }
-
 
 
 ##' @importFrom clisymbols symbol
