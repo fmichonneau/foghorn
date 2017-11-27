@@ -23,6 +23,7 @@ RoxygenNote: 6.0.1
 URL: https://github.com/fmichonneau/foghorn
 BugReports: https://github.com/fmichonneau/foghorn/issues
 Suggests:
+    progress,
     testthat,
     covr,
     knitr,

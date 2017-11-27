@@ -59,9 +59,7 @@ progress_multi <- function(i, labels, count, progress) {
 }
 
 
-
-
-##' @importFrom httr GET write_disk status_code
+##' @importFrom httr GET write_disk status_code config
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, file_prefix = NULL, ...) {
@@ -74,10 +72,11 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
            file.size(dest_file) > 0) ||
         overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
-        pb <- progress_multi(i = 1, labels = list(paste("Downloading", file)), count = FALSE, TRUE)
+        pb <- progress_multi(i = 1, labels = list(paste("Downloading", file)), count = FALSE,
+                             progress = requireNamespace("progress", quietly = TRUE))
         d_status <- httr::GET(url = cran_url,
                               httr::write_disk(dest_file, overwrite = overwrite),
-                              config(progressfunction = pb$callback), ...)
+                              httr::config(progressfunction = pb$callback), ...)
 
         if (!identical(httr::status_code(d_status), 200L)) {
             unlink(dest_file)
