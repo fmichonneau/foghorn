@@ -1,3 +1,66 @@
+## progress_multi taken from `provisionr` written by Rich FitzJohn:
+##   https://github.com/mrc-ide/provisionr/blob/master/R/download.R#L124-L179
+##
+progress_multi <- function(i, labels, count, progress) {
+  label <- format(labels[[i]], width = max(nchar(labels)), justify = "right")
+  if (count) {
+    is <- format(i, width = nchar(length(labels)))
+    prefix <- sprintf("[%s/%s] %s", is, length(labels), label)
+  } else {
+    prefix <- label
+  }
+  bar <- NULL
+  type <- "down"
+  seen <- 0
+
+  if (progress) {
+    callback <- function(down, up) {
+      if (type == "down") {
+        total <- down[[1L]]
+        now <- down[[2L]]
+      } else {
+        total <- up[[1L]]
+        now <- up[[2L]]
+      }
+
+      if (total == 0 && now == 0) {
+        bar <<- NULL
+        seen <<- 0
+        return(TRUE)
+      }
+
+      if (is.null(bar)) {
+        if (total == 0) {
+          fmt <- paste0(prefix, " [ :bytes in :elapsed ]")
+          total <- 1e8 # arbitrarily big
+        } else {
+          fmt <- paste0(prefix, " [:percent :bar]")
+        }
+        bar <<- progress::progress_bar$new(fmt, total, clear = TRUE,
+                                           show_after = 0)
+      }
+      if (total == 0) {
+        bar$tick(now)
+      } else {
+        bar$tick(now - seen)
+        seen <<- now
+      }
+
+      TRUE
+    }
+  } else {
+    callback <- function(down, up) {
+      TRUE
+    }
+  }
+
+  list(callback = callback,
+       prefix = prefix)
+}
+
+
+
+
 ##' @importFrom httr GET write_disk status_code
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
@@ -11,8 +74,11 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
            file.size(dest_file) > 0) ||
         overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
+        pb <- progress_multi(i = 1, labels = list(paste("Downloading", file)), count = FALSE, TRUE)
         d_status <- httr::GET(url = cran_url,
-                              httr::write_disk(dest_file, overwrite = overwrite), ...)
+                              httr::write_disk(dest_file, overwrite = overwrite),
+                              config(progressfunction = pb$callback), ...)
+
         if (!identical(httr::status_code(d_status), 200L)) {
             unlink(dest_file)
             stop("Can't get ", cran_url, " (status code: ", httr::status_code(d_status), ")", call. = FALSE)
