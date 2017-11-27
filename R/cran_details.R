@@ -218,5 +218,5 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
 summary_cran_details <- function(pkg, src = c("website", "crandb"),
                                  show_log = TRUE, print_ok = TRUE, ...) {
     res <- cran_details(pkg = pkg, src = src, ...)
-    summary(res, print_ok = print_ok)
+    summary(res, show_log = show_log, print_ok = print_ok)
 }
