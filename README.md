@@ -34,34 +34,36 @@ Demonstration
 library(foghorn)
 ```
 
-`foghorn` provides a graphical summary for CRAN check results for the packages maintained by individuals (the number in parentheses indicates the number of R flavors used by CRAN that generate notes, warnings, errors):
+`foghorn` provides the results of the package CRAN checks. As a maintainer, you can easily get the results of the checks for your packages by using the email address included in the `DESCRIPTION` file of your packages.
+
+`summary_cran_results()` provides you with a graphical summary of the results of the CRAN checks. The number in parenthesis after the name of the package indicates the number of platforms used by CRAN that produced this result.
 
 ``` r
 ## Graphical interface
 summary_cran_results(email = "francois.michonneau@gmail.com")
-#> ⚠  Packages with warnings on CRAN: 
+#> ✔ All clear for foghorn, phylobase, riceware, rotl!
+#> ⚠  Package with warnings on CRAN: 
 #>   - rncl (3)
-#>   - rotl (1)
 #> ★  Package with notes on CRAN: 
 #>   - rncl (6)
 ```
 
-The information can also be summarized as a table:
+`summary_cran_results()` is actually an alias of `summary(cran_results())`, meaning that you can call `cran_results()` directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.
 
 ``` r
-## Summary as a tibble
+## Results of the checks as a tibble
 cran_results(email = "francois.michonneau@gmail.com")
 #> # A tibble: 5 x 7
-#>     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>     package error  fail  warn  note    ok has_other_issues
 #>       <chr> <int> <int> <int> <int> <int>            <lgl>
 #> 1   foghorn     0     0     0     0    12            FALSE
 #> 2 phylobase     0     0     0     0    12            FALSE
 #> 3  riceware     0     0     0     0    12            FALSE
 #> 4      rncl     0     0     3     6     3            FALSE
-#> 5      rotl     0     0     1     0    11            FALSE
+#> 5      rotl     0     0     0     0    12            FALSE
 ```
 
-In addition of your own packages, you can also check the results for other packages that might be of interest to you:
+In addition of your own packages, you can also check the results for any other packages that might be of interest to you:
 
 ``` r
 ## either by themselves
@@ -73,9 +75,10 @@ summary_cran_results(pkg = c("ggplot2", "dplyr"))
 #>   - ggplot2 (4)
 #> ◉  Package with other issues on CRAN: 
 #>   - dplyr
+
 cran_results(pkg = c("ggplot2", "dplyr"))
 #> # A tibble: 2 x 7
-#>   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>   package error  fail  warn  note    ok has_other_issues
 #>     <chr> <int> <int> <int> <int> <int>            <lgl>
 #> 1   dplyr     0     0     0     8     4             TRUE
 #> 2 ggplot2     1     0     0     4     7            FALSE
@@ -83,55 +86,55 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 ## or by combining them with email addresses
 summary_cran_results(email = "francois.michonneau@gmail.com",
                      pkg = c("mregions", "ridigbio"))
-#> ⚠  Packages with warnings on CRAN: 
+#> ✔ All clear for foghorn, mregions, phylobase, riceware, ridigbio, rotl!
+#> ⚠  Package with warnings on CRAN: 
 #>   - rncl (3)
-#>   - rotl (1)
 #> ★  Package with notes on CRAN: 
 #>   - rncl (6)
+
 cran_results(email = "francois.michonneau@gmail.com",
               pkg = c("mregions", "ridigbio"))
 #> # A tibble: 7 x 7
-#>     Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>     package error  fail  warn  note    ok has_other_issues
 #>       <chr> <int> <int> <int> <int> <int>            <lgl>
-#> 1  mregions     0     0     0     0    12            FALSE
-#> 2  ridigbio     0     0     0     0    12            FALSE
-#> 3   foghorn     0     0     0     0    12            FALSE
-#> 4 phylobase     0     0     0     0    12            FALSE
-#> 5  riceware     0     0     0     0    12            FALSE
+#> 1   foghorn     0     0     0     0    12            FALSE
+#> 2  mregions     0     0     0     0    12            FALSE
+#> 3 phylobase     0     0     0     0    12            FALSE
+#> 4  riceware     0     0     0     0    12            FALSE
+#> 5  ridigbio     0     0     0     0    12            FALSE
 #> 6      rncl     0     0     3     6     3            FALSE
-#> 7      rotl     0     0     1     0    11            FALSE
+#> 7      rotl     0     0     0     0    12            FALSE
 ```
 
-You can also inspect the logs for the check results using `summary(cran_details(pkg))`, while `visit_cran_check(pkg)` takes you to the CRAN webpage.
+You can inspect the logs for the check results using `summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while `visit_cran_check(pkg)` takes you directly to the CRAN webpage.
 
 ``` r
 (tidyr_checks <- cran_details(pkg = "tidyr"))
-#> # A tibble: 1 x 5
-#>   Package result                         check
-#>     <chr>  <chr>                         <chr>
-#> 1   tidyr   NOTE data for non-ASCII characters
-#> # ... with 2 more variables: flavors <chr>, message <chr>
+#> # A tibble: 1 x 7
+#>   package version result                         check
+#> *   <chr>   <chr>  <chr>                         <chr>
+#> 1   tidyr   0.7.2   NOTE data for non-ASCII characters
+#> # ... with 3 more variables: flavors <chr>, n_flavors <dbl>, message <chr>
 summary(tidyr_checks)
-#> ◉ tidyr has other issues 
-#> ★ tidyr - NOTE: data for non-ASCII characters
+#> ★ tidyr - note: data for non-ASCII characters
 #>    ❯ r-devel-linux-x86_64-fedora-clang 
 #>    ❯ r-devel-linux-x86_64-fedora-gcc 
 #>    ❯ r-patched-solaris-x86 
 #>    ❯ r-release-osx-x86_64 
 #>    ❯ r-oldrel-osx-x86_64 
 #> 
-#>       Note: found 23 marked UTF-8 strings
+#>      Note: found 23 marked UTF-8 strings
 ```
 
 Where does the data come from?
 ------------------------------
 
-The data from the CRAN check results used by this package are either scrapped from the CRAN web pages (default), or are from the CRAN database. The first option is faster if you want to regularly check a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended. To use the CRAN database, add `src = "crandb"` in your function calls:
+The data from the check results used by this package are either scrapped from the CRAN web pages (default), or are from the CRAN database (that CRAN uses to build the webpages). The first option is faster if you want to regularly check a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended (it's about 20Mb of data). To use the CRAN database, add `src = "crandb"` in your function calls:
 
 ``` r
 cran_results(pkg = "nlme", src = "crandb")
 #> # A tibble: 1 x 7
-#>   Package ERROR  FAIL  WARN  NOTE    OK has_other_issues
+#>   package error  fail  warn  note    ok has_other_issues
 #>     <chr> <int> <int> <int> <int> <int>            <lgl>
 #> 1    nlme     1     0     0     0    11            FALSE
 ```
