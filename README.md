@@ -9,7 +9,7 @@ foghorn
 
 `foghorn` makes accessible to the R terminal the CRAN check results for packages maintained by individuals, or for other packages of interest. The results are presented as a colored summary, or as a tibble. The function that generates the summary is designed to be called from your `.Rprofile` so you can check on the status of the packages regularly.
 
-As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when checked on CRAN's infrastructure. `foghorn` brings this information to your terminal so you don't have to leave the comfort of your terminal to know the results of the CRAN checks for your packages.
+As new features are introduced in development versions of R, or new policies are put in place, packages that are not updated frequently may start generating warnings or errors when checked on CRAN's infrastructure. `foghorn` brings this information to your terminal so you don't have to leave the comfort of your R session to know the results of the CRAN checks for your packages.
 
 Installation
 ------------
