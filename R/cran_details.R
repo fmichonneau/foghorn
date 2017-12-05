@@ -89,20 +89,19 @@ cran_details_from_crandb <- function(pkg, ...) {
         for (.v in unique(dt_p$version)) {
             dt_v <- dt_p[dt_p$version == .v, ]
             for (.c in unique(dt_v$check)) {
-                .sub <- dt_v[dt_v$check == .c, ]
-                .rslt <- unique(.sub$status)
-                if (length(.rslt) > 1)
-                    stop("report on github, package causing issues is: ", .p)
-
-                .res <- tibble::add_row(.res,
-                    package = .p,
-                    version = .v,
-                    result = .rslt %~~% "",
-                    check = .c,
-                    flavors = paste(.sub$flavor, collapse = ", ") %~~% "",
-                    n_flavors = length(.sub$flavor),
-                    message = gsub("\\n", "\n   ", paste("  ", .sub$output[1]))
-                    )
+                dt_c <- dt_v[dt_v$check == .c, ]
+                for (.s in unique(dt_c$status)) {
+                    dt_s <- dt_c[dt_c$status == .s, ]
+                    .res <- tibble::add_row(.res,
+                                            package = .p,
+                                            version = .v,
+                                            result = .s %~~% "",
+                                            check = .c,
+                                            flavors = paste(dt_s$flavor, collapse = ", ") %~~% "",
+                                            n_flavors = length(dt_s$flavor),
+                                            message = gsub("\\n", "\n   ", paste("  ", dt_s$output[1]))
+                                            )
+                }
             }
         }
     }
