@@ -6,7 +6,7 @@ Authors@R: c(person("Francois", "Michonneau", role=c("aut", "cre"),
              person("Ben", "Bolker", role="ctb"))
 Description: The CRAN check results in your R terminal.
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.3.0)
 Imports:
     clisymbols (>= 1.0.0),
     crayon (>= 1.3.2),
