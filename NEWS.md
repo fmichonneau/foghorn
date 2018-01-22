@@ -1,3 +1,11 @@
+## v1.x.x
+
+## New features
+
+* Add `cran_incoming` to retrieve the list of packages currently in the CRAN
+  incoming queue. Feature requested by @krlmlr, #24.
+  
+
 ## v1.0.0
 
 ### API changes
