@@ -39,7 +39,8 @@ read_cran_web_from_email <- function(email) {
     url <- url_email_res(email)
     res <- lapply(url, read_cran_web)
     if (length(bad <- which(is.na(res))) > 0) {
-        stop("Invalid email address(es): ", email[bad], call. = FALSE)
+        stop("Invalid email address(es): ", paste(sQuote(email[bad]), collapse = ", "),
+             ".", call. = FALSE)
     }
     class(res) <- c("cran_checks_email", class(res))
     res
@@ -49,7 +50,8 @@ read_cran_web_from_pkg <- function(pkg) {
     url <- url_pkg_res(pkg)
     res <- lapply(url, read_cran_web)
     if (length(bad <- which(is.na(res))) > 0) {
-        stop("Invalid package name(s): ", pkg[bad], call. = FALSE)
+        stop("Invalid package name(s): ", paste(sQuote(pkg[bad]), collapse = ", "),
+             ".", call. = FALSE)
     }
     names(res) <- pkg
     class(res) <- c("cran_checks_pkg", class(res))
