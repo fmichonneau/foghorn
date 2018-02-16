@@ -20,5 +20,5 @@ test_that("filtering works", {
     res <- cran_incoming()
     pkg_test <- sample(res$package, 5L)
     res_test <- cran_incoming(pkg = pkg_test)
-    expect_true(nrow(res_test) > 5L)
+    expect_true(nrow(res_test) >=  5L)
 })
