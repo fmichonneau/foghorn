@@ -69,7 +69,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     file <- paste0("check_", file, ".rds")
     dest_file <- file.path(dest, paste0(file_prefix, file))
     if (! (file.exists(dest_file) &&
-           file.size(dest_file) > 0) ||
+           file.info(dest_file, extra_cols = FALSE)$size > 0) ||
         overwrite) {
         cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
         pb <- progress_multi(i = 1, labels = list(paste("Downloading", file)), count = FALSE,
@@ -89,7 +89,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
 check_cran_rds_file <- function(file, return_logical = FALSE) {
     if (!file.exists(file))
         stop(file, " can't be found...", call. = FALSE)
-    if (file.size(file) < 100)
+    if (file.info(file, extra_cols = FALSE)$size < 100)
         stop(file, " is corrupted. Delete it and retry.")
     res <- try(readRDS(file = file), silent = TRUE)
     if (inherits(res, "try-error"))
