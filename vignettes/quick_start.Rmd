@@ -65,7 +65,7 @@ few packages. However, if you are doing statistics on a large number of
 packages, using the CRAN database is recommended (it's about 20Mb of data). To
 use the CRAN database, add `src = "crandb"` in your function calls:
 
-```{r show-cran-db}
+```{r show-cran-db, eval=FALSE}
 cran_results(pkg = "nlme", src = "crandb")
 ```
 
