@@ -1,6 +1,12 @@
+## v1.x.x
+
+### Bug fixes
+
+* Don't display progress bar in non-interactive mode for file download.
+
 ## v1.0.1
 
-## New features
+### New features
 
 * Add `cran_incoming()` to retrieve the list of packages currently in the CRAN
   incoming queue. Feature requested by @krlmlr, #24.

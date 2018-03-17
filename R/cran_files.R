@@ -76,7 +76,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
                              progress = requireNamespace("progress", quietly = TRUE))
         d_status <- httr::GET(url = cran_url,
                               httr::write_disk(dest_file, overwrite = overwrite),
-                              httr::config(progressfunction = pb$callback), ...)
+                              httr::config(progressfunction = if (interactive()) pb$callback), ...)
 
         if (!identical(httr::status_code(d_status), 200L)) {
             unlink(dest_file)
