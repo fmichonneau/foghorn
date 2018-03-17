@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# foghorn
+# foghorn <img src="man/figures/foghorn-logo.png" align="right" />
 
 > **foghorn** *noun* <br>
 >     1. Device used to facilitate navigation in foggy conditions by warning of
