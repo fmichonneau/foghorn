@@ -20,7 +20,7 @@ parse_pkg <- function(pkg) {
 ##' Check where your package stands in the CRAN incoming queue.
 ##'
 ##' When submitting a package to CRAN, it undergoes a series of checks before it
-##' is published and publicly available. `cran_incoming` allows you to check the
+##' is published and publicly available. `cran_incoming()` allows you to check the
 ##' packages that are currently in the queue, and the folder where they are
 ##' located. This information could help you track your package submission. Only
 ##' the following folders are considered: `archive`, `inspect`, `noemail`,
@@ -38,10 +38,11 @@ parse_pkg <- function(pkg) {
 ##' @title List packages in CRAN incoming queue.
 ##' @param pkg Optionally provide a vector of package name to limit the results
 ##'     to these packages.
-##' @return A `tibble` with the following columns:
-##'   - the name of the package: `package`
-##'   - the version of the package: `version`
-##'   - the name of the folder where the package was found: `cran_folder`
+##' @param folders Which folders of the CRAN FTP do you want to inspect? Default
+##'     all the non-human folders.
+##' @return A `tibble` with the following columns: - the name of the package:
+##'     `package` - the version of the package: `version` - the name of the
+##'     folder where the package was found: `cran_folder`
 ##' @examples
 ##' \dontrun{
 ##'   ## all the packages in the CRAN incoming queue
@@ -52,18 +53,20 @@ parse_pkg <- function(pkg) {
 ##' @importFrom utils read.table
 ##' @export
 ##' @md
-cran_incoming <- function(pkg = NULL) {
+cran_incoming <- function(pkg = NULL,
+                          folders =  c("archive", "inspect", "pending", "pretest",
+                                       "publish", "recheck", "waiting")) {
 
     if (!is.null(pkg) &&
         (!is.character(pkg) || any(is.na(pkg)))) {
             stop(sQuote("pkg"), " must be a character vector.")
     }
 
+    folders <- match.arg(folders, several.ok = TRUE)
+
     cran_incoming_url <- "ftp://cran.r-project.org/incoming/"
 
-    sub_folders <- c("archive", "inspect", "pending", "pretest",
-                     "publish", "recheck", "waiting")
-    sub_folders <- paste0(sub_folders, "/")
+    sub_folders <- paste0(folders, "/")
 
     pool <- curl::new_pool()
 
