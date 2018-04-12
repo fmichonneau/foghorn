@@ -15,9 +15,12 @@ to these packages.}
 all the non-human folders.}
 }
 \value{
-A \code{tibble} with the following columns: - the name of the package:
-\code{package} - the version of the package: \code{version} - the name of the
-folder where the package was found: \code{cran_folder}
+A \code{tibble} with the following columns:
+\itemize{
+\item the name of the package: \code{package}
+\item the version of the package: \code{version}
+\item the name of the folder where the package was found: \code{cran_folder}
+}
 }
 \description{
 Check where your package stands in the CRAN incoming queue.
