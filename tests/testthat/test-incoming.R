@@ -22,3 +22,11 @@ test_that("filtering works", {
     res_test <- cran_incoming(pkg = pkg_test)
     expect_true(nrow(res_test) >=  5L)
 })
+
+test_that("specifying folders works", {
+    skip_on_cran()
+    res <- cran_incoming(folders = "archive")
+    expect_true(nrow(res) > 1 && all(res$cran_folder == "archive"))
+    res2 <- cran_incoming(folders = c("pretest", "recheck"))
+    expect_true(nrow(res2) > 1 && all(res2$cran_folder %in% c("pretest", "recheck")))
+})
