@@ -40,9 +40,10 @@ parse_pkg <- function(pkg) {
 ##'     to these packages.
 ##' @param folders Which folders of the CRAN FTP do you want to inspect? Default
 ##'     all the non-human folders.
-##' @return A `tibble` with the following columns: - the name of the package:
-##'     `package` - the version of the package: `version` - the name of the
-##'     folder where the package was found: `cran_folder`
+##' @return A `tibble` with the following columns:
+##' - the name of the package: `package`
+##' - the version of the package: `version`
+##' - the name of the folder where the package was found: `cran_folder`
 ##' @examples
 ##' \dontrun{
 ##'   ## all the packages in the CRAN incoming queue
