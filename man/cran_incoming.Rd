@@ -4,26 +4,27 @@
 \alias{cran_incoming}
 \title{List packages in CRAN incoming queue.}
 \usage{
-cran_incoming(pkg = NULL)
+cran_incoming(pkg = NULL, folders = c("archive", "inspect", "pending",
+  "pretest", "publish", "recheck", "waiting"))
 }
 \arguments{
 \item{pkg}{Optionally provide a vector of package name to limit the results
 to these packages.}
+
+\item{folders}{Which folders of the CRAN FTP do you want to inspect? Default
+all the non-human folders.}
 }
 \value{
-A \code{tibble} with the following columns:
-\itemize{
-\item the name of the package: \code{package}
-\item the version of the package: \code{version}
-\item the name of the folder where the package was found: \code{cran_folder}
-}
+A \code{tibble} with the following columns: - the name of the package:
+\code{package} - the version of the package: \code{version} - the name of the
+folder where the package was found: \code{cran_folder}
 }
 \description{
 Check where your package stands in the CRAN incoming queue.
 }
 \details{
 When submitting a package to CRAN, it undergoes a series of checks before it
-is published and publicly available. \code{cran_incoming} allows you to check the
+is published and publicly available. \code{cran_incoming()} allows you to check the
 packages that are currently in the queue, and the folder where they are
 located. This information could help you track your package submission. Only
 the following folders are considered: \code{archive}, \code{inspect}, \code{noemail},
