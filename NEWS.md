@@ -1,5 +1,10 @@
 ## v1.x.x
 
+### New features
+
+* Let users filter the CRAN incoming folder they want to inspect. Feature
+  requested by @krlmlr, #28.
+
 ### Bug fixes
 
 * Don't display progress bar in non-interactive mode for file download.
