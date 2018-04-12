@@ -61,7 +61,7 @@ cran_incoming <- function(pkg = NULL) {
 
     cran_incoming_url <- "ftp://cran.r-project.org/incoming/"
 
-    sub_folders <- c("archive", "inspect", "noemail", "pending", "pretest",
+    sub_folders <- c("archive", "inspect", "pending", "pretest",
                      "publish", "recheck", "waiting")
     sub_folders <- paste0(sub_folders, "/")
 
