@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summary of the CRAN check results — summary_cran_results • foghorn</title>
+<title>Table of the CRAN check results — cran_results • foghorn</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,13 +25,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Summary of the CRAN check results — summary_cran_results" />
+<meta property="og:title" content="Table of the CRAN check results — cran_results" />
 
-<meta property="og:description" content="Given the email address of a package maintainer, and/or a vector
-of package names, it displays at the console a summary of the
-check results run on the CRAN platforms. This function is designed
-to be included in your .Rprofile to be run (periodically) at start
-up." />
+<meta property="og:description" content="Make a table that summarizes the results of the CRAN checks for a
+set of packages specified by a maintainer or by names." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -114,48 +111,42 @@ up." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summary of the CRAN check results</h1>
-    <small>Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/cran_results.R'><code>R/cran_results.R</code></a>, <a href='https://github.com/fmichonneau/foghorn/blob/master/R/deprecated.R'><code>R/deprecated.R</code></a></small>
-    <div class="hidden name"><code>summary_cran_results.Rd</code></div>
+    <h1>Table of the CRAN check results</h1>
+    <small>Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/cran_results.R'><code>R/cran_results.R</code></a></small>
+    <div class="hidden name"><code>cran_results.Rd</code></div>
     </div>
 
     
-    <p>Given the email address of a package maintainer, and/or a vector
-of package names, it displays at the console a summary of the
-check results run on the CRAN platforms. This function is designed
-to be included in your .Rprofile to be run (periodically) at start
-up.</p>
+    <p>Make a table that summarizes the results of the CRAN checks for a
+set of packages specified by a maintainer or by names.</p>
     
 
-    <pre class="usage"><span class='fu'>summary_cran_results</span>(<span class='kw'>email</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>compact</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>print_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for cran_results</span>
-<span class='fu'>summary</span>(<span class='no'>object</span>, <span class='kw'>compact</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>print_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>)
-
-<span class='fu'>show_cran_results</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>cran_results</span>(<span class='kw'>email</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"error"</span>, <span class='st'>"fail"</span>, <span class='st'>"warn"</span>,
+  <span class='st'>"note"</span>, <span class='st'>"ok"</span>), <span class='kw'>src</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"website"</span>, <span class='st'>"crandb"</span>), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>email</th>
-      <td><p>email address for package maintainers (character vector)</p></td>
+      <td><p>email address for package maintainers (character
+vector)</p></td>
     </tr>
     <tr>
       <th>pkg</th>
       <td><p>package names (character vector)</p></td>
     </tr>
     <tr>
-      <th>compact</th>
-      <td><p>if <code>TRUE</code>, all the packages with non-OK results are
-listed in a single line, otherwise they are listed on multiple lines.</p></td>
+      <th>show</th>
+      <td><p>columns of the data frame to show (all are shown by
+default)</p></td>
     </tr>
     <tr>
-      <th>print_ok</th>
-      <td><p>if <code>TRUE</code> the summary method will print a "all clear"
-message for package(s) that have an OK status for all CRAN checks.</p></td>
+      <th>src</th>
+      <td><p>if <code>"website"</code> the data is scrapped from the CRAN
+website, if <code>"crandb"</code> the data is downloaded from a RDS
+file hosted on the CRAN servers (which is used to generate the
+information found on the CRAN website).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -163,26 +154,59 @@ message for package(s) that have an OK status for all CRAN checks.</p></td>
 check results are coming from and how they are downloaded from
 the CRAN servers (see Details section).</p></td>
     </tr>
-    <tr>
-      <th>object</th>
-      <td><p>an object created by <code>cran_results</code></p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Prints the packages that return errors, warnings, and
-    notes on the CRAN platforms. The number in parenthesis after
-    the name of the packages indicates the number of CRAN
-    platforms that produce these results.</p>
+    <p>a data frame that tabulates the number of CRAN platforms
+    that return errors, warnings, notes, or OK for the packages.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Given the email address of a package maintainer, and/or a vector
+of package names, returns a tibble that allows you to detect
+potential issues with your packages on CRAN.</p>
+<p>Where does the data come from?</p>
+<p>The data comes from the CRAN servers. They generate RDS files that
+contains information regarding the results of the checks for all
+the packages, and all the flavors. This data is then used to
+generate the web pages.</p>
+<p><code>foghorn</code> provides access to either of these data sources. If
+you choose <code>src = "website"</code> the data is scrapped from the
+CRAN website. If you only need to check a few packages, this is a
+good option. If you choose <code>src = "crandb"</code> the RDS files
+(about 20Mb) are downloaded first from the CRAN servers.</p>
+<p>When choosing <code>src = "crandb"</code> you can also specify the
+following options:</p>
+<ul>
+<li><p>dest  a folder where to store the RDS files (<code>tempdir()</code>
+                 by default).</p></li>
+<li><p>protocol  either <code>https</code> (default) or <code>http</code>.</p></li>
+<li><p>overwrite  when <code>FALSE</code> (default), if the file exists in
+                      <code>dest</code> then it will not be downloaded again.
+                      When <code>TRUE</code> the file gets downloaded everytime
+                      it's needed.</p></li>
+<li><p>...  additional arguments that will be passed to
+                <code><a href='http://www.rdocumentation.org/packages/httr/topics/GET'>GET</a></code> function to control how
+                the file will be downloaded.</p></li>
+</ul>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Note that the <code>tools</code> package contains unexported
+    functions that can be used to extract summary information from
+    the check results. Specifically
+    <code>tools:::sumarize_CRAN_check_status</code> is similar to
+    <code>show_cran_results</code>.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-   <span class='fu'>summary_cran_results</span>(<span class='kw'>email</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"user1@company1.com"</span>, <span class='st'>"user2@company2.com"</span>))
-   <span class='fu'>summary_cran_results</span>(<span class='kw'>email</span> <span class='kw'>=</span> <span class='st'>"user1@company1.com"</span>,
-                        <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"pkg1"</span>, <span class='st'>"pkg2"</span>))
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'>  <span class='kw'>if</span> (<span class='kw pkg'>curl</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/curl/topics/nslookup'>has_internet</a></span>()) {
+    <span class='fu'>cran_results</span>(<span class='kw'>pkg</span><span class='kw'>=</span><span class='st'>"MASS"</span>)
+  }</div><div class='output co'>#&gt; # A tibble: 1 x 7
+#&gt;   package error  fail  warn  note    ok has_other_issues
+#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           
+#&gt; 1 MASS        0     0     0     0    12 FALSE           </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -190,6 +214,10 @@ the CRAN servers (see Details section).</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

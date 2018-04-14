@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Visit the CRAN check results page — visit_cran_check • foghorn</title>
+<title>List packages in CRAN incoming queue. — cran_incoming • foghorn</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,10 +25,9 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Visit the CRAN check results page — visit_cran_check" />
+<meta property="og:title" content="List packages in CRAN incoming queue. — cran_incoming" />
 
-<meta property="og:description" content="Visit the page in your web browser for a given package or a
-maintainer's email address" />
+<meta property="og:description" content="Check where your package stands in the CRAN incoming queue." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -111,36 +110,69 @@ maintainer's email address" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Visit the CRAN check results page</h1>
-    <small>Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/visit_cran_check.R'><code>R/visit_cran_check.R</code></a></small>
-    <div class="hidden name"><code>visit_cran_check.Rd</code></div>
+    <h1>List packages in CRAN incoming queue.</h1>
+    <small>Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/cran_queue.R'><code>R/cran_queue.R</code></a></small>
+    <div class="hidden name"><code>cran_incoming.Rd</code></div>
     </div>
 
     
-    <p>Visit the page in your web browser for a given package or a
-maintainer's email address</p>
+    <p>Check where your package stands in the CRAN incoming queue.</p>
     
 
-    <pre class="usage"><span class='fu'>visit_cran_check</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>email</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>cran_incoming</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>folders</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"archive"</span>, <span class='st'>"inspect"</span>, <span class='st'>"pending"</span>,
+  <span class='st'>"pretest"</span>, <span class='st'>"publish"</span>, <span class='st'>"recheck"</span>, <span class='st'>"waiting"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>pkg</th>
-      <td><p>name of the package to check the results for</p></td>
+      <td><p>Optionally provide a vector of package name to limit the results
+to these packages.</p></td>
     </tr>
     <tr>
-      <th>email</th>
-      <td><p>email address of the package maintainer</p></td>
+      <th>folders</th>
+      <td><p>Which folders of the CRAN FTP do you want to inspect? Default
+all the non-human folders.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The URL from the CRAN check results page invisibly</p>
+    <p>A <code>tibble</code> with the following columns:</p><ul>
+<li><p>the name of the package: <code>package</code></p></li>
+<li><p>the version of the package: <code>version</code></p></li>
+<li><p>the name of the folder where the package was found: <code>cran_folder</code></p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>When submitting a package to CRAN, it undergoes a series of checks before it
+is published and publicly available. <code>cran_incoming()</code> allows you to check the
+packages that are currently in the queue, and the folder where they are
+located. This information could help you track your package submission. Only
+the following folders are considered: <code>archive</code>, <code>inspect</code>, <code>noemail</code>,
+<code>pending</code>, <code>pretest</code>, <code>publish</code>, <code>recheck</code>, <code>waiting</code>. The folders named
+after the initials of the CRAN volunteers are not inspected.</p>
+    
+    <h2 class="hasAnchor" id="disclaimer"><a class="anchor" href="#disclaimer"></a>Disclaimer</h2>
+
+    
+    <p>The information provided here is only to give you an indication of where
+your package stands in the submission process. It can be useful to confirm
+that your package has been correctly uploaded to CRAN. Please consult the
+<a href='https://cran.r-project.org/web/packages/policies.html'>CRAN RepositoryPolicy</a> if you have
+any questions.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+  <span class='co'>## all the packages in the CRAN incoming queue</span>
+  <span class='fu'>cran_incoming</span>()
+  <span class='co'>## if the package `foo` is in the queue, it will appear below</span>
+  <span class='fu'>cran_incoming</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"foo"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -148,7 +180,13 @@ maintainer's email address</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-          </ul>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#disclaimer">Disclaimer</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

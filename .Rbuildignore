@@ -10,3 +10,4 @@
 ^cran-comments.md$
 man-roxygen
 ^docs$
+^_pkgdown\.yml$
