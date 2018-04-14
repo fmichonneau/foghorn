@@ -1,31 +1,38 @@
-## v1.x.x
+# v1.0.2
 
-### New features
+## New features
 
 * Let users filter the CRAN incoming folder they want to inspect. Feature
   requested by @krlmlr, #28.
 
-### Bug fixes
+## Bug fixes
 
 * Don't display progress bar in non-interactive mode for file download.
 
-## v1.0.1
+## Other changes
 
-### New features
+* The `noemail` folder has been removed from the CRAN FTP incoming server.
+  `cran_incoming()` has been updated to reflect this change.
+* `foghorn` has an hex logo. Thanks to Maëlle Salmon for feedback on initial
+  design.
+
+# v1.0.1
+
+## New features
 
 * Add `cran_incoming()` to retrieve the list of packages currently in the CRAN
   incoming queue. Feature requested by @krlmlr, #24.
   
 * `foghorn` is now compatible with R >= 3.1. Suggested by @jimhester, #26.
 
-## v1.0.0
+# v1.0.0
 
-### API changes
+## API changes
 
 * `check_cran_results()` and `show_cran_results()` are deprecated in favor of
   `cran_results()` and `summary_cran_details()` respectively.
 
-### New features
+## New features
 
 * Add initial support for https://cranchecks.info as a data source (not
   exported/tested at this stage).
@@ -45,7 +52,7 @@
 
 * All the functions return tibbles, with column names in lower case.
 
-### Bugs fixed
+## Bugs fixed
 
 * Fix bug #14 reported by @hadley, no issues are now represented as 0 instead of
   `NA`.
@@ -53,12 +60,12 @@
 * Fix bug that would display a number instead of the package name in some
   situations.
 
-## v0.4.4
+# v0.4.4
 
 * CRAN has merged memtest notes with a new "other issues" that run valgrind and
   other memory issues on multiple platforms/compilers. Therefore, memtest is
   renamed "other issues".
 
-## v0.4.2
+# v0.4.2
 
 * initial release on CRAN
