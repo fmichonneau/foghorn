@@ -20,12 +20,12 @@ parse_pkg <- function(pkg) {
 ##' Check where your package stands in the CRAN incoming queue.
 ##'
 ##' When submitting a package to CRAN, it undergoes a series of checks before it
-##' is published and publicly available. `cran_incoming()` allows you to check the
-##' packages that are currently in the queue, and the folder where they are
+##' is published and publicly available. `cran_incoming()` allows you to check
+##' the packages that are currently in the queue, and the folder where they are
 ##' located. This information could help you track your package submission. Only
 ##' the following folders are considered: `archive`, `inspect`, `noemail`,
-##' `pending`, `pretest`, `publish`, `recheck`, `waiting`. The folders named
-##' after the initials of the CRAN volunteers are not inspected.
+##' `pending`, `pretest`, `publish`, `recheck`. The folders named after the
+##' initials of the CRAN volunteers are not inspected.
 ##'
 ##' @section Disclaimer:
 ##' The information provided here is only to give you an indication of where
@@ -56,7 +56,7 @@ parse_pkg <- function(pkg) {
 ##' @md
 cran_incoming <- function(pkg = NULL,
                           folders =  c("archive", "inspect", "pending", "pretest",
-                                       "publish", "recheck", "waiting")) {
+                                       "publish", "recheck")) {
 
     if (!is.null(pkg) &&
         (!is.character(pkg) || any(is.na(pkg)))) {
