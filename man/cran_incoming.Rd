@@ -5,7 +5,7 @@
 \title{List packages in CRAN incoming queue.}
 \usage{
 cran_incoming(pkg = NULL, folders = c("archive", "inspect", "pending",
-  "pretest", "publish", "recheck", "waiting"))
+  "pretest", "publish", "recheck"))
 }
 \arguments{
 \item{pkg}{Optionally provide a vector of package name to limit the results
@@ -27,12 +27,12 @@ Check where your package stands in the CRAN incoming queue.
 }
 \details{
 When submitting a package to CRAN, it undergoes a series of checks before it
-is published and publicly available. \code{cran_incoming()} allows you to check the
-packages that are currently in the queue, and the folder where they are
+is published and publicly available. \code{cran_incoming()} allows you to check
+the packages that are currently in the queue, and the folder where they are
 located. This information could help you track your package submission. Only
 the following folders are considered: \code{archive}, \code{inspect}, \code{noemail},
-\code{pending}, \code{pretest}, \code{publish}, \code{recheck}, \code{waiting}. The folders named
-after the initials of the CRAN volunteers are not inspected.
+\code{pending}, \code{pretest}, \code{publish}, \code{recheck}. The folders named after the
+initials of the CRAN volunteers are not inspected.
 }
 \section{Disclaimer}{
 
