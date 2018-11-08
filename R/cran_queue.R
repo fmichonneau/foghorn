@@ -23,10 +23,22 @@ parse_pkg <- function(pkg) {
 ##' is published and publicly available. `cran_incoming()` allows you to check
 ##' the packages that are currently in the queue, and the folder where they are
 ##' located. This information could help you track your package submission. Only
-##' the following folders are considered: `archive`, `inspect`, `noemail`,
-##' `pending`, `pretest`, `publish`, `recheck`. The folders named after the
-##' initials of the CRAN volunteers are not inspected.
+##' the following folders are considered (approximately in order of the CRAN
+##' queue sequence): `inspect`, `pretest`, `recheck`, `pending`, `publish`, `archive`.
+##' The folders named after the initials of the CRAN volunteers are not inspected.
 ##'
+##' @note
+##' The meaning of the package folders is as follows (see
+##' Hornik, Ligges and Zeileis \url{https://journal.r-project.org/archive/2018-1/cran.pdf}):
+##' \describe{
+##' \item{inspect}{package is awaiting manual inspection; always happens for first time submissions and for packages with problems that are likely to be false positives}
+##' \item{pretest}{a human has triggered a new auto-check of the package}
+##' \item{recheck}{package has passed checks and is waiting for reverse dependency checking}
+##' \item{pending}{CRAN's decision is waiting for a response from the package maintainer, e.g. when issues are present that CRAN cannot check for in the incoming checks}
+##' \item{publish}{package is awaiting publication}
+##' \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
+##' }
+##' https://cransays.itsalocke.com/articles/dashboard.html
 ##' @section Disclaimer:
 ##' The information provided here is only to give you an indication of where
 ##' your package stands in the submission process. It can be useful to confirm
@@ -36,9 +48,9 @@ parse_pkg <- function(pkg) {
 ##' any questions.
 ##'
 ##' @title List packages in CRAN incoming queue.
-##' @param pkg Optionally provide a vector of package name to limit the results
+##' @param pkg Optionally provide a vector of package names to limit the results
 ##'     to these packages.
-##' @param folders Which folders of the CRAN FTP do you want to inspect? Default
+##' @param folders Which folders of the CRAN FTP site do you want to inspect? Default: 
 ##'     all the non-human folders.
 ##' @return A `tibble` with the following columns:
 ##' - the name of the package: `package`
@@ -51,12 +63,16 @@ parse_pkg <- function(pkg) {
 ##'   ## if the package `foo` is in the queue, it will appear below
 ##'   cran_incoming(pkg = "foo")
 ##' }
+##' @references
+##' \itemize{
+##' \item Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to 2018-06-30", R Journal 10(1), July 2018. \url{https://journal.r-project.org/archive/2018-1/cran.pdf}
+##' \item  Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo Gruson. "CRAN incoming dashboard", \url{https://cransays.itsalocke.com/articles/dashboard.html}
+##' }
 ##' @importFrom utils read.table
 ##' @export
 ##' @md
 cran_incoming <- function(pkg = NULL,
-                          folders =  c("archive", "inspect", "pending", "pretest",
-                                       "publish", "recheck")) {
+                          folders =  c("inspect", "pretest", "recheck", "pending", "publish", "archive")) {
 
     if (!is.null(pkg) &&
         (!is.character(pkg) || any(is.na(pkg)))) {
@@ -97,9 +113,10 @@ cran_incoming <- function(pkg = NULL,
     res <- cbind(res, parse_pkg(res$packages))
 
     res <- tibble::as_tibble(res[, c("package", "version", "cran_folder")])
+    res$cran_folder <- factor(res$cran_folder, levels=folders)
 
     if (!is.null(pkg)) {
-        res <- res[res$package %in% pkg, ]
+        res <- res[ res$package %in% pkg, ]
     }
     res
 }
