@@ -98,7 +98,7 @@ summary(tidyr_checks)
 
 ## Where does the data come from?
 
-The data from the check results used by this package are either scrapped from
+The data from the check results used by this package are either scraped from
 the CRAN web pages (default), or are from the CRAN database (that CRAN uses to
 build the webpages). The first option is faster if you want to regularly check a
 few packages. However, if you are doing statistics on a large number of
