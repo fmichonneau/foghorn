@@ -1,9 +1,17 @@
 parse_cran_incoming <- function(res) {
     if (length(res$content) == 0) return(NULL)
-    folders <- read.table(text = rawToChar(res$content),
-                          stringsAsFactors = FALSE)$V9
+    rr <- read.table(text = rawToChar(res$content),
+                     stringsAsFactors = FALSE)
+    folders <- rr$V9
+    year <- substr(Sys.time(),1,4)
+    ## avoid need for locale-dependent month name match
+    ##  (CRAN FTP info uses English abbrevs)
+    month <- match(rr$V6,month.abb)
+    timestr <- with(rr,sprintf("%d-%s-%s %s", V7,month,year,V8))
+    time <- as.POSIXct(timestr,format="%d-%m-%Y %H:%M")
     tibble::tibble(
                 cran_folder = basename(res$url),
+                time = time,
                 packages = folders
             )
 }
@@ -52,9 +60,13 @@ parse_pkg <- function(pkg) {
 ##' @param folders Which folders of the CRAN FTP site do you want to inspect? Default: 
 ##'     all the non-human folders.
 ##' @return A `tibble` with the following columns:
-##' - the name of the package: `package`
-##' - the version of the package: `version`
-##' - the name of the folder where the package was found: `cran_folder`
+##' \describe{
+##' \item{package}{package name}
+##' \item{version}{package version}
+##' \item{cran_folder}{folder where the package was found}
+##' \item{time}{date/time package was entered in the folder}
+##' }
+##' 
 ##' @examples
 ##' \dontrun{
 ##'   ## all the packages in the CRAN incoming queue
@@ -111,7 +123,7 @@ cran_incoming <- function(pkg = NULL,
     res <- do.call("rbind", res)
     res <- cbind(res, parse_pkg(res$packages))
 
-    res <- tibble::as_tibble(res[, c("package", "version", "cran_folder")])
+    res <- tibble::as_tibble(res[, c("package", "version", "cran_folder", "time")])
     res$cran_folder <- factor(res$cran_folder, levels=folders)
 
     if (!is.null(pkg)) {

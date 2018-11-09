@@ -4,8 +4,8 @@ test_that("Documentation is correct", {
     skip_on_cran()
     ## make sure all folders investigated are correct
     expect_silent(res <- cran_incoming())
-    expect_true(all(names(res) %in% c("package", "version", "cran_folder")))
-    expect_equal(ncol(res), 3L)
+    expect_true(all(names(res) %in% c("package", "version", "cran_folder", "time")))
+    expect_equal(ncol(res), 4L)
     expect_true(nrow(res) > 1)
 })
 

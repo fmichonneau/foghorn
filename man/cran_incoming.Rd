@@ -16,10 +16,11 @@ all the non-human folders.}
 }
 \value{
 A \code{tibble} with the following columns:
-\itemize{
-\item the name of the package: \code{package}
-\item the version of the package: \code{version}
-\item the name of the folder where the package was found: \code{cran_folder}
+\describe{
+\item{package}{package name}
+\item{version}{package version}
+\item{cran_folder}{folder where the package was found}
+\item{time}{date/time package was entered in the folder}
 }
 }
 \description{
