@@ -38,7 +38,6 @@ parse_pkg <- function(pkg) {
 ##' \item{publish}{package is awaiting publication}
 ##' \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 ##' }
-##' https://cransays.itsalocke.com/articles/dashboard.html
 ##' @section Disclaimer:
 ##' The information provided here is only to give you an indication of where
 ##' your package stands in the submission process. It can be useful to confirm

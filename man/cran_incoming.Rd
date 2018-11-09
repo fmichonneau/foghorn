@@ -45,7 +45,6 @@ Hornik, Ligges and Zeileis \url{https://journal.r-project.org/archive/2018-1/cra
 \item{publish}{package is awaiting publication}
 \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 }
-https://cransays.itsalocke.com/articles/dashboard.html
 }
 \section{Disclaimer}{
 
