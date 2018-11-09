@@ -4,22 +4,23 @@
 \alias{cran_incoming}
 \title{List packages in CRAN incoming queue.}
 \usage{
-cran_incoming(pkg = NULL, folders = c("archive", "inspect", "pending",
-  "pretest", "publish", "recheck"))
+cran_incoming(pkg = NULL, folders = c("inspect", "pretest", "recheck",
+  "pending", "publish", "archive"))
 }
 \arguments{
-\item{pkg}{Optionally provide a vector of package name to limit the results
+\item{pkg}{Optionally provide a vector of package names to limit the results
 to these packages.}
 
-\item{folders}{Which folders of the CRAN FTP do you want to inspect? Default
+\item{folders}{Which folders of the CRAN FTP site do you want to inspect? Default:
 all the non-human folders.}
 }
 \value{
 A \code{tibble} with the following columns:
-\itemize{
-\item the name of the package: \code{package}
-\item the version of the package: \code{version}
-\item the name of the folder where the package was found: \code{cran_folder}
+\describe{
+\item{package}{package name}
+\item{version}{package version}
+\item{cran_folder}{folder where the package was found}
+\item{time}{date/time package was entered in the folder}
 }
 }
 \description{
@@ -30,16 +31,28 @@ When submitting a package to CRAN, it undergoes a series of checks before it
 is published and publicly available. \code{cran_incoming()} allows you to check
 the packages that are currently in the queue, and the folder where they are
 located. This information could help you track your package submission. Only
-the following folders are considered: \code{archive}, \code{inspect}, \code{noemail},
-\code{pending}, \code{pretest}, \code{publish}, \code{recheck}. The folders named after the
-initials of the CRAN volunteers are not inspected.
+the following folders are considered (approximately in order of the CRAN
+queue sequence): \code{inspect}, \code{pretest}, \code{recheck}, \code{pending}, \code{publish}, \code{archive}.
+The folders named after the initials of the CRAN volunteers are not inspected.
+}
+\note{
+The meaning of the package folders is as follows (see
+Hornik, Ligges and Zeileis \url{https://journal.r-project.org/archive/2018-1/cran.pdf}):
+\describe{
+\item{inspect}{package is awaiting manual inspection; always happens for first time submissions and for packages with problems that are likely to be false positives}
+\item{pretest}{a human has triggered a new auto-check of the package}
+\item{recheck}{package has passed checks and is waiting for reverse dependency checking}
+\item{pending}{CRAN's decision is waiting for a response from the package maintainer, e.g. when issues are present that CRAN cannot check for in the incoming checks}
+\item{publish}{package is awaiting publication}
+\item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
+}
 }
 \section{Disclaimer}{
 
 The information provided here is only to give you an indication of where
 your package stands in the submission process. It can be useful to confirm
 that your package has been correctly uploaded to CRAN. Please consult the
-\href{https://cran.r-project.org/web/packages/policies.html}{CRAN RepositoryPolicy} if you have
+\href{https://cran.r-project.org/web/packages/policies.html}{CRAN Repository Policy} if you have
 any questions.
 }
 
@@ -49,5 +62,11 @@ any questions.
   cran_incoming()
   ## if the package `foo` is in the queue, it will appear below
   cran_incoming(pkg = "foo")
+}
+}
+\references{
+\itemize{
+\item Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to 2018-06-30", R Journal 10(1), July 2018. \url{https://journal.r-project.org/archive/2018-1/cran.pdf}
+\item  Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo Gruson. "CRAN incoming dashboard", \url{https://cransays.itsalocke.com/articles/dashboard.html}
 }
 }
