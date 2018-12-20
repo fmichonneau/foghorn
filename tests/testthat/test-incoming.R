@@ -26,7 +26,6 @@ test_that("filtering works", {
 test_that("specifying folders works", {
     skip_on_cran()
     res <- cran_incoming(folders = "archive")
-    stop(str(res))
     expect_true(nrow(res) > 1 && all(res$cran_folder == "archive"))
     res2 <- cran_incoming(folders = c("inspect", "pending"))
     expect_true(nrow(res2) > 1 && all(res2$cran_folder %in% c("inspect", "pending")))
