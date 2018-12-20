@@ -113,6 +113,7 @@ cran_incoming <- function(pkg = NULL,
                                   "?passive=yes"),
                            pool = pool, done = success, fail = fail)
   }
+  res_qry <- curl::multi_run(pool = pool)
 
     ## check for errors
     if (res_qry$error > 0) {
