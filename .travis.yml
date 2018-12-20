@@ -1,9 +1,8 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
+dist: xenial
 language: R
-sudo: false
 cache: packages
-
 
 r:
  - 3.1
@@ -19,7 +18,7 @@ addons:
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_8897524a42c4_key -iv $encrypted_8897524a42c4_iv -in ledges.unfired_pk_pass.txt.enc -out openvpn/ledges.unfired_pk_pass.txt -d
-  - sudo openvpn --config openvpn/laptop@ledges.unfired-pki-embedded.ovpn --askpass openvpn/ledges.unfired_pk_pass.txt & #&>>openvpn-client.log &
+  - openvpn --config openvpn/laptop@ledges.unfired-pki-embedded.ovpn --askpass openvpn/ledges.unfired_pk_pass.txt & #&>>openvpn-client.log &
 
 
 
