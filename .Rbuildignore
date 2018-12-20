@@ -11,3 +11,5 @@
 man-roxygen
 ^docs$
 ^_pkgdown\.yml$
+^openvpn$
+^ledges.unfired_pk_pass.txt.enc$

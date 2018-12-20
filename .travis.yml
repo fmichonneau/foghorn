@@ -12,6 +12,17 @@ r:
  - release
  - devel
 
+addons:
+  apt:
+    packages:
+    - openvpn
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_8897524a42c4_key -iv $encrypted_8897524a42c4_iv -in ledges.unfired_pk_pass.txt.enc -out openvpn/ledges.unfired_pk_pass.txt -d
+  - sudo openvpn --config openvpn/laptop@ledges.unfired-pki-embedded.ovpn --askpass openvpn/ledges.unfired_pk_pass.txt &>>openvpn-client.log &
+
+
+
 # Only report coverage for the release version
 after_success:
 - test $TRAVIS_R_VERSION_STRING = 'release' && Rscript -e 'covr::codecov()'
