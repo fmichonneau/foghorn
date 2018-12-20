@@ -108,11 +108,11 @@ cran_incoming <- function(pkg = NULL,
         warning("Server returned error: ", res, call. = FALSE)
     }
 
-    for (sf in seq_along(sub_folders)) {
-        curl::curl_fetch_multi(paste0(cran_incoming_url,"/", sub_folders[sf]),
-                              pool = pool, done = success, fail = fail)
-    }
-    res_qry <- curl::multi_run(pool = pool)
+  for (sf in seq_along(sub_folders)) {
+    curl::curl_fetch_multi(paste0(cran_incoming_url,"/", sub_folders[sf],
+                                  "?passive=yes"),
+                           pool = pool, done = success, fail = fail)
+  }
 
     ## check for errors
     if (res_qry$error > 0) {
