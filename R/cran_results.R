@@ -1,34 +1,34 @@
 cran_results_web <- function(email, pkg, ...) {
-    res <- NULL
-    if (!is.null(email)) {
-        res_email <- read_cran_web_from_email(email, ...)
-        res <- cran_checks_table(res_email)
-        res <- add_other_issues(res, res_email)
-    }
-    if (!is.null(pkg)) {
-        res_pkg <- read_cran_web_from_pkg(pkg, ...)
-        tbl_pkg <- cran_checks_table(res_pkg)
-        res_pkg <- add_other_issues(tbl_pkg, res_pkg)
-        res <- rbind(res, res_pkg)
-    }
-    res
+  res <- NULL
+  if (!is.null(email)) {
+    res_email <- read_cran_web_from_email(email, ...)
+    res <- cran_checks_table(res_email)
+    res <- add_other_issues(res, res_email)
+  }
+  if (!is.null(pkg)) {
+    res_pkg <- read_cran_web_from_pkg(pkg, ...)
+    tbl_pkg <- cran_checks_table(res_pkg)
+    res_pkg <- add_other_issues(tbl_pkg, res_pkg)
+    res <- rbind(res, res_pkg)
+  }
+  res
 }
 
 
 cran_results_crandb <- function(email, pkg, ...) {
-    res <- NULL
-    if (!is.null(email)) {
-        res_email <- read_crandb_from_email(email, ...)
-        res <- cran_checks_table(res_email)
-        res <- add_other_issues_crandb(res)
-    }
-    if (!is.null(pkg)) {
-        res_pkg <- read_crandb_from_pkg(pkg, ...)
-        tbl_pkg <- cran_checks_table(res_pkg)
-        res_pkg <- add_other_issues_crandb(tbl_pkg)
-        res <- rbind(res_pkg, res)
-    }
-    res
+  res <- NULL
+  if (!is.null(email)) {
+    res_email <- read_crandb_from_email(email, ...)
+    res <- cran_checks_table(res_email)
+    res <- add_other_issues_crandb(res)
+  }
+  if (!is.null(pkg)) {
+    res_pkg <- read_crandb_from_pkg(pkg, ...)
+    tbl_pkg <- cran_checks_table(res_pkg)
+    res_pkg <- add_other_issues_crandb(tbl_pkg)
+    res <- rbind(res_pkg, res)
+  }
+  res
 }
 
 
@@ -60,25 +60,28 @@ cran_results_crandb <- function(email, pkg, ...) {
 cran_results <- function(email = NULL, pkg = NULL,
                          show = c("error", "fail", "warn", "note", "ok"),
                          src = c("website", "crandb"), ...) {
-    show <- tolower(show)
-    show <- match.arg(show, several.ok = TRUE)
-    show <- c("package", show, "has_other_issues")
+  show <- tolower(show)
+  show <- match.arg(show, several.ok = TRUE)
+  show <- c("package", show, "has_other_issues")
 
-    src <- match.arg(src, c("website", "crandb"))
+  src <- match.arg(src, c("website", "crandb"))
 
-    if (is.null(email) && is.null(pkg))
-        stop("You need to provide at least one value for ", sQuote("email"),
-             "or for ", sQuote("pkg"))
+  if (is.null(email) && is.null(pkg)) {
+    stop(
+      "You need to provide at least one value for ", sQuote("email"),
+      "or for ", sQuote("pkg")
+    )
+  }
 
-    if (identical(src, "website")) {
-        res <- cran_results_web(email, pkg, ...)
-    } else if (identical(src, "crandb")) {
-        res <- cran_results_crandb(email, pkg, ...)
-    }
-    res <- res[!duplicated(res$package), ]
-    res <- res[order(res$package), show]
-    class(res) <- c("cran_results", class(res))
-    res
+  if (identical(src, "website")) {
+    res <- cran_results_web(email, pkg, ...)
+  } else if (identical(src, "crandb")) {
+    res <- cran_results_crandb(email, pkg, ...)
+  }
+  res <- res[!duplicated(res$package), ]
+  res <- res[order(res$package), show]
+  class(res) <- c("cran_results", class(res))
+  res
 }
 
 
@@ -109,17 +112,17 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##' @importFrom clisymbols symbol
 ##' @export
 summary_cran_results <- function(email = NULL, pkg = NULL,
-                                compact = FALSE, print_ok = TRUE, ...) {
-    res_checks <- cran_results(email, pkg, ...)
-    summary(res_checks, compact = compact, print_ok = print_ok)
+                                 compact = FALSE, print_ok = TRUE, ...) {
+  res_checks <- cran_results(email, pkg, ...)
+  summary(res_checks, compact = compact, print_ok = print_ok)
 }
 
 ##' @param object an object created by \code{cran_results}
 ##' @export
 ##' @rdname summary_cran_results
 summary.cran_results <- function(object, compact = FALSE, print_ok = TRUE, ...) {
-    what <- c("ok", "error", "fail", "warn", "note", "has_other_issues")
-    lapply(what, function(x)
-        get_pkg_with_results(object, x, compact, print_ok))
-   invisible(object)
+  what <- c("ok", "error", "fail", "warn", "note", "has_other_issues")
+  lapply(what, function(x)
+    get_pkg_with_results(object, x, compact, print_ok))
+  invisible(object)
 }
