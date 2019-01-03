@@ -9,8 +9,8 @@
 summary_cran_results(email = NULL, pkg = NULL, compact = FALSE,
   print_ok = TRUE, ...)
 
-\method{summary}{cran_results}(object, compact = FALSE, print_ok = TRUE,
-  ...)
+\method{summary}{cran_results}(object, compact = FALSE,
+  print_ok = TRUE, ...)
 
 show_cran_results(...)
 }
