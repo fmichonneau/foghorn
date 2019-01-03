@@ -4,18 +4,18 @@ matrix:
   include:
     - os: linux
       dist: xenial
+      r:
+        - 3.1
+        - 3.2
+        - oldrel
+        - release
+        - devel
     - os: osx
+      r:
+        - release
 
 language: R
 cache: packages
-
-r:
- - 3.1
- - 3.2
- - oldrel
- - release
- - devel
-
 
 # Only report coverage for the release version
 after_success:
