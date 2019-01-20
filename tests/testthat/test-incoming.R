@@ -1,16 +1,8 @@
 context("Test `cran_incoming`")
 
-skip_on_linux_travis <- function() {
-  if (!identical(Sys.getenv("TRAVIS_OS_NAME"), "linux")) {
-    return(invisible(TRUE))
-  }
-  skip("On Travis Linux where the FTP connection doesn't work")
-}
-
-
 test_that("Documentation is correct", {
   skip_on_cran()
-  skip_on_linux_travis()
+  skip_on_travis()
 
   ## make sure all folders investigated are correct
   expect_silent(res <- cran_incoming())
@@ -27,7 +19,7 @@ test_that("only character strings are provided", {
 
 test_that("filtering works", {
   skip_on_cran()
-  skip_on_linux_travis()
+  skip_on_travis()
   res <- cran_incoming()
   pkg_test <- sample(res$package, 5L)
   res_test <- cran_incoming(pkg = pkg_test)
@@ -36,7 +28,7 @@ test_that("filtering works", {
 
 test_that("specifying folders works", {
   skip_on_cran()
-  skip_on_linux_travis()
+  skip_on_travis()
   res <- cran_incoming(folders = "archive")
   expect_true(nrow(res) > 1 && all(res$cran_folder == "archive"))
   res2 <- cran_incoming(folders = c("inspect", "pending"))
