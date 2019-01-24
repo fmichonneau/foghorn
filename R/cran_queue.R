@@ -34,13 +34,14 @@ parse_pkg <- function(pkg) {
 ##' the packages that are currently in the queue, and the folder where they are
 ##' located. This information could help you track your package submission. Only
 ##' the following folders are considered (approximately in order of the CRAN
-##' queue sequence): `inspect`, `pretest`, `recheck`, `pending`, `publish`, `archive`.
+##' queue sequence): `newbies`, `inspect`, `pretest`, `recheck`, `pending`, `publish`, `archive`.
 ##' The folders named after the initials of the CRAN volunteers are not inspected.
 ##'
 ##' @note
 ##' The meaning of the package folders is as follows (see
 ##' Hornik, Ligges and Zeileis \url{https://journal.r-project.org/archive/2018-1/cran.pdf}):
 ##' \describe{
+##' \item{newbies}{for first time submission; package will be manually inspected.}
 ##' \item{inspect}{package is awaiting manual inspection; always happens for first time submissions and for packages with problems that are likely to be false positives}
 ##' \item{pretest}{a human has triggered a new auto-check of the package}
 ##' \item{recheck}{package has passed checks and is waiting for reverse dependency checking}
@@ -85,11 +86,11 @@ parse_pkg <- function(pkg) {
 ##' @export
 ##' @md
 cran_incoming <- function(pkg = NULL,
-                          folders = c("inspect", "pretest", "recheck", "pending", "publish", "archive")) {
-  if (!is.null(pkg) &&
-    (!is.character(pkg) || any(is.na(pkg)))) {
-    stop(sQuote("pkg"), " must be a character vector.")
-  }
+                          folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive")) {
+    if (!is.null(pkg) &&
+        (!is.character(pkg) || any(is.na(pkg)))) {
+        stop(sQuote("pkg"), " must be a character vector.")
+    }
 
   folders <- match.arg(folders, several.ok = TRUE)
 
