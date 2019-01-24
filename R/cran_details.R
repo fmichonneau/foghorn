@@ -66,7 +66,20 @@ cran_details_from_web <- function(pkg, ...) {
       )
     }
   }, parsed, names(parsed), SIMPLIFY = FALSE)
+
   res <- do.call("rbind", all_p)
+
+  .iss <- tibble::tibble(
+    package = issue_test$package,
+    version = rep("", nrow(issue_test)),
+    result = issue_test$result,
+    check = issue_test$check,
+    flavors = issue_test$flavors,
+    n_flavors = NA_integer_,
+    message = issue_test$message
+  )
+
+  res <- rbind (res, .iss)
   tibble::as.tibble(res[order(res$package), ])
 }
 
