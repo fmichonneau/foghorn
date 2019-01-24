@@ -177,6 +177,19 @@ render_flavors <- function(x) {
   }
 }
 
+##' @param res output of cran_details()
+##' @return a tibble of packages that fail regular CRAN tests and/or that don't
+##'   have "Additional Issues"
+filter_pkg_not_ok <- function(res) {
+  res[res[["result"]] != "OK", ]
+}
+
+##' @param res output of cran_details()
+##' @return a  tibble of packages that pass all CRAN tests
+filter_pkg_ok <- function(res) {
+  not_ok <- filter_pkg_not_ok(res)
+  res[! res$package %in% not_ok$package, ]
+}
 
 ##' @param object an object created by \code{cran_details}
 ##' @param show_log Should the messages of the \dQuote{Check Details}
@@ -187,14 +200,16 @@ render_flavors <- function(x) {
 ##' @importFrom crayon green
 ##' @importFrom clisymbols symbol
 summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) {
-  res_ok <- object[object[["result"]] == "OK" & object[["n_flavors"]] == n_cran_platforms, ]
-  if (nrow(res_ok) > 0 && print_ok) {
+
+  res_ok <- filter_pkg_ok(object)
+
+  if (length(res_ok) > 0 && print_ok) {
     print_all_clear(res_ok[["package"]])
   }
 
-  res_others <- object[object[["result"]] != "OK", ]
+  res_not_ok <- filter_pkg_not_ok(object)
 
-  if (nrow(res_others) < 1) {
+  if (nrow(res_not_ok) < 1) {
     return(invisible(object))
   }
 
@@ -218,8 +233,8 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
         msg, "\n\n",
         sep = ""
       )
-    }, res_others$package, tolower(res_others$result), res_others$check,
-    res_others$flavors, res_others$message
+    }, res_not_ok$package, tolower(res_not_ok$result), res_not_ok$check,
+    res_not_ok$flavors, res_not_ok$message
   )
 
   invisible(object)
