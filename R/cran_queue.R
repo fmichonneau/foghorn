@@ -112,8 +112,7 @@ cran_incoming <- function(pkg = NULL,
 
   for (sf in seq_along(sub_folders)) {
     curl::curl_fetch_multi(paste0(
-      cran_incoming_url, "/", sub_folders[sf],
-      "?passive=yes"
+      cran_incoming_url, "/", sub_folders[sf]
     ),
     pool = pool, done = success, fail = fail
     )
