@@ -14,51 +14,87 @@ url_email_res <- function(email) {
   )
 }
 
-
 summary_maintainer_res <- function(res) {
-  ##      ## TODO
+    ##      ## TODO
 }
+
+clean_connection <- function(x) {
+    ss <- showConnections(all = TRUE)
+    cc <- as.numeric(rownames(ss)[ss[, 1] == x])
+    if (length(cc) > 0) on.exit(close(getConnection(cc)))
+}
+
+.internal_read_cran_web <- function(x) {
+    on.exit(clean_connection(x))
+    xml2::read_html(x)
+}
+
+retry_connect <- function(f, n_attempts = 3) {
+    res <- try(f, silent = TRUE)
+    attempts <- 0
+    pred <- inherits(res, "try-error")
+    if (grepl("404", res))
+        return(res)
+
+    while (pred && attempts <= n_attempts) {
+        Sys.sleep(exp(stats::runif(1) * attempts))
+        res <- try(f, silent = TRUE)
+        pred <- inherits(res, "try-error")
+        attempts <- attempts + 1
+    }
+
+    if (pred)
+        return(res)
+
+    res
+}
+
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet
 read_cran_web <- function(x) {
-  if (!curl::has_internet()) {
-    stop("No internet connection detected", call. = FALSE)
-  }
-  .res <- try(xml2::read_html(x), silent = TRUE)
-  if (inherits(.res, "try-error")) {
-    ## is there a cleaner way to do this ???
-    ss <- showConnections(all = TRUE)
-    cc <- as.numeric(rownames(ss)[ss[, 1] == x])
-    if (length(cc) > 0) on.exit(close(getConnection(cc)))
-    return(NA)
-  }
-  ## not sure whether we need to close connections ... ?
-  return(.res)
+    if (!curl::has_internet()) {
+        stop("No internet connection detected", call. = FALSE)
+    }
+    retry_connect(.internal_read_cran_web(x))
+}
+
+handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
+    if (length(bad <- grep("404", res)) > 0) {
+        stop(msg_404,
+             paste(sQuote(input[bad]), collapse = ", "),
+             ".",
+             call. = FALSE
+             )
+    }
+    if (length(bad <- which(vapply(res, inherits, logical(1), "try-error")))) {
+        stop(msg_other,
+             paste(sQuote(input[bad]), collapse = ", "), "\n",
+             "  ", res[[bad]], call. = FALSE)
+    }
+
 }
 
 read_cran_web_from_email <- function(email) {
-  url <- url_email_res(email)
-  res <- lapply(url, read_cran_web)
-  if (length(bad <- which(is.na(res))) > 0) {
-    stop("Invalid email address(es): ", paste(sQuote(email[bad]), collapse = ", "),
-      ".",
-      call. = FALSE
+    url <- url_email_res(email)
+    res <- lapply(url, read_cran_web)
+    handle_cran_web_issues(
+        email, res,
+        "Invalid email address(es): ",
+        "Something went wrong with getting data with email address(es): "
     )
-  }
-  class(res) <- c("cran_checks_email", class(res))
-  res
+    class(res) <- c("cran_checks_email", class(res))
+    res
 }
 
 read_cran_web_from_pkg <- function(pkg) {
   url <- url_pkg_res(pkg)
   res <- lapply(url, read_cran_web)
-  if (length(bad <- which(is.na(res))) > 0) {
-    stop("Invalid package name(s): ", paste(sQuote(pkg[bad]), collapse = ", "),
-      ".",
-      call. = FALSE
-    )
-  }
+  handle_cran_web_issues(
+      pkg, res,
+      "Invalid package name(s): ",
+      "Something went wrong with getting data for package name(s): "
+  )
   names(res) <- pkg
   class(res) <- c("cran_checks_pkg", class(res))
   res
