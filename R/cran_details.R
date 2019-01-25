@@ -216,7 +216,7 @@ summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) 
 
   res_ok <- filter_pkg_ok(object)
 
-  if (length(res_ok) > 0 && print_ok) {
+  if (nrow(res_ok) > 0 && print_ok) {
     print_all_clear(res_ok[["package"]])
   }
 
