@@ -14,9 +14,9 @@ url_email_res <- function(email) {
   )
 }
 
-summary_maintainer_res <- function(res) {
-    ##      ## TODO
-}
+## summary_maintainer_res <- function(res) {
+##    ##      ## TODO
+## }
 
 clean_connection <- function(x) {
     ss <- showConnections(all = TRUE)
@@ -33,19 +33,15 @@ retry_connect <- function(f, n_attempts = 3) {
     res <- try(f, silent = TRUE)
     attempts <- 0
     pred <- inherits(res, "try-error")
-    if (grepl("404", res))
-        return(res)
-
     while (pred && attempts <= n_attempts) {
+        message("attempt: ", attempts)
         Sys.sleep(exp(stats::runif(1) * attempts))
         res <- try(f, silent = TRUE)
         pred <- inherits(res, "try-error")
         attempts <- attempts + 1
     }
-
     if (pred)
         return(res)
-
     res
 }
 
