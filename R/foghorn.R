@@ -14,10 +14,6 @@ url_email_res <- function(email) {
   )
 }
 
-## summary_maintainer_res <- function(res) {
-##    ##      ## TODO
-## }
-
 clean_connection <- function(x) {
     ss <- showConnections(all = TRUE)
     cc <- as.numeric(rownames(ss)[ss[, 1] == x])

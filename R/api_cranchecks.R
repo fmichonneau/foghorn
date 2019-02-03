@@ -15,6 +15,12 @@ api_pkg_status <- function(pkg, ...) {
   do.call("rbind", res)
 }
 
+
+summary_maintainer_res <- function(res) {
+  ##      ## TODO
+}
+
+
 api_maintainer <- function(email, ...) {
   res <- lapply(email, function(e) {
     e <- convert_email_to_cran_format(email)
