@@ -15,77 +15,77 @@ url_email_res <- function(email) {
 }
 
 clean_connection <- function(x) {
-    ss <- showConnections(all = TRUE)
-    cc <- as.numeric(rownames(ss)[ss[, 1] == x])
-    if (length(cc) > 0) on.exit(close(getConnection(cc)))
+  ss <- showConnections(all = TRUE)
+  cc <- as.numeric(rownames(ss)[ss[, 1] == x])
+  if (length(cc) > 0) on.exit(close(getConnection(cc)))
 }
 
 .internal_read_cran_web <- function(x) {
-    on.exit(clean_connection(x))
-    xml2::read_html(x)
+  on.exit(clean_connection(x))
+  xml2::read_html(x)
 }
 
 retry_connect <- function(f, n_attempts = 3) {
+  res <- try(f, silent = TRUE)
+  attempts <- 0
+  pred <- inherits(res, "try-error")
+  while (pred && attempts <= n_attempts) {
+    message("attempt: ", attempts)
+    Sys.sleep(exp(stats::runif(1) * attempts))
     res <- try(f, silent = TRUE)
-    attempts <- 0
     pred <- inherits(res, "try-error")
-    while (pred && attempts <= n_attempts) {
-        message("attempt: ", attempts)
-        Sys.sleep(exp(stats::runif(1) * attempts))
-        res <- try(f, silent = TRUE)
-        pred <- inherits(res, "try-error")
-        attempts <- attempts + 1
-    }
-    if (pred)
-        return(res)
-    res
+    attempts <- attempts + 1
+  }
+  if (pred)
+    return(res)
+  res
 }
 
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet
 read_cran_web <- function(x) {
-    if (!curl::has_internet()) {
-        stop("No internet connection detected", call. = FALSE)
-    }
-    retry_connect(.internal_read_cran_web(x))
+  if (!curl::has_internet()) {
+    stop("No internet connection detected", call. = FALSE)
+  }
+  retry_connect(.internal_read_cran_web(x))
 }
 
 handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
-    if (length(bad <- grep("404", res)) > 0) {
-        stop(msg_404,
-             paste(sQuote(input[bad]), collapse = ", "),
-             ".",
-             call. = FALSE
-             )
-    }
-    if (length(bad <- which(vapply(res, inherits, logical(1), "try-error")))) {
-        stop(msg_other,
-             paste(sQuote(input[bad]), collapse = ", "), "\n",
-             "  ", res[[bad]], call. = FALSE)
-    }
+  if (length(bad <- grep("404", res)) > 0) {
+    stop(msg_404,
+      paste(sQuote(input[bad]), collapse = ", "),
+      ".",
+      call. = FALSE
+    )
+  }
+  if (length(bad <- which(vapply(res, inherits, logical(1), "try-error")))) {
+    stop(msg_other,
+      paste(sQuote(input[bad]), collapse = ", "), "\n",
+      "  ", res[[bad]], call. = FALSE)
+  }
 
 }
 
 read_cran_web_from_email <- function(email) {
-    url <- url_email_res(email)
-    res <- lapply(url, read_cran_web)
-    handle_cran_web_issues(
-        email, res,
-        "Invalid email address(es): ",
-        "Something went wrong with getting data with email address(es): "
-    )
-    class(res) <- c("cran_checks_email", class(res))
-    res
+  url <- url_email_res(email)
+  res <- lapply(url, read_cran_web)
+  handle_cran_web_issues(
+    email, res,
+    "Invalid email address(es): ",
+    "Something went wrong with getting data with email address(es): "
+  )
+  class(res) <- c("cran_checks_email", class(res))
+  res
 }
 
 read_cran_web_from_pkg <- function(pkg) {
   url <- url_pkg_res(pkg)
   res <- lapply(url, read_cran_web)
   handle_cran_web_issues(
-      pkg, res,
-      "Invalid package name(s): ",
-      "Something went wrong with getting data for package name(s): "
+    pkg, res,
+    "Invalid package name(s): ",
+    "Something went wrong with getting data for package name(s): "
   )
   names(res) <- pkg
   class(res) <- c("cran_checks_pkg", class(res))
@@ -193,9 +193,9 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
       sptr <- c("  - ", "\n")
     }
     res <- paste0(sptr[1], tbl_pkg$package[!is.na(tbl_pkg[[what]]) &
-      tbl_pkg[[what]] > 0],
-    n,
-    collapse = sptr[2]
+                                             tbl_pkg[[what]] > 0],
+      n,
+      collapse = sptr[2]
     )
   } else {
     res <- NULL
@@ -204,10 +204,10 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
 }
 
 print_summary_cran <- function(type = c(
-                                 "ok", "error", "fail", "warn",
-                                 "note", "has_other_issues"
-                               ),
-                               pkgs, compact) {
+  "ok", "error", "fail", "warn",
+  "note", "has_other_issues"
+),
+pkgs, compact) {
   if (is.null(pkgs)) {
     return(NULL)
   }
