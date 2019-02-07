@@ -2,15 +2,22 @@
 ## As of 2017-11-23, 12 platforms listed https://cran.r-project.org/web/checks/check_flavors.html
 n_cran_platforms <- 12L
 
+cran_url <- function(protocol = "https") {
+    if (identical(protocol, "ftp"))
+        return("ftp://cran.r-project.org")
+
+    paste0(protocol, "://cran.rstudio.com/")
+}
+
 url_pkg_res <- function(pkg) {
-  paste0("https://cran.r-project.org/web/checks/check_results_", pkg, ".html")
+    paste0(cran_url(), "/web/checks/check_results_", pkg, ".html")
 }
 
 url_email_res <- function(email) {
   email <- convert_email_to_cran_format(email)
   paste0(
-    "https://cran.r-project.org/web/checks/check_results_",
-    email, ".html"
+      cran_url(), "/web/checks/check_results_",
+      email, ".html"
   )
 }
 

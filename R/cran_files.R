@@ -75,7 +75,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
   if (!(file.exists(dest_file) &&
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
     overwrite) {
-    cran_url <- paste0(protocol, "://cran.r-project.org/", is_ftp, "web/checks/", file)
+    cran_url <- paste0(cran_url(protocol), is_ftp, "web/checks/", file)
     pb <- progress_multi(
       i = 1, labels = list(paste("Downloading", file)), count = FALSE,
       progress = requireNamespace("progress", quietly = TRUE)
