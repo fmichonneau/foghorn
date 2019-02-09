@@ -3,10 +3,18 @@
 n_cran_platforms <- 12L
 
 cran_url <- function(protocol = "https") {
+    protocol <- match.arg(protocol, c("https", "http", "ftp"))
     if (identical(protocol, "ftp"))
         return("ftp://cran.r-project.org")
 
-    paste0(protocol, "://cran.rstudio.com/")
+    mirror <- getOption("repos")[["CRAN"]][1]
+
+    if(is.na(mirror) || identical(mirror, "@CRAN@"))
+        mirror <- "://cloud.r-project.org"
+    else
+        mirror <- paste0("://", xml2::url_parse(mirror)[["server"]])
+
+    paste0(protocol, mirror)
 }
 
 url_pkg_res <- function(pkg) {
