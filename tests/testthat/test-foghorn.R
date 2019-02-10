@@ -50,6 +50,27 @@ validate_cran_details <- function(x) {
     ))
 }
 
+## retrieves the number of CRAN flavors
+validate_n_flavors <- function() {
+    cran_flavors <- try(
+        xml2::read_html("https://cran.rstudio.org/web/checks/check_flavors.html"),
+        silent = TRUE)
+    if (inherits(cran_flavors, "try-error")) {
+        warning("Can't connect to check number of flavors. Using hardcoded value.")
+        return(12L)
+    }
+
+    cran_flvr_tbl <- rvest::html_node("table") %>%
+        rvest::html_table()
+
+    nrow(cran_flvr_tbl)
+}
+
+test_that("foghorn uses the accurate number of CRAN flavors", {
+    skip_on_cran()
+    expect_true(identical(validate_n_flavors(), 12L))
+})
+
 test_that("at least email or package name specified (website)", {
   expect_error(cran_results(), "provide at least one value for")
 })
