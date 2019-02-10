@@ -45,7 +45,7 @@ retry_connect <- function(f, n_attempts = 3) {
   attempts <- 0
   pred <- inherits(res, "try-error")
 
-  if (pred && grepl("404", res)) {
+  if (pred && grepl("HTTP error 404", res)) {
     return(res)
   }
 
@@ -70,7 +70,7 @@ read_cran_web <- function(x) {
 }
 
 handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
-  if (length(bad <- grep("404", res)) > 0) {
+  if (length(bad <- grep("HTTP error 404", res)) > 0) {
     stop(msg_404,
       paste(sQuote(input[bad]), collapse = ", "),
       ".\n", "Original error: ", sQuote(res[bad]),
