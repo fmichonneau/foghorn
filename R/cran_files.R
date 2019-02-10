@@ -69,26 +69,26 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
                                 overwrite = FALSE, file_prefix = NULL, ...) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
-  is_ftp <- if (identical(protocol, "ftp")) "pub/R/" else character(0)
+  is_ftp <- if (identical(protocol, "ftp")) "/pub/R/" else character(0)
   file <- paste0("check_", file, ".rds")
   dest_file <- file.path(dest, paste0(file_prefix, file))
   if (!(file.exists(dest_file) &&
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
-    overwrite) {
-    cran_url <- paste0(cran_url(protocol), is_ftp, "web/checks/", file)
+      overwrite) {
+    file_cran_url <- paste0(cran_url(protocol), is_ftp, "/web/checks/", file)
     pb <- progress_multi(
       i = 1, labels = list(paste("Downloading", file)), count = FALSE,
       progress = requireNamespace("progress", quietly = TRUE)
     )
     d_status <- httr::GET(
-      url = cran_url,
+      url = file_cran_url,
       httr::write_disk(dest_file, overwrite = overwrite),
       httr::config(progressfunction = if (interactive()) pb$callback), ...
     )
 
     if (!identical(httr::status_code(d_status), 200L)) {
       unlink(dest_file)
-      stop("Can't get ", cran_url, " (status code: ", httr::status_code(d_status), ")", call. = FALSE)
+      stop("Can't get ", file_cran_url, " (status code: ", httr::status_code(d_status), ")", call. = FALSE)
     }
   }
   invisible(dest_file)
