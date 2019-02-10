@@ -44,8 +44,8 @@ retry_connect <- function(f, n_attempts = 3) {
   res <- try(f, silent = TRUE)
   attempts <- 0
   pred <- inherits(res, "try-error")
-  while (pred && attempts <= n_attempts) {
-    message("attempt: ", attempts)
+
+  while (pred && attempts < n_attempts) {
     Sys.sleep(exp(stats::runif(1) * attempts))
     res <- try(f, silent = TRUE)
     pred <- inherits(res, "try-error")
