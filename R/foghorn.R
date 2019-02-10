@@ -73,7 +73,7 @@ handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
   if (length(bad <- grep("404", res)) > 0) {
     stop(msg_404,
       paste(sQuote(input[bad]), collapse = ", "),
-      ".",
+      ".\n", "Original error: ", sQuote(res[bad]),
       call. = FALSE
     )
   }
