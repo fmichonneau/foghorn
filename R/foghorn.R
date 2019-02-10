@@ -55,8 +55,7 @@ retry_connect <- function(f, n_attempts = 3) {
     pred <- inherits(res, "try-error")
     attempts <- attempts + 1
   }
-  if (pred)
-    return(res)
+
   res
 }
 
