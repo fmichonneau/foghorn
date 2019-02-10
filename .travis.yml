@@ -23,6 +23,14 @@ matrix:
 language: R
 cache: packages
 
+before_install:
+  before_install:
+    - curl -OLs https://eddelbuettel.github.io/r-travis/run.sh && chmod 0755 run.sh
+
+after_failure:
+  - ./run.sh dump_logs
+
+
 # Only report coverage for the release version
 after_success:
 - test $TRAVIS_R_VERSION_STRING = 'release' && Rscript -e 'covr::codecov()'
