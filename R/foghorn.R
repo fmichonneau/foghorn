@@ -45,6 +45,10 @@ retry_connect <- function(f, n_attempts = 3) {
   attempts <- 0
   pred <- inherits(res, "try-error")
 
+  if (pred && grepl("404", res)) {
+    return(res)
+  }
+
   while (pred && attempts < n_attempts) {
     Sys.sleep(exp(stats::runif(1) * attempts))
     res <- try(f, silent = TRUE)
