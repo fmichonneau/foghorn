@@ -1,6 +1,6 @@
 Package: foghorn
 Title: Summarize CRAN Check Results in the Terminal
-Version: 1.0.2.902
+Version: 1.1.0
 Authors@R: c(person("Francois", "Michonneau", role=c("aut", "cre"),
                     email="francois.michonneau@gmail.com"),
              person("Ben", "Bolker", role="ctb"))
