@@ -1,3 +1,26 @@
+# v1.1.0
+
+## New features
+
+* The output of `cran_incoming` now includes the date/time (contribution by
+  @bbolker, #30)
+* `foghorn` respects the CRAN mirror set by the users instead of using
+  `https://cran.r-project.org`.
+* When a failure (other than 404) occurs while trying to obtain the data for a
+  package, `foghorn` will retry up to three times.
+
+
+## Bug fixes
+
+* `foghorn` would, in some cases, return that a valid package name published on
+  CRAN did not exit (#29, @zkamvar).
+* The recent `newbies` folder found on the CRAN FTP incoming server has been
+  added to the list of places to check packages in CRAN's submisison queue
+  (#32).
+* When a package only had "additional issues", the summary functions would
+  report that everything was clear (#33, @coatless)
+
+
 # v1.0.2
 
 ## New features
