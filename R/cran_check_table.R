@@ -37,7 +37,7 @@ process_cran_table <- function(tbl) {
   ctbl <- stats::reshape(ctbl,
     idvar = c("package"),
     timevar = "status", direction = "wide",
-    v.name = "Freq"
+    v.names = "Freq"
   )
   names(ctbl) <- gsub("Freq\\.", "", names(ctbl))
   names(ctbl) <- tolower(names(ctbl))
