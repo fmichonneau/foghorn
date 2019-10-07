@@ -4,9 +4,6 @@ matrix:
   include:
     - os: linux
       dist: xenial
-      r: 3.1
-    - os: linux
-      dist: xenial
       r: 3.2
     - os: linux
       dist: xenial
@@ -22,13 +19,6 @@ matrix:
 
 language: R
 cache: packages
-
-before_install:
-  - curl -OLs https://eddelbuettel.github.io/r-travis/run.sh && chmod 0755 run.sh
-
-after_failure:
-  - ./run.sh dump_logs
-
 
 # Only report coverage for the release version
 after_success:
