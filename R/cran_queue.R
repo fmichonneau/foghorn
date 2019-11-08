@@ -1,5 +1,7 @@
 parse_cran_incoming <- function(res) {
-  if (length(res$content) == 0) return(NULL)
+  if (length(res$content) == 0) {
+    return(NULL)
+  }
   rr <- read.table(
     text = rawToChar(res$content),
     stringsAsFactors = FALSE
@@ -34,8 +36,9 @@ parse_pkg <- function(pkg) {
 ##' the packages that are currently in the queue, and the folder where they are
 ##' located. This information could help you track your package submission. Only
 ##' the following folders are considered (approximately in order of the CRAN
-##' queue sequence): `newbies`, `inspect`, `pretest`, `recheck`, `pending`, `waiting`, `publish`, `archive`.
-##' The folders named after the initials of the CRAN volunteers are not inspected.
+##' queue sequence): `newbies`, `inspect`, `pretest`, `recheck`, `pending`,
+##' `waiting`, `publish`, `archive`. The folders named after the initials of the
+##' CRAN volunteers are not inspected.
 ##'
 ##' @note
 ##' The meaning of the package folders is as follows
@@ -87,11 +90,11 @@ parse_pkg <- function(pkg) {
 ##' @export
 ##' @md
 cran_incoming <- function(pkg = NULL,
-                          folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive")) {
-    if (!is.null(pkg) &&
-        (!is.character(pkg) || any(is.na(pkg)))) {
-        stop(sQuote("pkg"), " must be a character vector.")
-    }
+                          folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive", "waiting")) {
+  if (!is.null(pkg) &&
+    (!is.character(pkg) || any(is.na(pkg)))) {
+    stop(sQuote("pkg"), " must be a character vector.")
+  }
 
   folders <- match.arg(folders, several.ok = TRUE)
 
