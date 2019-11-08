@@ -12,3 +12,4 @@
 man-roxygen
 ^docs$
 ^_pkgdown\.yml$
+^.pre-commit-config.yaml$
