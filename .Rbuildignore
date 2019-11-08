@@ -14,3 +14,4 @@ man-roxygen
 ^_pkgdown\.yml$
 ^.pre-commit-config.yaml$
 ^pkgdown$
+^CRAN-RELEASE$
