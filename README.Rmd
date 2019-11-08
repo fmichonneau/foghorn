@@ -81,11 +81,15 @@ summary_cran_results(pkg = c("ggplot2", "dplyr"))
 cran_results(pkg = c("ggplot2", "dplyr"))
 
 ## or by combining them with email addresses
-summary_cran_results(email = "francois.michonneau@gmail.com",
-                     pkg = c("mregions", "ridigbio"))
+summary_cran_results(
+  email = "francois.michonneau@gmail.com",
+  pkg = c("mregions", "ridigbio")
+)
 
-cran_results(email = "francois.michonneau@gmail.com",
-              pkg = c("mregions", "ridigbio"))
+cran_results(
+  email = "francois.michonneau@gmail.com",
+  pkg = c("mregions", "ridigbio")
+)
 ```
 
 You can inspect the logs for the check results using
@@ -106,7 +110,7 @@ packages, using the CRAN database is recommended (it's about 20Mb of data). To
 use the CRAN database, add `src = "crandb"` in your function calls:
 
 ```{r show-cran-db}
-cran_results(pkg = "nlme", src = "crandb")
+cran_results(pkg = "nlme", src = "crandb", progress = FALSE)
 ```
 
 Check out the "Details" section in the help files for more information.
@@ -122,5 +126,5 @@ GitHub.
 ## Code of Conduct
 
 Please note that this project is released with
-a [Contributor Code of Conduct](CONDUCT.md). By participating in this project
+a [Contributor Code of Conduct](https://fmichonneau.github.io/foghorn/CODE_OF_CONDUCT.html). By participating in this project
 you agree to abide by its terms.
