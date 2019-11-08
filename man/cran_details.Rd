@@ -8,11 +8,15 @@
 \usage{
 cran_details(pkg, src = c("website", "crandb"), ...)
 
-\method{summary}{cran_details}(object, show_log = TRUE,
-  print_ok = TRUE, ...)
+\method{summary}{cran_details}(object, show_log = TRUE, print_ok = TRUE, ...)
 
-summary_cran_details(pkg, src = c("website", "crandb"),
-  show_log = TRUE, print_ok = TRUE, ...)
+summary_cran_details(
+  pkg,
+  src = c("website", "crandb"),
+  show_log = TRUE,
+  print_ok = TRUE,
+  ...
+)
 }
 \arguments{
 \item{pkg}{character vector of the names for the packages on CRAN}

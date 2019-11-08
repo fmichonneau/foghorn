@@ -3,7 +3,6 @@
 \docType{package}
 \name{foghorn}
 \alias{foghorn}
-\alias{foghorn-package}
 \title{CRAN check results at the terminal}
 \description{
 \code{foghorn} brings the results of the CRAN checks into your R

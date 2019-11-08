@@ -4,8 +4,13 @@
 \alias{cran_results}
 \title{Table of the CRAN check results}
 \usage{
-cran_results(email = NULL, pkg = NULL, show = c("error", "fail",
-  "warn", "note", "ok"), src = c("website", "crandb"), ...)
+cran_results(
+  email = NULL,
+  pkg = NULL,
+  show = c("error", "fail", "warn", "note", "ok"),
+  src = c("website", "crandb"),
+  ...
+)
 }
 \arguments{
 \item{email}{email address for package maintainers (character
