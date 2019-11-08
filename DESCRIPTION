@@ -1,10 +1,18 @@
 Package: foghorn
 Title: Summarize CRAN Check Results in the Terminal
-Version: 1.1.0
-Authors@R: c(person("Francois", "Michonneau", role=c("aut", "cre"),
-                    email="francois.michonneau@gmail.com"),
-             person("Ben", "Bolker", role="ctb"))
+Version: 1.1.1
+Authors@R: 
+    c(person(given = "Francois",
+             family = "Michonneau",
+             role = c("aut", "cre"),
+             email = "francois.michonneau@gmail.com"),
+      person(given = "Ben",
+             family = "Bolker",
+             role = "ctb"))
 Description: The CRAN check results in your R terminal.
+License: MIT + file LICENSE
+URL: https://github.com/fmichonneau/foghorn
+BugReports: https://github.com/fmichonneau/foghorn/issues
 Depends:
     R (>= 3.1.0)
 Imports:
@@ -16,17 +24,15 @@ Imports:
     rvest (>= 0.3.2),
     tibble (>= 1.2),
     xml2 (>= 1.0.0)
-License: MIT + file LICENSE
+Suggests:
+    covr,
+    dplyr,
+    knitr,
+    progress,
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
-URL: https://github.com/fmichonneau/foghorn
-BugReports: https://github.com/fmichonneau/foghorn/issues
-Suggests:
-    progress,
-    testthat,
-    covr,
-    knitr,
-    rmarkdown,
-    dplyr
-VignetteBuilder: knitr
+RoxygenNote: 6.1.99.9001
