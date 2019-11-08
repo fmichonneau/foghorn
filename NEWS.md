@@ -33,7 +33,7 @@
 * `foghorn` would, in some cases, return that a valid package name published on
   CRAN did not exit (#29, @zkamvar).
 * The recent `newbies` folder found on the CRAN FTP incoming server has been
-  added to the list of places to check packages in CRAN's submisison queue
+  added to the list of places to check packages in CRAN's submissison queue
   (#32).
 * When a package only had "additional issues", the summary functions would
   report that everything was clear (#33, @coatless)
