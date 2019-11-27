@@ -1,31 +1,33 @@
 ## maximum number of CRAN check results that can be expected.
 ## As of 2017-11-23, 12 platforms listed https://cran.r-project.org/web/checks/check_flavors.html
-n_cran_platforms <- 12L
+n_cran_platforms <- 13L
 
 cran_url <- function(protocol = "https") {
-    protocol <- match.arg(protocol, c("https", "http", "ftp"))
-    if (identical(protocol, "ftp"))
-        return("ftp://cran.r-project.org")
+  protocol <- match.arg(protocol, c("https", "http", "ftp"))
+  if (identical(protocol, "ftp")) {
+    return("ftp://cran.r-project.org")
+  }
 
-    mirror <- getOption("repos")[["CRAN"]][1]
+  mirror <- getOption("repos")[["CRAN"]][1]
 
-    if(is.na(mirror) || identical(mirror, "@CRAN@"))
-        mirror <- "://cloud.r-project.org"
-    else
-        mirror <- paste0("://", xml2::url_parse(mirror)[["server"]])
+  if (is.na(mirror) || identical(mirror, "@CRAN@")) {
+    mirror <- "://cloud.r-project.org"
+  } else {
+    mirror <- paste0("://", xml2::url_parse(mirror)[["server"]])
+  }
 
-    paste0(protocol, mirror)
+  paste0(protocol, mirror)
 }
 
 url_pkg_res <- function(pkg) {
-    paste0(cran_url(), "/web/checks/check_results_", pkg, ".html")
+  paste0(cran_url(), "/web/checks/check_results_", pkg, ".html")
 }
 
 url_email_res <- function(email) {
   email <- convert_email_to_cran_format(email)
   paste0(
-      cran_url(), "/web/checks/check_results_",
-      email, ".html"
+    cran_url(), "/web/checks/check_results_",
+    email, ".html"
   )
 }
 
@@ -80,9 +82,10 @@ handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
   if (length(bad <- which(vapply(res, inherits, logical(1), "try-error")))) {
     stop(msg_other,
       paste(sQuote(input[bad]), collapse = ", "), "\n",
-      "  ", res[[bad]], call. = FALSE)
+      "  ", res[[bad]],
+      call. = FALSE
+    )
   }
-
 }
 
 read_cran_web_from_email <- function(email) {
@@ -161,7 +164,9 @@ has_other_issues <- function(parsed, ...) {
     all_urls <- xml2::xml_text(all_urls)
     with_issue <- grep("check_issue_kinds", all_urls, value = TRUE)
     pkg_with_issue <- unique(basename(with_issue))
-    if (length(pkg_with_issue) == 0) return(NULL)
+    if (length(pkg_with_issue) == 0) {
+      return(NULL)
+    }
     TRUE
   })
   pkg_with_issue <- unlist(pkg_with_issue)
@@ -211,9 +216,9 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
       sptr <- c("  - ", "\n")
     }
     res <- paste0(sptr[1], tbl_pkg$package[!is.na(tbl_pkg[[what]]) &
-                                             tbl_pkg[[what]] > 0],
-      n,
-      collapse = sptr[2]
+      tbl_pkg[[what]] > 0],
+    n,
+    collapse = sptr[2]
     )
   } else {
     res <- NULL
@@ -222,10 +227,10 @@ get_pkg_with_results <- function(tbl_pkg, what, compact = FALSE, print_ok, ...) 
 }
 
 print_summary_cran <- function(type = c(
-  "ok", "error", "fail", "warn",
-  "note", "has_other_issues"
-),
-pkgs, compact) {
+                                 "ok", "error", "fail", "warn",
+                                 "note", "has_other_issues"
+                               ),
+                               pkgs, compact) {
   if (is.null(pkgs)) {
     return(NULL)
   }

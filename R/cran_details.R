@@ -79,7 +79,7 @@ cran_details_from_web <- function(pkg, ...) {
     message = issue_test$message
   )
 
-  res <- rbind (res, .iss)
+  res <- rbind(res, .iss)
   tibble::as.tibble(res[order(res$package), ])
 }
 
@@ -190,18 +190,27 @@ render_flavors <- function(x) {
   }
 }
 
-##' @param res output of cran_details()
-##' @return a tibble of packages that fail regular CRAN tests and/or that don't
-##'   have "Additional Issues"
+## @title Keep packages that have issues
+##
+## Only keeps the packages that have issues
+##
+## @param res output of cran_details()
+## @return a tibble of packages that fail regular CRAN tests and/or that don't
+##   have "Additional Issues"
 filter_pkg_not_ok <- function(res) {
   res[res[["result"]] != "OK", ]
 }
 
-##' @param res output of cran_details()
-##' @return a  tibble of packages that pass all CRAN tests
+
+## @title Keep the packages that have no issues
+##
+## Only keep the packages that have no issues.
+##
+## @param res output of cran_details()
+## @return a  tibble of packages that pass all CRAN tests
 filter_pkg_ok <- function(res) {
   not_ok <- filter_pkg_not_ok(res)
-  res[! res$package %in% not_ok$package, ]
+  res[!res$package %in% not_ok$package, ]
 }
 
 ##' @param object an object created by \code{cran_details}
@@ -213,7 +222,6 @@ filter_pkg_ok <- function(res) {
 ##' @importFrom crayon green
 ##' @importFrom clisymbols symbol
 summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) {
-
   res_ok <- filter_pkg_ok(object)
 
   if (nrow(res_ok) > 0 && print_ok) {
