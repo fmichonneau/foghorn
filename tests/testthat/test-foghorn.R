@@ -356,7 +356,7 @@ test_that("output of cran_details", {
   while (length(pkg_with_ok) < 1) {
     pkg_with_ok <- cran_res %>%
       dplyr::count(package, status) %>%
-      dplyr::filter(status == "OK" & n == 12) %>%
+      dplyr::filter(status == "OK" & n == 13L) %>%
       dplyr::sample_n(5) %>%
       dplyr::pull(package)
     pkg_with_ok <- setdiff(pkg_with_ok, cran_issues$package)
@@ -419,8 +419,8 @@ context("non-skipped tests")
 test_that("check output for MASS", {
   if (curl::has_internet()) {
     res <- cran_results(pkg = "MASS")
-    validate_cran_results(res)
+    expect_true(validate_cran_results(res))
     res <- cran_results(pkg = "MASS", src = "crandb")
-    validate_cran_results(res)
+    expect_true(validate_cran_results(res))
   }
 })

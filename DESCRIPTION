@@ -1,6 +1,6 @@
 Package: foghorn
 Title: Summarize CRAN Check Results in the Terminal
-Version: 1.1.3.9000
+Version: 1.1.4
 Authors@R: 
     c(person(given = "Francois",
              family = "Michonneau",
@@ -9,7 +9,8 @@ Authors@R:
       person(given = "Ben",
              family = "Bolker",
              role = "ctb"))
-Description: The CRAN check results in your R terminal.
+Description: The CRAN check results and where your package stands in the
+    CRAN submission queue in your R terminal.
 License: MIT + file LICENSE
 URL: https://github.com/fmichonneau/foghorn
 BugReports: https://github.com/fmichonneau/foghorn/issues
