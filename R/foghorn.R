@@ -113,7 +113,7 @@ read_cran_web_from_pkg <- function(pkg) {
   res
 }
 
-##' @importFrom tibble as.tibble
+##' @importFrom tibble as_tibble
 get_cran_table <- function(parsed, ...) {
   res <- lapply(parsed, function(x) {
     tbl <- rvest::html_table(x)[[1]]
@@ -125,7 +125,7 @@ get_cran_table <- function(parsed, ...) {
   pkg_col <- rep(names(res), vapply(res, nrow, integer(1)))
   res <- do.call("rbind", res)
   res <- cbind(package = pkg_col, res, stringsAsFactors = FALSE)
-  tibble::as.tibble(res)
+  tibble::as_tibble(res)
 }
 
 
@@ -177,7 +177,7 @@ has_other_issues <- function(parsed, ...) {
 ##' @importFrom tibble tibble
 add_other_issues <- function(tbl, parsed, ...) {
   other_issues <- has_other_issues(parsed)
-  tibble::as.tibble(merge(tbl, other_issues, by = "package"))
+  tibble::as_tibble(merge(tbl, other_issues, by = "package"))
 }
 
 print_all_clear <- function(pkgs) {

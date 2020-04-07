@@ -17,7 +17,7 @@ has_other_issues_details <- function(parsed, ...) {
   pkgs <- rep(unlist(pkg), vapply(res, function(x) nrow(x) %||% 0L, integer(1)))
   res <- do.call("rbind", res)
   res <- cbind(package = pkgs, res, stringsAsFactors = FALSE)
-  tibble::as.tibble(res)
+  tibble::as_tibble(res)
 }
 
 
@@ -80,7 +80,7 @@ cran_details_from_web <- function(pkg, ...) {
   )
 
   res <- rbind(res, .iss)
-  tibble::as.tibble(res[order(res$package), ])
+  tibble::as_tibble(res[order(res$package), ])
 }
 
 
@@ -128,7 +128,7 @@ cran_details_from_crandb <- function(pkg, ...) {
   .res$check <- replace(.res$check, .res$check == "*", "")
 
   issues <- issues[issues[["package"]] %in% pkg, ]
-  issues <- tibble::as.tibble(issues)
+  issues <- tibble::as_tibble(issues)
 
   .iss <- tibble::tibble(
     package = as.character(issues$package),
