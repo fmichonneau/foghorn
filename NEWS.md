@@ -1,3 +1,7 @@
+# v1.1.5
+
+* internally replaced `as.tibble` with `as_tibble`
+
 # v1.1.4
 
 * The number of CRAN check flavors is now 13. Code and tests have been adjusted
