@@ -37,14 +37,14 @@ the CRAN servers (see Details section).}
 }
 \value{
 Prints the packages that return errors, warnings, and
-    notes on the CRAN platforms. The number in parenthesis after
-    the name of the packages indicates the number of CRAN
-    platforms that produce these results.
+notes on the CRAN flavors. The number in parenthesis after
+the name of the packages indicates the number of CRAN
+flavors that produce these results.
 }
 \description{
 Given the email address of a package maintainer, and/or a vector
 of package names, it displays at the console a summary of the
-check results run on the CRAN platforms. This function is designed
+check results run on the CRAN flavors. This function is designed
 to be included in your .Rprofile to be run (periodically) at start
 up.
 }

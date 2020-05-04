@@ -40,8 +40,8 @@ message for package(s) that have an OK status for all CRAN checks.}
 }
 \value{
 a \code{tibble} listing the names of the packages that have non- OK
-    check results, the nature of the result (\code{WARN}, \code{ERROR},
-    \code{FAIL}, \code{NOTE}, or other issues).
+check results, the nature of the result (\code{WARN}, \code{ERROR},
+\code{FAIL}, \code{NOTE}, or other issues).
 }
 \description{
 Given the names of packages published on CRAN, return the output of
@@ -66,25 +66,25 @@ following options:
 
 \itemize{
 
-  \item {dest} { a folder where to store the RDS files (\code{tempdir()}
-                 by default).}
+\item {dest} { a folder where to store the RDS files (\code{tempdir()}
+by default).}
 
-  \item {protocol} { either \code{https} (default) or \code{http}. }
+\item {protocol} { either \code{https} (default) or \code{http}. }
 
-  \item {overwrite} { when \code{FALSE} (default), if the file exists in
-                      \code{dest} then it will not be downloaded again.
-                      When \code{TRUE} the file gets downloaded everytime
-                      it's needed.}
+\item {overwrite} { when \code{FALSE} (default), if the file exists in
+\code{dest} then it will not be downloaded again.
+When \code{TRUE} the file gets downloaded everytime
+it's needed.}
 
-  \item {...} { additional arguments that will be passed to
-                \code{\link[httr]{GET}} function to control how
-                the file will be downloaded.}
+\item {...} { additional arguments that will be passed to
+\code{\link[httr]{GET}} function to control how
+the file will be downloaded.}
 }
 }
 \seealso{
 Note that the \code{tools} package contains unexported
-    functions that can be used to extract summary information from
-    the check results. Specifically
-    \code{tools:::sumarize_CRAN_check_status} is similar to
-    \code{show_cran_results}.
+functions that can be used to extract summary information from
+the check results. Specifically
+\code{tools:::sumarize_CRAN_check_status} is similar to
+\code{show_cran_results}.
 }

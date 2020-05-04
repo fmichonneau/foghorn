@@ -390,7 +390,7 @@ test_that("output of cran_details", {
   while (length(pkg_with_ok) < 1) {
     pkg_with_ok <- cran_res %>%
       dplyr::count(package, status) %>%
-      dplyr::filter(status == "OK" & n == foghorn::n_cran_platforms) %>%
+      dplyr::filter(status == "OK" & n == n_cran_flavors()) %>%
       dplyr::sample_n(5) %>%
       dplyr::pull(package)
     pkg_with_ok <- setdiff(pkg_with_ok, cran_issues$package)

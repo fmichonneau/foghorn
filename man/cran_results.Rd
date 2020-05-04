@@ -31,8 +31,8 @@ check results are coming from and how they are downloaded from
 the CRAN servers (see Details section).}
 }
 \value{
-a data frame that tabulates the number of CRAN platforms
-    that return errors, warnings, notes, or OK for the packages.
+a data frame that tabulates the number of CRAN flavors
+that return errors, warnings, notes, or OK for the packages.
 }
 \description{
 Make a table that summarizes the results of the CRAN checks for a
@@ -61,19 +61,19 @@ following options:
 
 \itemize{
 
-  \item {dest} { a folder where to store the RDS files (\code{tempdir()}
-                 by default).}
+\item {dest} { a folder where to store the RDS files (\code{tempdir()}
+by default).}
 
-  \item {protocol} { either \code{https} (default) or \code{http}. }
+\item {protocol} { either \code{https} (default) or \code{http}. }
 
-  \item {overwrite} { when \code{FALSE} (default), if the file exists in
-                      \code{dest} then it will not be downloaded again.
-                      When \code{TRUE} the file gets downloaded everytime
-                      it's needed.}
+\item {overwrite} { when \code{FALSE} (default), if the file exists in
+\code{dest} then it will not be downloaded again.
+When \code{TRUE} the file gets downloaded everytime
+it's needed.}
 
-  \item {...} { additional arguments that will be passed to
-                \code{\link[httr]{GET}} function to control how
-                the file will be downloaded.}
+\item {...} { additional arguments that will be passed to
+\code{\link[httr]{GET}} function to control how
+the file will be downloaded.}
 }
 }
 \examples{
@@ -83,8 +83,8 @@ following options:
 }
 \seealso{
 Note that the \code{tools} package contains unexported
-    functions that can be used to extract summary information from
-    the check results. Specifically
-    \code{tools:::sumarize_CRAN_check_status} is similar to
-    \code{show_cran_results}.
+functions that can be used to extract summary information from
+the check results. Specifically
+\code{tools:::sumarize_CRAN_check_status} is similar to
+\code{show_cran_results}.
 }

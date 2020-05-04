@@ -51,7 +51,7 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##' @template src
 ##' @template dots
 ##' @template details
-##' @return a data frame that tabulates the number of CRAN platforms
+##' @return a data frame that tabulates the number of CRAN flavors
 ##'     that return errors, warnings, notes, or OK for the packages.
 ##' @examples
 ##'   if (curl::has_internet()) {
@@ -89,7 +89,7 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##'
 ##' Given the email address of a package maintainer, and/or a vector
 ##' of package names, it displays at the console a summary of the
-##' check results run on the CRAN platforms. This function is designed
+##' check results run on the CRAN flavors. This function is designed
 ##' to be included in your .Rprofile to be run (periodically) at start
 ##' up.
 ##'
@@ -105,9 +105,9 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##'                         pkg = c("pkg1", "pkg2"))
 ##' }
 ##' @return Prints the packages that return errors, warnings, and
-##'     notes on the CRAN platforms. The number in parenthesis after
+##'     notes on the CRAN flavors. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
-##'     platforms that produce these results.
+##'     flavors that produce these results.
 ##' @importFrom crayon red yellow blue bold cyan magenta
 ##' @importFrom clisymbols symbol
 ##' @export
@@ -122,7 +122,8 @@ summary_cran_results <- function(email = NULL, pkg = NULL,
 ##' @rdname summary_cran_results
 summary.cran_results <- function(object, compact = FALSE, print_ok = TRUE, ...) {
   what <- c("ok", "error", "fail", "warn", "note", "has_other_issues")
-  lapply(what, function(x)
-    get_pkg_with_results(object, x, compact, print_ok))
+  lapply(what, function(x) {
+    get_pkg_with_results(object, x, compact, print_ok)
+  })
   invisible(object)
 }

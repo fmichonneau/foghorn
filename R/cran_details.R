@@ -61,7 +61,7 @@ cran_details_from_web <- function(pkg, ...) {
         result = "OK",
         check = "",
         flavors = "",
-        n_flavors = n_cran_platforms,
+        n_flavors = n_cran_flavors(),
         message = ""
       )
     }
