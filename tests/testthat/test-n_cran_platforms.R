@@ -7,7 +7,7 @@ validate_n_flavors <- function() {
   )
   if (inherits(cran_flavors, "try-error")) {
     warning("Can't connect to check number of flavors. Using hardcoded value.")
-    return(13L)
+    return(12L)
   }
 
   cran_flvr_tbl <- cran_flavors %>%
@@ -19,5 +19,5 @@ validate_n_flavors <- function() {
 
 test_that("foghorn uses the accurate number of CRAN flavors", {
   skip_on_cran()
-  expect_true(identical(validate_n_flavors(), 13L))
+  expect_true(identical(validate_n_flavors(), foghorn::n_cran_platforms))
 })
