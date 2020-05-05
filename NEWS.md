@@ -1,3 +1,5 @@
+# foghorn (development version)
+
 # v1.2.1
 
 * The number of CRAN check flavors is back to 12. A new function
