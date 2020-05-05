@@ -81,7 +81,7 @@ set of packages specified by a maintainer or by names." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -175,8 +175,8 @@ the CRAN servers (see Details section).</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a data frame that tabulates the number of CRAN platforms
-    that return errors, warnings, notes, or OK for the packages.</p>
+    <p>a data frame that tabulates the number of CRAN flavors
+that return errors, warnings, notes, or OK for the packages.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Given the email address of a package maintainer, and/or a vector
@@ -196,24 +196,24 @@ good option. If you choose <code>src = "crandb"</code> the RDS files
 following options:</p>
 <ul>
 <li><p>dest  a folder where to store the RDS files (<code><a href='https://rdrr.io/r/base/tempfile.html'>tempdir()</a></code>
-                 by default).</p></li>
+by default).</p></li>
 <li><p>protocol  either <code>https</code> (default) or <code>http</code>.</p></li>
 <li><p>overwrite  when <code>FALSE</code> (default), if the file exists in
-                      <code>dest</code> then it will not be downloaded again.
-                      When <code>TRUE</code> the file gets downloaded everytime
-                      it's needed.</p></li>
+<code>dest</code> then it will not be downloaded again.
+When <code>TRUE</code> the file gets downloaded everytime
+it's needed.</p></li>
 <li><p>...  additional arguments that will be passed to
-                <code><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></code> function to control how
-                the file will be downloaded.</p></li>
+<code><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></code> function to control how
+the file will be downloaded.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Note that the <code>tools</code> package contains unexported
-    functions that can be used to extract summary information from
-    the check results. Specifically
-    <code>tools:::sumarize_CRAN_check_status</code> is similar to
-    <code>show_cran_results</code>.</p></div>
+functions that can be used to extract summary information from
+the check results. Specifically
+<code>tools:::sumarize_CRAN_check_status</code> is similar to
+<code>show_cran_results</code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>  <span class='kw'>if</span> (<span class='kw pkg'>curl</span><span class='kw ns'>::</span><span class='fu'><a href='https://jeroen.cran.dev/curl/reference/nslookup.html'>has_internet</a></span>()) {
@@ -221,7 +221,7 @@ following options:</p>
   }</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1 x 7</span><span>
 #&gt;   package error  fail  warn  note    ok has_other_issues
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>           
-#&gt; </span><span style='color: #555555;'>1</span><span> MASS        0     0     0     0    13 FALSE           </div></span></pre>
+#&gt; </span><span style='color: #555555;'>1</span><span> MASS        0     0     0     0    12 FALSE           </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -237,7 +237,7 @@ following options:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

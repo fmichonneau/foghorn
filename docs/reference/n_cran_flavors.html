@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get details about the CRAN check results for packages — cran_details • foghorn</title>
+<title>The number of CRAN flavors — n_cran_flavors • foghorn</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,13 @@
 
 
 
-<meta property="og:title" content="Get details about the CRAN check results for packages — cran_details" />
-<meta property="og:description" content="Given the names of packages published on CRAN, return the output of
-checks that return notes, warnings or errors." />
+<meta property="og:title" content="The number of CRAN flavors — n_cran_flavors" />
+<meta property="og:description" content="The CRAN flavors, the systems on which CRAN tests all packages regularly,
+are listed https://cran.r-project.org/web/checks/check_flavors.html. To
+get the correct results, foghorn needs to know how many flavors CRAN uses.
+This function reads the number of flavors that CRAN currently uses, and
+caches it (per session, in the tempdir() folder). Arguments control
+caching, fall back and default values." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -123,104 +127,64 @@ checks that return notes, warnings or errors." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get details about the CRAN check results for packages</h1>
-    <small class="dont-index">Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/cran_details.R'><code>R/cran_details.R</code></a></small>
-    <div class="hidden name"><code>cran_details.Rd</code></div>
+    <h1>The number of CRAN flavors</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/cran_flavors.R'><code>R/cran_flavors.R</code></a></small>
+    <div class="hidden name"><code>n_cran_flavors.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Given the names of packages published on CRAN, return the output of
-checks that return notes, warnings or errors.</p>
+    <p>The CRAN flavors, the systems on which CRAN tests all packages regularly,
+are listed <a href='https://cran.r-project.org/web/checks/check_flavors.html'>https://cran.r-project.org/web/checks/check_flavors.html</a>. To
+get the correct results, foghorn needs to know how many flavors CRAN uses.
+This function reads the number of flavors that CRAN currently uses, and
+caches it (per session, in the <code><a href='https://rdrr.io/r/base/tempfile.html'>tempdir()</a></code> folder). Arguments control
+caching, fall back and default values.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cran_details</span>(<span class='no'>pkg</span>, <span class='kw'>src</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"website"</span>, <span class='st'>"crandb"</span>), <span class='no'>...</span>)
-
-<span class='co'># S3 method for cran_details</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span>(<span class='no'>object</span>, <span class='kw'>show_log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>print_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='fu'>summary_cran_details</span>(
-  <span class='no'>pkg</span>,
-  <span class='kw'>src</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"website"</span>, <span class='st'>"crandb"</span>),
-  <span class='kw'>show_log</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>print_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>
+    <pre class="usage"><span class='fu'>n_cran_flavors</span>(
+  <span class='kw'>use_cache</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.use_cache"</span>, <span class='fl'>TRUE</span>),
+  <span class='kw'>force_default</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.force_default"</span>, <span class='fl'>FALSE</span>),
+  <span class='kw'>n_flavors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.n_flavors"</span>, <span class='fl'>12L</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>pkg</th>
-      <td><p>character vector of the names for the packages on CRAN</p></td>
+      <th>use_cache</th>
+      <td><p>Should the value for the number of flavors be read to/
+written from the cache? (default: <code>TRUE</code>)</p></td>
     </tr>
     <tr>
-      <th>src</th>
-      <td><p>if <code>"website"</code> the data is scrapped from the CRAN
-website, if <code>"crandb"</code> the data is downloaded from a RDS
-file hosted on the CRAN servers (which is used to generate the
-information found on the CRAN website).</p></td>
+      <th>force_default</th>
+      <td><p>Should the default value be used? (default: <code>FALSE</code>).
+When <code>TRUE</code>, the number of flavors is read from the Internet.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>additional arguments to control where the data from the
-check results are coming from and how they are downloaded from
-the CRAN servers (see Details section).</p></td>
-    </tr>
-    <tr>
-      <th>object</th>
-      <td><p>an object created by <code>cran_details</code></p></td>
-    </tr>
-    <tr>
-      <th>show_log</th>
-      <td><p>Should the messages of the &#8220;Check Details&#8221;
-be printed? (logical)</p></td>
-    </tr>
-    <tr>
-      <th>print_ok</th>
-      <td><p>if <code>TRUE</code> the summary method will print a "all clear"
-message for package(s) that have an OK status for all CRAN checks.</p></td>
+      <th>n_flavors</th>
+      <td><p>What is the default number of flavors? (default: <code>12L</code>)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>tibble</code> listing the names of the packages that have non- OK
-check results, the nature of the result (<code>WARN</code>, <code>ERROR</code>,
-<code>FAIL</code>, <code>NOTE</code>, or other issues).</p>
+    <p>The number of CRAN check flavors (as an integer).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Where does the data come from?</p>
-<p>The data comes from the CRAN servers. They generate RDS files that
-contains information regarding the results of the checks for all
-the packages, and all the flavors. This data is then used to
-generate the web pages.</p>
-<p><code>foghorn</code> provides access to either of these data sources. If
-you choose <code>src = "website"</code> the data is scrapped from the
-CRAN website. If you only need to check a few packages, this is a
-good option. If you choose <code>src = "crandb"</code> the RDS files
-(about 20Mb) are downloaded first from the CRAN servers.</p>
-<p>When choosing <code>src = "crandb"</code> you can also specify the
-following options:</p>
-<ul>
-<li><p>dest  a folder where to store the RDS files (<code><a href='https://rdrr.io/r/base/tempfile.html'>tempdir()</a></code>
-by default).</p></li>
-<li><p>protocol  either <code>https</code> (default) or <code>http</code>.</p></li>
-<li><p>overwrite  when <code>FALSE</code> (default), if the file exists in
-<code>dest</code> then it will not be downloaded again.
-When <code>TRUE</code> the file gets downloaded everytime
-it's needed.</p></li>
-<li><p>...  additional arguments that will be passed to
-<code><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></code> function to control how
-the file will be downloaded.</p></li>
+    <p>The default values for the arguments are read from options. Given that
+<code>n_cran_flavors</code> function is relied on internally to provide accurate
+information to the user, using options allows you to control how the
+function behaves directly. In general, the default values should not be
+changed. They are provided in case you have issues connecting to the web
+page listing the number of flavors, or you do not want to use caching.</p>
+<p>The options can be set:</p><ul>
+<li><p>by session, using, for instance,<code><a href='https://rdrr.io/r/base/options.html'>options("foghorn.use_cache" = FALSE)</a></code>.</p></li>
+<li><p>permanently, by adding <code><a href='https://rdrr.io/r/base/options.html'>options("foghorn.use_cache" = FALSE)</a></code> in your
+<code>.Rprofile</code>.</p></li>
+<li><p>for a specific call, using the <code>withr</code> package:
+<code><a href='https://rdrr.io/pkg/withr/man/with_options.html'>withr::with_options(foghorn.use_cache = FALSE,  ...)</a></code>.</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Note that the <code>tools</code> package contains unexported
-functions that can be used to extract summary information from
-the check results. Specifically
-<code>tools:::sumarize_CRAN_check_status</code> is similar to
-<code>show_cran_results</code>.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
