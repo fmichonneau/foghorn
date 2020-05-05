@@ -1,4 +1,4 @@
-# v1.2.0
+# v1.2.1
 
 * The number of CRAN check flavors is back to 12. A new function
   `n_cran_flavors` reads the table on the CRAN website that lists the number of
