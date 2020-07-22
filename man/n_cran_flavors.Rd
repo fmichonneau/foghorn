@@ -7,7 +7,7 @@
 n_cran_flavors(
   use_cache = getOption("foghorn.use_cache", TRUE),
   force_default = getOption("foghorn.force_default", FALSE),
-  n_flavors = getOption("foghorn.n_flavors", 12L)
+  n_flavors = getOption("foghorn.n_flavors", 11L)
 )
 }
 \arguments{
@@ -17,7 +17,7 @@ written from the cache? (default: \code{TRUE})}
 \item{force_default}{Should the default value be used? (default: \code{FALSE}).
 When \code{TRUE}, the number of flavors is read from the Internet.}
 
-\item{n_flavors}{What is the default number of flavors? (default: \code{12L})}
+\item{n_flavors}{What is the default number of flavors? (default: \code{11L})}
 }
 \value{
 The number of CRAN check flavors (as an integer).
@@ -28,7 +28,7 @@ are listed \url{https://cran.r-project.org/web/checks/check_flavors.html}. To
 get the correct results, foghorn needs to know how many flavors CRAN uses.
 This function reads the number of flavors that CRAN currently uses, and
 caches it (per session, in the \code{tempdir()} folder). Arguments control
-caching, fall back and default values.
+caching, fall back, and default values.
 }
 \details{
 The default values for the arguments are read from options. Given that
