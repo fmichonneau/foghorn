@@ -1,11 +1,18 @@
-# foghorn (development version)
+# foghorn
+
+# v1.2.2
+
+* The number of CRAN check flavors is now 11.
 
 # v1.2.1
 
 * The number of CRAN check flavors is back to 12. A new function
   `n_cran_flavors` reads the table on the CRAN website that lists the number of
-  flavors, caches, and returns this number. This is a more robust way to ensure
-  that the number of flavors (used in the package) is always accurate.
+  flavors, caches it, and returns this number. This is a more robust way to
+  ensure that the number of flavors (used in the package) is always accurate.
+  There is also the possibility of setting the number of flavors (and disabling
+  caching) using options, see the help for the `n_cran_flavors()` function for
+  more information.
 
 # v1.1.5
 
