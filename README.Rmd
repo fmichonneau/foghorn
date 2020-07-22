@@ -39,7 +39,7 @@ R session to know the results of the CRAN checks for your packages.
 You can install the development version of **`foghorn`** from github with:
 
 ```{r gh-installation, eval = FALSE}
-source("https://install-github.me/fmichonneau/foghorn")
+remotes::install_github("fmichonneau/foghorn")
 ```
 
 or the stable version from CRAN:

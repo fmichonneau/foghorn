@@ -52,7 +52,7 @@ are listed https://cran.r-project.org/web/checks/check_flavors.html. To
 get the correct results, foghorn needs to know how many flavors CRAN uses.
 This function reads the number of flavors that CRAN currently uses, and
 caches it (per session, in the tempdir() folder). Arguments control
-caching, fall back and default values." />
+caching, fall back, and default values." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -85,7 +85,7 @@ caching, fall back and default values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -138,13 +138,13 @@ are listed <a href='https://cran.r-project.org/web/checks/check_flavors.html'>ht
 get the correct results, foghorn needs to know how many flavors CRAN uses.
 This function reads the number of flavors that CRAN currently uses, and
 caches it (per session, in the <code><a href='https://rdrr.io/r/base/tempfile.html'>tempdir()</a></code> folder). Arguments control
-caching, fall back and default values.</p>
+caching, fall back, and default values.</p>
     </div>
 
     <pre class="usage"><span class='fu'>n_cran_flavors</span>(
   <span class='kw'>use_cache</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.use_cache"</span>, <span class='fl'>TRUE</span>),
   <span class='kw'>force_default</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.force_default"</span>, <span class='fl'>FALSE</span>),
-  <span class='kw'>n_flavors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.n_flavors"</span>, <span class='fl'>12L</span>)
+  <span class='kw'>n_flavors</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span>(<span class='st'>"foghorn.n_flavors"</span>, <span class='fl'>11L</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -162,7 +162,7 @@ When <code>TRUE</code>, the number of flavors is read from the Internet.</p></td
     </tr>
     <tr>
       <th>n_flavors</th>
-      <td><p>What is the default number of flavors? (default: <code>12L</code>)</p></td>
+      <td><p>What is the default number of flavors? (default: <code>11L</code>)</p></td>
     </tr>
     </table>
 

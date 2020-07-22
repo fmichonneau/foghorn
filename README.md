@@ -35,7 +35,7 @@ You can install the development version of **`foghorn`** from github
 with:
 
 ``` r
-source("https://install-github.me/fmichonneau/foghorn")
+remotes::install_github("fmichonneau/foghorn")
 ```
 
 or the stable version from CRAN:
@@ -65,10 +65,8 @@ this result.
 ## Graphical interface
 summary_cran_results(email = "francois.michonneau@gmail.com")
 #> ✔ All clear for foghorn, phylobase, riceware, rotl!
-#> ⚠  Package with warnings on CRAN: 
-#>   - rncl (4)
 #> ★  Package with notes on CRAN: 
-#>   - rncl (3)
+#>   - rncl (2)
 ```
 
 `summary_cran_results()` is actually an alias of
@@ -82,11 +80,11 @@ cran_results(email = "francois.michonneau@gmail.com")
 #> # A tibble: 5 x 7
 #>   package   error  fail  warn  note    ok has_other_issues
 #>   <chr>     <int> <int> <int> <int> <int> <lgl>           
-#> 1 foghorn       0     0     0     0    12 FALSE           
-#> 2 phylobase     0     0     0     0    12 FALSE           
-#> 3 riceware      0     0     0     0    12 FALSE           
-#> 4 rncl          0     0     4     3     5 FALSE           
-#> 5 rotl          0     0     0     0    12 FALSE
+#> 1 foghorn       0     0     0     0    11 FALSE           
+#> 2 phylobase     0     0     0     0    11 FALSE           
+#> 3 riceware      0     0     0     0    11 FALSE           
+#> 4 rncl          0     0     0     2     9 FALSE           
+#> 5 rotl          0     0     0     0    11 FALSE
 ```
 
 In addition of your own packages, you can also check the results for any
@@ -95,18 +93,18 @@ other packages that might be of interest to you:
 ``` r
 ## either by themselves
 summary_cran_results(pkg = c("ggplot2", "dplyr"))
-#> ⚠  Package with warnings on CRAN: 
-#>   - ggplot2 (4)
 #> ★  Packages with notes on CRAN: 
-#>   - dplyr (8)
+#>   - dplyr (4)
 #>   - ggplot2 (4)
+#> ◉  Package with other issues on CRAN: 
+#>   - dplyr
 
 cran_results(pkg = c("ggplot2", "dplyr"))
 #> # A tibble: 2 x 7
 #>   package error  fail  warn  note    ok has_other_issues
 #>   <chr>   <int> <int> <int> <int> <int> <lgl>           
-#> 1 dplyr       0     0     0     8     4 FALSE           
-#> 2 ggplot2     0     0     4     4     4 FALSE
+#> 1 dplyr       0     0     0     4     7 TRUE            
+#> 2 ggplot2     0     0     0     4     7 FALSE
 
 ## or by combining them with email addresses
 summary_cran_results(
@@ -114,10 +112,8 @@ summary_cran_results(
   pkg = c("mregions", "ridigbio")
 )
 #> ✔ All clear for foghorn, mregions, phylobase, riceware, ridigbio, rotl!
-#> ⚠  Package with warnings on CRAN: 
-#>   - rncl (4)
 #> ★  Package with notes on CRAN: 
-#>   - rncl (3)
+#>   - rncl (2)
 
 cran_results(
   email = "francois.michonneau@gmail.com",
@@ -126,13 +122,13 @@ cran_results(
 #> # A tibble: 7 x 7
 #>   package   error  fail  warn  note    ok has_other_issues
 #>   <chr>     <int> <int> <int> <int> <int> <lgl>           
-#> 1 foghorn       0     0     0     0    12 FALSE           
-#> 2 mregions      0     0     0     0    12 FALSE           
-#> 3 phylobase     0     0     0     0    12 FALSE           
-#> 4 riceware      0     0     0     0    12 FALSE           
-#> 5 ridigbio      0     0     0     0    12 FALSE           
-#> 6 rncl          0     0     4     3     5 FALSE           
-#> 7 rotl          0     0     0     0    12 FALSE
+#> 1 foghorn       0     0     0     0    11 FALSE           
+#> 2 mregions      0     0     0     0    11 FALSE           
+#> 3 phylobase     0     0     0     0    11 FALSE           
+#> 4 riceware      0     0     0     0    11 FALSE           
+#> 5 ridigbio      0     0     0     0    11 FALSE           
+#> 6 rncl          0     0     0     2     9 FALSE           
+#> 7 rotl          0     0     0     0    11 FALSE
 ```
 
 You can inspect the logs for the check results using
@@ -142,16 +138,15 @@ You can inspect the logs for the check results using
 ``` r
 (tidyr_checks <- cran_details(pkg = "tidyr"))
 #> # A tibble: 1 x 7
-#>   package version result check     flavors           n_flavors message     
-#>   <chr>   <chr>   <chr>  <chr>     <chr>                 <dbl> <chr>       
-#> 1 tidyr   1.0.0   NOTE   data for… r-devel-linux-x8…         5 "     Note:…
+#>   package version result check      flavors              n_flavors message      
+#>   <chr>   <chr>   <chr>  <chr>      <chr>                    <dbl> <chr>        
+#> 1 tidyr   1.1.0   NOTE   data for … r-devel-linux-x86_6…         4 "     Note: …
 summary(tidyr_checks)
 #> ★ tidyr - note: data for non-ASCII characters
 #>    ❯ r-devel-linux-x86_64-fedora-clang 
 #>    ❯ r-devel-linux-x86_64-fedora-gcc 
 #>    ❯ r-patched-solaris-x86 
-#>    ❯ r-release-osx-x86_64 
-#>    ❯ r-oldrel-osx-x86_64 
+#>    ❯ r-oldrel-macos-x86_64 
 #> 
 #>      Note: found 24 marked UTF-8 strings
 ```
@@ -171,7 +166,7 @@ cran_results(pkg = "nlme", src = "crandb", progress = FALSE)
 #> # A tibble: 1 x 7
 #>   package error  fail  warn  note    ok has_other_issues
 #>   <chr>   <int> <int> <int> <int> <int> <lgl>           
-#> 1 nlme        1     0     0     0    11 FALSE
+#> 1 nlme        0     0     0     0    11 FALSE
 ```
 
 Check out the “Details” section in the help files for more information.
