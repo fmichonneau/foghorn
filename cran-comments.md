@@ -1,5 +1,5 @@
 
-### v1.2.2
+### v1.2.3
 
 ## Test environments
 

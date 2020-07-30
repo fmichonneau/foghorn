@@ -26,7 +26,7 @@
 ##'   written from the cache? (default: `TRUE`)
 ##' @param force_default Should the default value be used? (default: `FALSE`).
 ##'   When `TRUE`, the number of flavors is read from the Internet.
-##' @param n_flavors What is the default number of flavors? (default: `11L`)
+##' @param n_flavors What is the default number of flavors? (default: `12L`)
 ##' @return The number of CRAN check flavors (as an integer).
 ##' @export
 ##' @importFrom rlang is_logical is_integer is_lgl_na
@@ -38,13 +38,13 @@ n_cran_flavors <- function(
                              "foghorn.force_default",
                              FALSE
                            ),
-                           n_flavors = getOption("foghorn.n_flavors", 11L)) {
+                           n_flavors = getOption("foghorn.n_flavors", 12L)) {
   stopifnot(rlang::is_logical(use_cache, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_logical(force_default, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_integer(n_flavors, 1))
 
   ## maximum number of CRAN check results that can be expected.
-  ## As of 2020-07-22, 11 flavors listed
+  ## As of 2020-07-30, 12 flavors listed
   ## https://cran.r-project.org/web/checks/check_flavors.html
 
   if (force_default) {

@@ -1,5 +1,9 @@
 # foghorn
 
+# v1.2.3
+
+- The number of CRAN check flavors is back to 12.
+
 # v1.2.2
 
 * The number of CRAN check flavors is now 11.
@@ -58,7 +62,7 @@
 * `foghorn` would, in some cases, return that a valid package name published on
   CRAN did not exit (#29, @zkamvar).
 * The recent `newbies` folder found on the CRAN FTP incoming server has been
-  added to the list of places to check packages in CRAN's submissison queue
+  added to the list of places to check packages in CRAN's submission queue
   (#32).
 * When a package only had "additional issues", the summary functions would
   report that everything was clear (#33, @coatless)

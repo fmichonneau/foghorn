@@ -22,9 +22,9 @@
 ##'   \item {protocol} { either \code{https} (default) or \code{http}. }
 ##'
 ##'   \item {overwrite} { when \code{FALSE} (default), if the file exists in
-##'                       \code{dest} then it will not be downloaded again.
-##'                       When \code{TRUE} the file gets downloaded everytime
-##'                       it's needed.}
+##'                       \code{dest} then it will not be downloaded again. When
+##'                       \code{TRUE} the file gets downloaded every time it's
+##'                       needed.}
 ##'
 ##'   \item {...} { additional arguments that will be passed to
 ##'                 \code{\link[httr]{GET}} function to control how
