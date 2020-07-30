@@ -81,7 +81,7 @@ set of packages specified by a maintainer or by names." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
       </span>
     </div>
 
@@ -199,9 +199,9 @@ following options:</p>
 by default).</p></li>
 <li><p>protocol  either <code>https</code> (default) or <code>http</code>.</p></li>
 <li><p>overwrite  when <code>FALSE</code> (default), if the file exists in
-<code>dest</code> then it will not be downloaded again.
-When <code>TRUE</code> the file gets downloaded everytime
-it's needed.</p></li>
+<code>dest</code> then it will not be downloaded again. When
+<code>TRUE</code> the file gets downloaded every time it's
+needed.</p></li>
 <li><p>...  additional arguments that will be passed to
 <code><a href='https://httr.r-lib.org/reference/GET.html'>GET</a></code> function to control how
 the file will be downloaded.</p></li>
@@ -221,7 +221,7 @@ the check results. Specifically
   }</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1 x 7</span><span>
 #&gt;   package error  fail  warn  note    ok has_other_issues
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span>           
-#&gt; </span><span style='color: #555555;'>1</span><span> MASS        0     0     0     0    11 FALSE           </div></span></pre>
+#&gt; </span><span style='color: #555555;'>1</span><span> MASS        0     0     0     1    11 FALSE           </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
