@@ -126,6 +126,7 @@ cran_ftp <- function(pkg, folders, url) {
 ##' \item Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to 2018-06-30", R Journal 10(1), July 2018. \url{https://journal.r-project.org/archive/2018-1/cran.pdf}
 ##' \item  Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo Gruson. "CRAN incoming dashboard", \url{https://cransays.itsalocke.com/articles/dashboard.html}
 ##' }
+##' @seealso cran_winbuilder
 ##' @importFrom utils read.table
 ##' @export
 ##' @md

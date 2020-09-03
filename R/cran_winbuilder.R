@@ -1,0 +1,90 @@
+parse_winbuilder <- function(res) {
+  if (length(res$content) == 0) {
+    return(NULL)
+  }
+
+  rr <- read.table(
+    text = rawToChar(res$content),
+    stringsAsFactors = FALSE
+  )
+
+  pkgs <- parse_pkg(rr$V4)
+
+  tibble::tibble(
+    package = pkgs$package,
+    version = pkgs$version,
+    folder = basename(res$url),
+    date = rr$V1,
+    time = rr$V2,
+    size = rr$V3
+  )
+}
+
+
+##' Check whether your package is in the win-builder queue.
+##'
+##' To check whether your package has successfully been submitted to
+##' win-builder, or to check whether there is unusual delay in processing
+##' packages submitted to win-builder, `winbuilder_queue` allows you to inspect
+##' the packages that are in the queue to be processed by the win-builder
+##' service.
+##'
+##' @title Show the Win-Builder queue
+##' @param pkg Optionally provide a vector of package names to limits the
+##'   results to these packages.
+##' @param folders Which folders of the Win-builder queue do you want to
+##'   inspect? Default: the 3 architectures Win-builder provides.
+##' @return If there are packages in the queue, a `tibble` with the following
+##'   columns:
+##' \describe{
+##' \item{package}{package name}
+##' \item{version}{package version}
+##' \item{folder}{the folder indicating the R version that will be used to perform the checks}
+##' \item{date}{the date at which the package tarball was uploaded on Win-builder}
+##' \item{time}{the time at which the package tarball was uploaded on Win-builder}
+##' \item{size}{the size of the package tarball}
+##' }
+##' @note The date and time are indicated in Central European (Summer) Time
+##'   (Europe/Berlin) as the WinBuilder server is hosted in Germany.
+##' @references \itemize{
+##'  \item Maëlle Salmon, 2020. "Everything you should know about WinBuilder" \url{https://blog.r-hub.io/2020/04/01/win-builder/}
+##'  \item Uwe Ligges. Building and checking R source packages for Windows. \url{https://win-builder.r-project.org/}
+##' }
+##' @export
+##' @examples
+##' \dontrun{
+##'   ## Get all the packages in the WinBuilder queue
+##'   winbuilder_queue()
+##'   ## Check if the 'dplyr' package is in the WinBuilder queue
+##'   winbuilder_queue(pkg = "dplyr")
+##'   ## Check which packages are in the R-devel queue
+##'   winbuilder_queue(folders = "R-devel")
+##' }
+winbuilder_queue <- function(pkg = NULL,
+                             folders = c("R-release", "R-devel", "R-oldrelease")) {
+  folders <- match.arg(folders, several.ok = TRUE)
+
+  res <- cran_ftp(
+    pkg = pkg,
+    folders = folders,
+    url = "ftp://win-builder.r-project.org"
+  )
+
+  res <- lapply(res, parse_winbuilder)
+  res <- do.call("rbind", res)
+
+  if (is.null(res)) {
+    message(
+      "The win-builder queue is empty for ",
+      paste(sQuote(folders), collapse = ", "),
+      "."
+    )
+    return(invisible(NULL))
+  }
+
+  if (!is.null(pkg)) {
+    res <- res[res$package %in% pkg, ]
+  }
+
+  res
+}

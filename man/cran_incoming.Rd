@@ -76,3 +76,6 @@ any questions.
 \item  Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo Gruson. "CRAN incoming dashboard", \url{https://cransays.itsalocke.com/articles/dashboard.html}
 }
 }
+\seealso{
+cran_winbuilder
+}
