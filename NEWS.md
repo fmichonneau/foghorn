@@ -1,8 +1,12 @@
 # foghorn
 
+# v1.2.3.900
+
+* Implement scrapping of Win-builder queue (#40 suggested by @krlmlr)
+
 # v1.2.3
 
-- The number of CRAN check flavors is back to 12.
+* The number of CRAN check flavors is back to 12.
 
 # v1.2.2
 
