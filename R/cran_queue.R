@@ -25,7 +25,7 @@ parse_pkg <- function(pkg) {
   pkg <- strsplit(pkg, "_")
   tibble::tibble(
     package = vapply(pkg, function(x) x[1], character(1)),
-    version = vapply(pkg, function(x) x[2], character(1))
+    version = as.package_version(vapply(pkg, function(x) x[2], character(1)))
   )
 }
 
