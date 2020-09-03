@@ -29,6 +29,46 @@ parse_pkg <- function(pkg) {
   )
 }
 
+## internal function to scrape content of FTP server, used by `cran_incoming`
+## and `cran_winbuilder`.
+cran_ftp <- function(pkg, folders, url) {
+  if (!is.null(pkg) &&
+    (!is.character(pkg) || any(is.na(pkg)))) {
+    stop(sQuote("pkg"), " must be a character vector.")
+  }
+
+  sub_folders <- paste0(folders, "/")
+
+  pool <- curl::new_pool()
+
+  res_data <- list()
+
+  success <- function(res) {
+    res_data <<- c(res_data, list(res))
+  }
+
+  fail <- function(res) {
+    warning("Server returned error: ", res, call. = FALSE)
+  }
+
+  for (sf in seq_along(sub_folders)) {
+    curl::curl_fetch_multi(paste0(
+      url, "/", sub_folders[sf]
+    ),
+    pool = pool, done = success, fail = fail
+    )
+  }
+  res_qry <- curl::multi_run(pool = pool)
+
+  ## check for errors
+  if (res_qry$error > 0) {
+    warning("One of the folders didn't work.", call. = FALSE)
+  }
+
+  res_data
+}
+
+
 ##' Check where your package stands in the CRAN incoming queue.
 ##'
 ##' When submitting a package to CRAN, it undergoes a series of checks before it
@@ -91,52 +131,25 @@ parse_pkg <- function(pkg) {
 ##' @md
 cran_incoming <- function(pkg = NULL,
                           folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive", "waiting")) {
-  if (!is.null(pkg) &&
-    (!is.character(pkg) || any(is.na(pkg)))) {
-    stop(sQuote("pkg"), " must be a character vector.")
-  }
-
   folders <- match.arg(folders, several.ok = TRUE)
 
-  cran_incoming_url <- "ftp://cran.r-project.org/incoming/"
-
-  sub_folders <- paste0(folders, "/")
-
-  pool <- curl::new_pool()
-
-  res_data <- list()
-
-  success <- function(res) {
-    res_data <<- c(res_data, list(res))
-  }
-
-  fail <- function(res) {
-    warning("Server returned error: ", res, call. = FALSE)
-  }
-
-  for (sf in seq_along(sub_folders)) {
-    curl::curl_fetch_multi(paste0(
-      cran_incoming_url, "/", sub_folders[sf]
-    ),
-    pool = pool, done = success, fail = fail
-    )
-  }
-  res_qry <- curl::multi_run(pool = pool)
-
-  ## check for errors
-  if (res_qry$error > 0) {
-    warning("One of the folders didn't work.", call. = FALSE)
-  }
+  res_data <- cran_ftp(
+    pkg = pkg,
+    folders = folders,
+    url = "ftp://cran.r-project.org/incoming/"
+  )
 
   res <- lapply(res_data, function(x) parse_cran_incoming(x))
   res <- do.call("rbind", res)
   res <- cbind(res, parse_pkg(res$packages))
 
-  res <- tibble::as_tibble(res[, c("package", "version", "cran_folder", "time")])
+  res <- tibble::as_tibble(
+    res[, c("package", "version", "cran_folder", "time")]
+  )
   res$cran_folder <- factor(res$cran_folder, levels = folders)
 
   if (!is.null(pkg)) {
-    res <- res[ res$package %in% pkg, ]
+    res <- res[res$package %in% pkg, ]
   }
   res
 }
