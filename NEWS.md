@@ -3,6 +3,9 @@
 # v1.2.3.900
 
 * Implement scrapping of Win-builder queue (#40 suggested by @krlmlr)
+* In `cran_incoming()` and `winbuilder_queue()` the version numbers in the
+  tibbles are of class `package_version` (suggested by @krlmlr).
+  
 
 # v1.2.3
 

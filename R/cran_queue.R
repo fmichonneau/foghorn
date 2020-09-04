@@ -30,7 +30,7 @@ parse_pkg <- function(pkg) {
 }
 
 ## internal function to scrape content of FTP server, used by `cran_incoming`
-## and `cran_winbuilder`.
+## and `winbuilder_queue`.
 cran_ftp <- function(pkg, folders, url) {
   if (!is.null(pkg) &&
     (!is.character(pkg) || any(is.na(pkg)))) {
