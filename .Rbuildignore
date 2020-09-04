@@ -16,3 +16,4 @@ man-roxygen
 ^pkgdown$
 ^CRAN-RELEASE$
 ^revdep
+^\.github$
