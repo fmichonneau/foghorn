@@ -2,7 +2,7 @@
 % Please edit documentation in R/cran_winbuilder.R
 \name{winbuilder_queue}
 \alias{winbuilder_queue}
-\title{Show the Win-Builder queue}
+\title{Show the win-builder queue}
 \usage{
 winbuilder_queue(
   pkg = NULL,
@@ -13,18 +13,16 @@ winbuilder_queue(
 \item{pkg}{Optionally provide a vector of package names to limits the
 results to these packages.}
 
-\item{folders}{Which folders of the Win-builder queue do you want to
-inspect? Default: the 3 architectures Win-builder provides.}
+\item{folders}{Which folders of the win-builder queue do you want to
+inspect? Default: the 3 architectures win-builder provides.}
 }
 \value{
-If there are packages in the queue, a \code{tibble} with the following
-columns:
+A \code{tibble} with the following columns:
 \describe{
 \item{package}{package name}
 \item{version}{package version}
 \item{folder}{the folder indicating the R version that will be used to perform the checks}
-\item{date}{the date at which the package tarball was uploaded on Win-builder}
-\item{time}{the time at which the package tarball was uploaded on Win-builder}
+\item{time}{the date and time at which the package tarball was uploaded on win-builder}
 \item{size}{the size of the package tarball}
 }
 }
@@ -38,15 +36,11 @@ packages submitted to win-builder, \code{winbuilder_queue} allows you to inspect
 the packages that are in the queue to be processed by the win-builder
 service.
 }
-\note{
-The date and time are indicated in Central European (Summer) Time
-(Europe/Berlin) as the WinBuilder server is hosted in Germany.
-}
 \examples{
 \dontrun{
-  ## Get all the packages in the WinBuilder queue
+  ## Get all the packages in the win-builder queue
   winbuilder_queue()
-  ## Check if the 'dplyr' package is in the WinBuilder queue
+  ## Check if the 'dplyr' package is in the win-builder queue
   winbuilder_queue(pkg = "dplyr")
   ## Check which packages are in the R-devel queue
   winbuilder_queue(folders = "R-devel")
