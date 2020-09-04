@@ -74,11 +74,11 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
   dest_file <- file.path(dest, paste0(file_prefix, file))
   if (!(file.exists(dest_file) &&
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
-      overwrite) {
+    overwrite) {
     file_cran_url <- paste0(cran_url(protocol), is_ftp, "/web/checks/", file)
     pb <- progress_multi(
       i = 1, labels = list(paste("Downloading", file)), count = FALSE,
-      progress = requireNamespace("progress", quietly = TRUE)
+      progress = requireNamespace("progress", quietly = TRUE) && interactive()
     )
     d_status <- httr::GET(
       url = file_cran_url,
@@ -134,8 +134,9 @@ get_cran_rds_file <- function(file, ...) {
 read_crandb_from_email <- function(email, file = "results", ...) {
   crandb <- get_cran_rds_file(file = file, ...)
   maintainer <- tolower(crandb$maintainer)
-  idx <- lapply(tolower(email), function(x)
-    grepl(paste0("<", x, ">"), maintainer, fixed = TRUE))
+  idx <- lapply(tolower(email), function(x) {
+    grepl(paste0("<", x, ">"), maintainer, fixed = TRUE)
+  })
   idx <- Reduce("+", idx)
 
   res <- crandb[as.logical(idx), ]
