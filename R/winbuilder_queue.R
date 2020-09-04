@@ -1,41 +1,47 @@
+new_winbuilder_q <- function(package = character(0),
+                             version = as.package_version(character(0)),
+                             folder = character(0),
+                             time = as.POSIXct(character(0)),
+                             size = integer(0)) {
+  stopifnot(is.character(package))
+  stopifnot(is.package_version(version))
+  stopifnot(is.character(folder))
+  stopifnot(inherits(time, "POSIXct"))
+  stopifnot(is.integer(size))
+
+  tibble::tibble(
+    package,
+    version,
+    folder,
+    time,
+    size
+  )
+}
+
 parse_winbuilder <- function(res) {
   if (length(res$content) == 0) {
-    cnt <- list(
-      package = character(0),
-      version = as.package_version(character(0)),
-      folder = character(0),
-      time = as.POSIXct(character(0)),
-      size = integer(0)
-    )
-    nr <- 0L
-  } else {
-    rr <- read.table(
-      text = rawToChar(res$content),
-      stringsAsFactors = FALSE
-    )
-
-    pkgs <- parse_pkg(rr$V4)
-
-    datetime <- as.POSIXct(
-      paste(rr$V1, rr$V2),
-      format = "%m-%d-%y %I:%M%p",
-      tz = "Europe/Berlin"
-    )
-
-    cnt <- list(
-      package = pkgs$package,
-      version = pkgs$version,
-      folder = basename(res$url),
-      time = datetime,
-      size = rr$V3
-    )
-    nr <- nrow(rr)
+    return(new_winbuilder_q())
   }
 
-  tibble::new_tibble(
-    cnt,
-    nrow = nr,
-    class = "fh_winbuild_q"
+  rr <- read.table(
+    text = rawToChar(res$content),
+    stringsAsFactors = FALSE
+  )
+
+  pkgs <- parse_pkg(rr$V4)
+
+  datetime <- as.POSIXct(
+    paste(rr$V1, rr$V2),
+    format = "%m-%d-%y %I:%M%p",
+    tz = "Europe/Berlin"
+  )
+
+  new_winbuilder_q(
+    package = pkgs$package,
+    version = pkgs$version,
+    folder = basename(res$url),
+    time = datetime,
+    size = rr$V3
   )
 }
 
