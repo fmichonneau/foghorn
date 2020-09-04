@@ -5,6 +5,9 @@
 * Implement scrapping of Win-builder queue (#40 suggested by @krlmlr)
 * In `cran_incoming()` and `winbuilder_queue()` the version numbers in the
   tibbles are of class `package_version` (suggested by @krlmlr).
+* `cran_incoming()` output includes the size of the tarball archive.
+* `cran_incoming()` returns a zero-row tibble instead of `NULL` when the
+  inspected folder is empty.
   
 
 # v1.2.3
