@@ -1,22 +1,48 @@
+new_cran_q <- function(package = character(0),
+                       version = as.package_version(character(0)),
+                       cran_folder = character(0),
+                       time = as.POSIXct(character(0)),
+                       size = integer(0)) {
+  stopifnot(is.character(package))
+  stopifnot(is.package_version(version))
+  stopifnot(is.character(cran_folder))
+  stopifnot(inherits(time, "POSIXct"))
+  stopifnot(is.integer(size))
+
+  tibble::tibble(
+    package,
+    version,
+    cran_folder,
+    time,
+    size
+  )
+}
+
 parse_cran_incoming <- function(res) {
   if (length(res$content) == 0) {
-    return(NULL)
+    return(new_cran_q())
   }
+
   rr <- read.table(
     text = rawToChar(res$content),
     stringsAsFactors = FALSE
   )
-  folders <- rr$V9
+
+  pkgs <- parse_pkg(rr$V9)
+  ## the server doesn't return the year???
   year <- substr(Sys.time(), 1, 4)
   ## avoid need for locale-dependent month name match
   ##  (CRAN FTP info uses English abbrevs)
   month <- match(rr$V6, month.abb)
   timestr <- with(rr, sprintf("%d-%s-%s %s", V7, month, year, V8))
   time <- as.POSIXct(timestr, format = "%d-%m-%Y %H:%M")
-  tibble::tibble(
+
+  new_cran_q(
+    package = pkgs$package,
+    version = pkgs$version,
     cran_folder = basename(res$url),
     time = time,
-    packages = folders
+    size = rr$V5
   )
 }
 
@@ -112,6 +138,7 @@ cran_ftp <- function(pkg, folders, url) {
 ##' \item{version}{package version}
 ##' \item{cran_folder}{folder where the package was found}
 ##' \item{time}{date/time package was entered in the folder}
+##' \item{size}{the size fo the package tarball}
 ##' }
 ##'
 ##' @examples
@@ -142,12 +169,6 @@ cran_incoming <- function(pkg = NULL,
 
   res <- lapply(res_data, function(x) parse_cran_incoming(x))
   res <- do.call("rbind", res)
-  res <- cbind(res, parse_pkg(res$packages))
-
-  res <- tibble::as_tibble(
-    res[, c("package", "version", "cran_folder", "time")]
-  )
-  res$cran_folder <- factor(res$cran_folder, levels = folders)
 
   if (!is.null(pkg)) {
     res <- res[res$package %in% pkg, ]

@@ -6,9 +6,21 @@ test_that("Documentation is correct", {
 
   ## make sure all folders investigated are correct
   expect_silent(res <- cran_incoming())
-  expect_true(all(names(res) %in% c("package", "version", "cran_folder", "time")))
-  expect_equal(ncol(res), 4L)
+  expect_true(all(names(res) %in% c(
+    "package", "version", "cran_folder", "time", "size"
+  )))
+  expect_equal(ncol(res), 5L)
   expect_true(nrow(res) > 1)
+  expect_identical(
+    lapply(res, class),
+    list(
+      package = "character",
+      version = c("package_version", "numeric_version"),
+      cran_folder = "character",
+      time = c("POSIXct", "POSIXt"),
+      size = "integer"
+    )
+  )
 })
 
 test_that("only character strings are provided", {
