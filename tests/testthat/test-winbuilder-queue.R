@@ -5,7 +5,6 @@ test_that("test format and class for winbuilder", {
 
   res <- winbuilder_queue()
 
-  expect_true(inherits(res, "fh_winbuild_q"))
   expect_identical(
     lapply(res, class),
     list(
