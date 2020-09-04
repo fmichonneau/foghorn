@@ -1,4 +1,4 @@
-context("check source validity")
+## check source validity
 
 test_that(
   "invalid source name",
@@ -6,7 +6,7 @@ test_that(
 )
 
 
-context("fail for invalid package name/emails")
+## fail for invalid package name/emails
 
 test_that("invalid package name", {
   expect_error(
@@ -26,7 +26,7 @@ test_that("invalid email address", {
   )
 })
 
-context("check cran results")
+## check cran results
 
 # nolint start
 validate_cran_results <- function(x) {
@@ -174,7 +174,6 @@ test_that("works for multiple packages, multiple addresses (crandb)", {
 
 ### visit_cran_check -----------------------------------------------------------
 
-context("visit cran check")
 test_that("error if nothing is specified", {
   expect_error(
     visit_cran_check(),
@@ -224,8 +223,6 @@ test_that("check for interactive", {
 })
 
 ## summary_cran_results --------------------------------------------------------
-
-context("summary cran results")
 
 build_regexp <- function(what, pkg) {
   pkg <- paste0("(.|\\W)+", sort(pkg), "(.|\\W)+", collapse = "")
@@ -368,8 +365,6 @@ test_that("output of summary cran results", {
 
 ### cran_details  ----------------------------------------------------------
 
-context("show cran results")
-
 test_that("input is character", {
   expect_error(
     cran_details(TRUE),
@@ -452,9 +447,7 @@ test_that("output of cran_details", {
   expect_silent(summary(cran_pkg_with_ok, show_log = TRUE, print_ok = FALSE))
 })
 
-### CRAN tests -----------------------------------------------------------------
-
-context("non-skipped tests")
+### CRAN tests ----------------------------------------------------------------
 
 test_that("check output for MASS", {
   if (curl::has_internet()) {

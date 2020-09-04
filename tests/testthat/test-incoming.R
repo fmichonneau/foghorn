@@ -1,5 +1,3 @@
-context("Test `cran_incoming`")
-
 test_that("Documentation is correct", {
   skip_on_cran()
   skip_on_travis()

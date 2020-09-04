@@ -1,5 +1,3 @@
-context("test winbuilder_queue")
-
 test_that("test format and class for winbuilder", {
   skip_on_cran()
 
@@ -39,5 +37,5 @@ test_that("package filtering works", {
 
   pkg <- sample(res$package, 1)
   res_pkg <- winbuilder_queue(pkg = pkg)
-  expect_true(nrow(res_pkg) <= nrow(pkg))
+  expect_true(unique(res_pkg$package) == pkg)
 })
