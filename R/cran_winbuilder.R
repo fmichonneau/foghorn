@@ -1,27 +1,41 @@
 parse_winbuilder <- function(res) {
   if (length(res$content) == 0) {
-    return(NULL)
+    cnt <- list(
+      package = character(0),
+      version = as.package_version(character(0)),
+      folder = character(0),
+      time = as.POSIXct(character(0)),
+      size = integer(0)
+    )
+    nr <- 0L
+  } else {
+    rr <- read.table(
+      text = rawToChar(res$content),
+      stringsAsFactors = FALSE
+    )
+
+    pkgs <- parse_pkg(rr$V4)
+
+    datetime <- as.POSIXct(
+      paste(rr$V1, rr$V2),
+      format = "%m-%d-%y %I:%M%p",
+      tz = "Europe/Berlin"
+    )
+
+    cnt <- list(
+      package = pkgs$package,
+      version = pkgs$version,
+      folder = basename(res$url),
+      time = datetime,
+      size = rr$V3
+    )
+    nr <- nrow(rr)
   }
 
-  rr <- read.table(
-    text = rawToChar(res$content),
-    stringsAsFactors = FALSE
-  )
-
-  pkgs <- parse_pkg(rr$V4)
-
-  datetime <- as.POSIXct(
-    paste(rr$V1, rr$V2),
-    format = "%m-%d-%y %I:%M%p",
-    tz = "Europe/Berlin"
-  )
-
-  tibble::tibble(
-    package = pkgs$package,
-    version = pkgs$version,
-    folder = basename(res$url),
-    time = datetime,
-    size = rr$V3
+  tibble::new_tibble(
+    cnt,
+    nrow = nr,
+    class = "fh_winbuild_q"
   )
 }
 
@@ -74,15 +88,6 @@ winbuilder_queue <- function(pkg = NULL,
 
   res <- lapply(res, parse_winbuilder)
   res <- do.call("rbind", res)
-
-  if (is.null(res)) {
-    message(
-      "The win-builder queue is empty for ",
-      paste(sQuote(folders), collapse = ", "),
-      "."
-    )
-    return(invisible(NULL))
-  }
 
   if (!is.null(pkg)) {
     res <- res[res$package %in% pkg, ]
