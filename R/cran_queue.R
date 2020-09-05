@@ -28,6 +28,9 @@ parse_cran_incoming <- function(res) {
     stringsAsFactors = FALSE
   )
 
+  ## people sometimes upload other stuff to the FTP server
+  rr <- rr[grepl("\\.tar.gz$", rr$V9), ]
+
   pkgs <- parse_pkg(rr$V9)
   ## the server doesn't return the year???
   year <- substr(Sys.time(), 1, 4)
