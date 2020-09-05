@@ -1,8 +1,13 @@
 # foghorn
 
-# v1.2.3.900
+# v1.3.0
 
-* Implement scrapping of Win-builder queue (#40 suggested by @krlmlr)
+## New feature
+
+* Implement scrapping of Win-builder queue (#40 suggested by @krlmlr).
+
+## Other changes
+
 * In `cran_incoming()` and `winbuilder_queue()` the version numbers in the
   tibbles are of class `package_version` (suggested by @krlmlr).
 * `cran_incoming()` output includes the size of the tarball archive.

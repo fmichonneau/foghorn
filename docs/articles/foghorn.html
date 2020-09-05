@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
       <h1 data-toc-skip>Get started</h1>
                         <h4 class="author">Francois Michonneau</h4>
             
-            <h4 class="date">2020-07-30</h4>
+            <h4 class="date">2020-09-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/fmichonneau/foghorn/blob/master/vignettes/foghorn.Rmd"><code>vignettes/foghorn.Rmd</code></a></small>
       <div class="hidden name"><code>foghorn.Rmd</code></div>
@@ -116,17 +116,17 @@
 <p>In addition of your own packages, you can also check the results for any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## either by themselves</span>
 <span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="kw">pkg</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span>))</pre></body></html></div>
+<pre><code>## ✖  Package with errors on CRAN: 
+##   - dplyr (2)</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
 ##   - dplyr (5)
 ##   - ggplot2 (5)</code></pre>
-<pre><code>## ◉  Package with other issues on CRAN: 
-##   - dplyr</code></pre>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span>(<span class="kw">pkg</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span>))</pre></body></html></div>
 <pre><code>## # A tibble: 2 x 7
 ##   package error  fail  warn  note    ok has_other_issues
 ##   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           
-## 1 dplyr       0     0     0     5     7 TRUE            
-## 2 ggplot2     0     0     0     5     6 FALSE</code></pre>
+## 1 dplyr       2     0     0     5     5 FALSE           
+## 2 ggplot2     0     0     0     5     7 FALSE</code></pre>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="co">## or by combining them with email addresses</span>
 <span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span>(<span class="kw">email</span> <span class="kw">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,
                      <span class="kw">pkg</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"mregions"</span>, <span class="st">"ridigbio"</span>))</pre></body></html></div>
@@ -152,7 +152,7 @@
 <pre><code>## # A tibble: 1 x 7
 ##   package version result check      flavors              n_flavors message      
 ##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;        
-## 1 tidyr   1.1.0   NOTE   data for … r-devel-linux-x86_6…         5 "     Note: …</code></pre>
+## 1 tidyr   1.1.2   NOTE   data for … r-devel-linux-x86_6…         5 "     Note: …</code></pre>
 <div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">tidyr_details</span>)</pre></body></html></div>
 <pre><code>## ★ tidyr - note: data for non-ASCII characters
 ##    ❯ r-devel-linux-x86_64-fedora-clang 

@@ -24,7 +24,7 @@ A \code{tibble} with the following columns:
 \item{version}{package version}
 \item{cran_folder}{folder where the package was found}
 \item{time}{date/time package was entered in the folder}
-\item{size}{the size fo the package tarball}
+\item{size}{the size of the package tarball}
 }
 }
 \description{

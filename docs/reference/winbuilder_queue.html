@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • foghorn</title>
+<title>Show the win-builder queue — winbuilder_queue • foghorn</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Show the win-builder queue — winbuilder_queue" />
+<meta property="og:description" content="Check whether your package is in the win-builder queue." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -121,18 +122,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Show the win-builder queue</h1>
+    <small class="dont-index">Source: <a href='https://github.com/fmichonneau/foghorn/blob/master/R/winbuilder_queue.R'><code>R/winbuilder_queue.R</code></a></small>
+    <div class="hidden name"><code>winbuilder_queue.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="foghorn.html">Get started</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Check whether your package is in the win-builder queue.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>winbuilder_queue</span>(
+  <span class='kw'>pkg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>folders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"R-release"</span>, <span class='st'>"R-devel"</span>, <span class='st'>"R-oldrelease"</span>)
+)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pkg</th>
+      <td><p>Optionally provide a vector of package names to limits the
+results to these packages.</p></td>
+    </tr>
+    <tr>
+      <th>folders</th>
+      <td><p>Which folders of the win-builder queue do you want to
+inspect? Default: the 3 architectures win-builder provides.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <code>tibble</code> with the following columns:</p><dl'>
+<dt>package</dt><dd><p>package name</p></dd>
+<dt>version</dt><dd><p>package version</p></dd>
+<dt>folder</dt><dd><p>the folder indicating the R version that will be used to perform the checks</p></dd>
+<dt>time</dt><dd><p>the date and time at which the package tarball was uploaded on win-builder</p></dd>
+<dt>size</dt><dd><p>the size of the package tarball</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>To check whether your package has successfully been submitted to
+win-builder, or to check whether there is unusual delay in processing
+packages submitted to win-builder, <code>winbuilder_queue</code> allows you to inspect
+the packages that are in the queue to be processed by the win-builder
+service.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    
+<ul>
+<li><p>Maëlle Salmon, 2020. "Everything you should know about WinBuilder" <a href='https://blog.r-hub.io/2020/04/01/win-builder/'>https://blog.r-hub.io/2020/04/01/win-builder/</a></p></li>
+<li><p>Uwe Ligges. Building and checking R source packages for Windows. <a href='https://win-builder.r-project.org/'>https://win-builder.r-project.org/</a></p></li>
+</ul>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='co'>## Get all the packages in the win-builder queue</span>
+  <span class='fu'>winbuilder_queue</span>()
+  <span class='co'>## Check if the 'dplyr' package is in the win-builder queue</span>
+  <span class='fu'>winbuilder_queue</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"dplyr"</span>)
+  <span class='co'>## Check which packages are in the R-devel queue</span>
+  <span class='fu'>winbuilder_queue</span>(<span class='kw'>folders</span> <span class='kw'>=</span> <span class='st'>"R-devel"</span>)
+}</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
