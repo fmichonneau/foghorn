@@ -76,10 +76,12 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
     overwrite) {
     file_cran_url <- paste0(cran_url(protocol), is_ftp, "/web/checks/", file)
-    pb <- progress_multi(
-      i = 1, labels = list(paste("Downloading", file)), count = FALSE,
-      progress = requireNamespace("progress", quietly = TRUE) && interactive()
-    )
+    if (interactive()) {
+      pb <- progress_multi(
+        i = 1, labels = list(paste("Downloading", file)), count = FALSE,
+        progress = requireNamespace("progress", quietly = TRUE)
+      )
+    }
     d_status <- httr::GET(
       url = file_cran_url,
       httr::write_disk(dest_file, overwrite = overwrite),
