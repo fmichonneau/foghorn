@@ -66,7 +66,8 @@ progress_multi <- function(i, labels, count, progress) {
 ##' @importFrom httr GET write_disk status_code config
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
-                                overwrite = FALSE, file_prefix = NULL, ...) {
+                                overwrite = FALSE, file_prefix = NULL,
+                                progress = TRUE, ...) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
   is_ftp <- if (identical(protocol, "ftp")) "/pub/R/" else character(0)
@@ -79,13 +80,15 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     if (interactive()) {
       pb <- progress_multi(
         i = 1, labels = list(paste("Downloading", file)), count = FALSE,
-        progress = requireNamespace("progress", quietly = TRUE)
+        progress = requireNamespace("progress", quietly = TRUE) && progress
       )
+    } else {
+      pb <- NULL
     }
     d_status <- httr::GET(
       url = file_cran_url,
       httr::write_disk(dest_file, overwrite = overwrite),
-      httr::config(progressfunction = if (interactive()) pb$callback), ...
+      httr::config(progressfunction = pb$callback), ...
     )
 
     if (!identical(httr::status_code(d_status), 200L)) {

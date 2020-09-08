@@ -6,9 +6,10 @@
 Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/foghorn)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://codecov.io/github/fmichonneau/foghorn?branch=master)
-[![](http://www.r-pkg.org/badges/version/foghorn)](http://www.r-pkg.org/pkg/foghorn)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/foghorn)](https://www.r-pkg.org/pkg/foghorn)
 [![CRAN RStudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/foghorn)](http://www.r-pkg.org/pkg/foghorn)
+downloads](https://cranlogs.r-pkg.org/badges/foghorn)](https://www.r-pkg.org/pkg/foghorn)
 
 # foghorn <img src="man/figures/logo.png" align="right" />
 
@@ -93,8 +94,6 @@ other packages that might be of interest to you:
 ``` r
 ## either by themselves
 summary_cran_results(pkg = c("ggplot2", "dplyr"))
-#> ✖  Package with errors on CRAN: 
-#>   - dplyr (2)
 #> ★  Packages with notes on CRAN: 
 #>   - dplyr (5)
 #>   - ggplot2 (5)
@@ -103,7 +102,7 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 #> # A tibble: 2 x 7
 #>   package error  fail  warn  note    ok has_other_issues
 #>   <chr>   <int> <int> <int> <int> <int> <lgl>           
-#> 1 dplyr       2     0     0     5     5 FALSE           
+#> 1 dplyr       0     0     0     5     7 FALSE           
 #> 2 ggplot2     0     0     0     5     7 FALSE
 
 ## or by combining them with email addresses

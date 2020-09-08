@@ -1,6 +1,6 @@
 # foghorn
 
-# v1.3.0
+# v1.3.1
 
 ## New feature
 
@@ -13,7 +13,8 @@
 * `cran_incoming()` output includes the size of the tarball archive.
 * `cran_incoming()` returns a zero-row tibble instead of `NULL` when the
   inspected folder is empty.
-  
+* The argument `progress` was not documented (and not implemented properly) for
+  `cran_results()` and `cran_details()`.
 
 # v1.2.3
 
