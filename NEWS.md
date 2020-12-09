@@ -1,5 +1,12 @@
 # foghorn
 
+# Development version
+
+## Bug fixes
+
+* The output of `winbuilder_queue()` was always empty following a change to the
+  content returned by the Win-builder FTP server (#43, reported by @bbolker).
+
 # v1.3.1
 
 ## New feature

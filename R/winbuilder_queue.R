@@ -19,7 +19,7 @@ new_winbuilder_q <- function(package = character(0),
 }
 
 parse_winbuilder <- function(res) {
-  if (length(res$content) == 0) {
+  if (identical(length(res$content), 0L)) {
     return(new_winbuilder_q())
   }
 
@@ -29,7 +29,7 @@ parse_winbuilder <- function(res) {
   )
 
   ## people sometimes upload other stuff to the FTP server
-  rr <- rr[grepl("\\.tar.gz$", rr$V9), ]
+  rr <- rr[grepl("\\.tar.gz$", rr$V4), ]
 
   pkgs <- parse_pkg(rr$V4)
 
