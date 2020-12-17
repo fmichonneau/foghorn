@@ -1,6 +1,6 @@
 # foghorn
 
-# Development version
+# v1.3.2
 
 ## Bug fixes
 
