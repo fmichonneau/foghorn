@@ -32,13 +32,30 @@ parse_cran_incoming <- function(res) {
   rr <- rr[grepl("\\.tar.gz$", rr$V9), ]
 
   pkgs <- parse_pkg(rr$V9)
-  ## the server doesn't return the year???
+  ## curl doesn't return the year for files that are less than
+  ## 6 month old.
+  ## see this thread: https://curl.se/mail/archive-2008-01/0007.html
+  ##
+  ## Assume that the files are from the current year,
+  ## if the date is in the future, then go back one year
+  ## (that's what is done with `future_times` below)
+  ##
+  ## FIXME: we don't know where the year will appear when it
+  ## will be listed so files more than a year old will still
+  ## have the wrong date!
   year <- substr(Sys.time(), 1, 4)
   ## avoid need for locale-dependent month name match
   ##  (CRAN FTP info uses English abbrevs)
   month <- match(rr$V6, month.abb)
   timestr <- with(rr, sprintf("%d-%s-%s %s", V7, month, year, V8))
-  time <- as.POSIXct(timestr, format = "%d-%m-%Y %H:%M")
+  time <- as.POSIXct(timestr, format = "%d-%m-%Y %H:%M", tz = "Europe/Vienna")
+
+  ## fix dates in the future
+  future_times <- difftime(Sys.time(), time) < 0
+  time[future_times] <- as.POSIXct(
+    with(rr[future_times, ], sprintf("%d-%s-%s %s", V7, month[future_times], as.numeric(year) - 1L, V8)),
+    format = "%d-%m-%Y %H:%M", tz = "Europe/Vienna"
+  )
 
   new_cran_q(
     package = pkgs$package,
