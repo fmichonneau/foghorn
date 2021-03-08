@@ -38,13 +38,13 @@ n_cran_flavors <- function(
                              "foghorn.force_default",
                              FALSE
                            ),
-                           n_flavors = getOption("foghorn.n_flavors", 12L)) {
+                           n_flavors = getOption("foghorn.n_flavors", 13L)) {
   stopifnot(rlang::is_logical(use_cache, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_logical(force_default, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_integer(n_flavors, 1))
 
   ## maximum number of CRAN check results that can be expected.
-  ## As of 2020-07-30, 12 flavors listed
+  ## As of 2021-03-08, 13 flavors listed
   ## https://cran.r-project.org/web/checks/check_flavors.html
 
   if (force_default) {
