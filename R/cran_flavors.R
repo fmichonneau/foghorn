@@ -26,7 +26,7 @@
 ##'   written from the cache? (default: `TRUE`)
 ##' @param force_default Should the default value be used? (default: `FALSE`).
 ##'   When `TRUE`, the number of flavors is read from the Internet.
-##' @param n_flavors What is the default number of flavors? (default: `12L`)
+##' @param n_flavors What is the default number of flavors? (default: `13L`)
 ##' @return The number of CRAN check flavors (as an integer).
 ##' @export
 ##' @importFrom rlang is_logical is_integer is_lgl_na
