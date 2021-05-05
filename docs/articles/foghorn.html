@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -63,7 +63,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/fmichonneau/foghorn/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -77,14 +77,13 @@
 
       
 
-      </header><script src="foghorn_files/header-attrs-2.5/header-attrs.js"></script><link href="foghorn_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="foghorn_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="foghorn_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Get started</h1>
                         <h4 class="author">Francois Michonneau</h4>
             
-            <h4 class="date">2020-12-17</h4>
+            <h4 class="date">2021-05-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/fmichonneau/foghorn/blob/master/vignettes/foghorn.Rmd"><code>vignettes/foghorn.Rmd</code></a></small>
       <div class="hidden name"><code>foghorn.Rmd</code></div>
@@ -101,10 +100,12 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Graphical interface</span>
 <span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></code></pre></div>
-<pre><code>## ✔ All clear for foghorn, riceware, rotl!</code></pre>
+<pre><code>## ✔ All clear for riceware!</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
+##   - foghorn (7)
 ##   - phylobase (1)
-##   - rncl (3)</code></pre>
+##   - rncl (9)
+##   - rotl (7)</code></pre>
 <p><code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> is actually an alias of <code><a href="https://rdrr.io/r/base/summary.html">summary(cran_results())</a></code>, meaning that you can call <code><a href="../reference/cran_results.html">cran_results()</a></code> directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## Results as a tibble</span>
@@ -112,63 +113,63 @@
 <pre><code>## # A tibble: 5 x 7
 ##   package   error  fail  warn  note    ok has_other_issues
 ##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           
-## 1 foghorn       0     0     0     0    12 FALSE           
-## 2 phylobase     0     0     0     1    11 FALSE           
-## 3 riceware      0     0     0     0    12 FALSE           
-## 4 rncl          0     0     0     3     9 FALSE           
-## 5 rotl          0     0     0     0    12 FALSE</code></pre>
+## 1 foghorn       0     0     0     7     6 FALSE           
+## 2 phylobase     0     0     0     1    12 FALSE           
+## 3 riceware      0     0     0     0    13 FALSE           
+## 4 rncl          0     0     0     9     4 FALSE           
+## 5 rotl          0     0     0     7     6 FALSE</code></pre>
 <p>In addition of your own packages, you can also check the results for any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## either by themselves</span>
 <span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## ✖  Package with errors on CRAN: 
-##   - ggplot2 (5)</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
-##   - dplyr (5)
-##   - ggplot2 (3)</code></pre>
-<pre><code>## ◉  Package with other issues on CRAN: 
-##   - ggplot2</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+##   - dplyr (6)
+##   - ggplot2 (6)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 7
 ##   package error  fail  warn  note    ok has_other_issues
 ##   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           
-## 1 dplyr       0     0     0     5     7 FALSE           
-## 2 ggplot2     5     0     0     3     4 TRUE</code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+## 1 dplyr       0     0     0     6     7 FALSE           
+## 2 ggplot2     0     0     0     6     7 FALSE</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## or by combining them with email addresses</span>
 <span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,
                      pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## ✔ All clear for foghorn, mregions, riceware, ridigbio, rotl!</code></pre>
+<pre><code>## ✔ All clear for mregions, riceware!</code></pre>
 <pre><code>## ★  Packages with notes on CRAN: 
+##   - foghorn (7)
 ##   - phylobase (1)
-##   - rncl (3)</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+##   - ridigbio (7)
+##   - rncl (9)
+##   - rotl (7)</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,
                    pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 7
 ##   package   error  fail  warn  note    ok has_other_issues
 ##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           
-## 1 foghorn       0     0     0     0    12 FALSE           
-## 2 mregions      0     0     0     0    12 FALSE           
-## 3 phylobase     0     0     0     1    11 FALSE           
-## 4 riceware      0     0     0     0    12 FALSE           
-## 5 ridigbio      0     0     0     0    12 FALSE           
-## 6 rncl          0     0     0     3     9 FALSE           
-## 7 rotl          0     0     0     0    12 FALSE</code></pre>
+## 1 foghorn       0     0     0     7     6 FALSE           
+## 2 mregions      0     0     0     0    13 FALSE           
+## 3 phylobase     0     0     0     1    12 FALSE           
+## 4 riceware      0     0     0     0    13 FALSE           
+## 5 ridigbio      0     0     0     7     6 FALSE           
+## 6 rncl          0     0     0     9     4 FALSE           
+## 7 rotl          0     0     0     7     6 FALSE</code></pre>
 <p>You can inspect the logs for the check results using <code><a href="../reference/cran_details.html">summary_cran_details(pkg)</a></code> (or <code><a href="https://rdrr.io/r/base/summary.html">summary(cran_details(pkg))</a></code>), while <code><a href="../reference/visit_cran_check.html">visit_cran_check(pkg)</a></code> takes you directly to the CRAN webpage.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tidyr_details</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cran_details.html">cran_details</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"tidyr"</span><span class="op">)</span>
 <span class="va">tidyr_details</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 7
 ##   package version result check      flavors              n_flavors message      
 ##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;        
-## 1 tidyr   1.1.2   NOTE   data for … r-devel-linux-x86_6…         5 "     Note: …</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+## 1 tidyr   1.1.3   NOTE   data for … r-devel-linux-x86_6…         6 "     Note: …</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">tidyr_details</span><span class="op">)</span></code></pre></div>
 <pre><code>## ★ tidyr - note: data for non-ASCII characters
 ##    ❯ r-devel-linux-x86_64-fedora-clang 
 ##    ❯ r-devel-linux-x86_64-fedora-gcc 
+##    ❯ r-devel-windows-x86_64-gcc10-UCRT 
 ##    ❯ r-patched-solaris-x86 
 ##    ❯ r-release-macos-x86_64 
 ##    ❯ r-oldrel-macos-x86_64 
@@ -178,7 +179,7 @@
 <h2 class="hasAnchor">
 <a href="#where-does-it-get-the-data" class="anchor"></a>Where does it get the data?</h2>
 <p>The data from the check results used by this package are either scrapped from the CRAN web pages (default), or are from the CRAN database (that CRAN uses to build the webpages). The first option is faster if you want to regularly check a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended (it’s about 20Mb of data). To use the CRAN database, add <code>src = "crandb"</code> in your function calls:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"nlme"</span>, src <span class="op">=</span> <span class="st">"crandb"</span><span class="op">)</span></code></pre></div>
 <p>Check out the “Details” section in the help files for more information.</p>
 </div>

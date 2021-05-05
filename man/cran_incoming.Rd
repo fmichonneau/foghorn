@@ -26,6 +26,9 @@ A \code{tibble} with the following columns:
 \item{time}{date/time package was entered in the folder}
 \item{size}{the size of the package tarball}
 }
+
+Note that if the package version is not provided, it will appear as \verb{0.0.0}
+in the \code{tibble}.
 }
 \description{
 Check where your package stands in the CRAN incoming queue.
