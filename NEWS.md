@@ -1,5 +1,14 @@
 # foghorn
 
+# v1.4.0
+
+## Other Changes
+
+* The inspection of the queue from CRAN incoming is now using HTTPS instead of
+  FTP.
+* The data in the `size` column for the object returned by `cran_incoming()` is
+  now of type character.
+
 # v1.3.2
 
 ## Bug fixes

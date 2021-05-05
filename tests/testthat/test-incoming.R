@@ -16,7 +16,7 @@ test_that("Documentation is correct", {
       version = c("package_version", "numeric_version"),
       cran_folder = "character",
       time = c("POSIXct", "POSIXt"),
-      size = "integer"
+      size = "character"
     )
   )
 })

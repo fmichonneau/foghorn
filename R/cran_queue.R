@@ -2,12 +2,12 @@ new_cran_q <- function(package = character(0),
                        version = as.package_version(character(0)),
                        cran_folder = character(0),
                        time = as.POSIXct(character(0)),
-                       size = integer(0)) {
+                       size = character(0)) {
   stopifnot(is.character(package))
   stopifnot(is.package_version(version))
   stopifnot(is.character(cran_folder))
   stopifnot(inherits(time, "POSIXct"))
-  stopifnot(is.integer(size))
+  stopifnot(is.character(size))
 
   tibble::tibble(
     package,
@@ -18,51 +18,52 @@ new_cran_q <- function(package = character(0),
   )
 }
 
-parse_cran_incoming <- function(res) {
-  if (length(res$content) == 0) {
+parse_http_cran_incoming <- function(res_raw) {
+  if (identical(length(res_raw$content), 0L)) {
     return(new_cran_q())
   }
 
-  rr <- read.table(
-    text = rawToChar(res$content),
-    stringsAsFactors = FALSE
-  )
+  res <- rawToChar(res_raw$content)
+  res <- xml2::read_html(res)
+  res <- rvest::html_table(res)
 
-  ## people sometimes upload other stuff to the FTP server
-  rr <- rr[grepl("\\.tar.gz$", rr$V9), ]
+  if (!identical(length(res), 1L)) {
+    stop(
+      "Issue with formatting of table. Please report the bug.",
+      call. = FALSE
+    )
+  }
 
-  pkgs <- parse_pkg(rr$V9)
-  ## curl doesn't return the year for files that are less than
-  ## 6 month old.
-  ## see this thread: https://curl.se/mail/archive-2008-01/0007.html
-  ##
-  ## Assume that the files are from the current year,
-  ## if the date is in the future, then go back one year
-  ## (that's what is done with `future_times` below)
-  ##
-  ## FIXME: we don't know where the year will appear when it
-  ## will be listed so files more than a year old will still
-  ## have the wrong date!
-  year <- substr(Sys.time(), 1, 4)
-  ## avoid need for locale-dependent month name match
-  ##  (CRAN FTP info uses English abbrevs)
-  month <- match(rr$V6, month.abb)
-  timestr <- with(rr, sprintf("%d-%s-%s %s", V7, month, year, V8))
-  time <- as.POSIXct(timestr, format = "%d-%m-%Y %H:%M", tz = "Europe/Vienna")
+  res <- res[[1]]
 
-  ## fix dates in the future
-  future_times <- difftime(Sys.time(), time) < 0
-  time[future_times] <- as.POSIXct(
-    with(rr[future_times, ], sprintf("%d-%s-%s %s", V7, month[future_times], as.numeric(year) - 1L, V8)),
-    format = "%d-%m-%Y %H:%M", tz = "Europe/Vienna"
-  )
+  res <- res[nzchar(res$Name) & res$Name != "Parent Directory", , drop = FALSE]
+
+  if (identical(nrow(res), 0L)) {
+    return(new_cran_q())
+  }
+
+  pkgs <- parse_pkg(res$Name)
+  time <- as.POSIXct(res[["Last modified"]], tz = "Europe/Vienna")
+  size <- res$Size
 
   new_cran_q(
     package = pkgs$package,
     version = pkgs$version,
-    cran_folder = basename(res$url),
+    cran_folder = basename(res_raw$url),
     time = time,
-    size = rr$V5
+    size = size
+  )
+}
+
+parse_pkg_version <- function(pkg) {
+  vapply(
+    pkg, function(x) {
+      if (is.na(x[2])) {
+        return("0.0.0")
+      }
+      x[2]
+    },
+    character(1)
   )
 }
 
@@ -71,7 +72,7 @@ parse_pkg <- function(pkg) {
   pkg <- strsplit(pkg, "_")
   tibble::tibble(
     package = vapply(pkg, function(x) x[1], character(1)),
-    version = as.package_version(vapply(pkg, function(x) x[2], character(1)))
+    version = as.package_version(parse_pkg_version(pkg))
   )
 }
 
@@ -161,6 +162,9 @@ cran_ftp <- function(pkg, folders, url) {
 ##' \item{size}{the size of the package tarball}
 ##' }
 ##'
+##' Note that if the package version is not provided, it will appear as `0.0.0`
+##' in the `tibble`.
+##'
 ##' @examples
 ##' \dontrun{
 ##'   ## all the packages in the CRAN incoming queue
@@ -184,10 +188,10 @@ cran_incoming <- function(pkg = NULL,
   res_data <- cran_ftp(
     pkg = pkg,
     folders = folders,
-    url = "ftp://cran.r-project.org/incoming/"
+    url = "https://cran.r-project.org/incoming/"
   )
 
-  res <- lapply(res_data, function(x) parse_cran_incoming(x))
+  res <- lapply(res_data, function(x) parse_http_cran_incoming(x))
   res <- do.call("rbind", res)
 
   if (!is.null(pkg)) {

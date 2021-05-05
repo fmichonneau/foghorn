@@ -2,7 +2,9 @@
 
 test_that(
   "invalid source name",
-  expect_error(cran_results(pkg = "dplyr", src = "foo"))
+  {
+    expect_error(cran_results(pkg = "dplyr", src = "foo"))
+  }
 )
 
 
