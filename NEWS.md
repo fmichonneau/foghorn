@@ -1,5 +1,11 @@
 # foghorn
 
+# v1.4.1
+
+## Other changes
+
+* The number of CRAN flavors is now at 14.
+
 # v1.4.0
 
 ## Other Changes

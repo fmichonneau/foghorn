@@ -1,11 +1,11 @@
 
-### v1.4.0
+### v1.4.1
 
 ## Test environments
 
-- Ubuntu 20.04, R 3.6.3, R 4.0.5, R-devel (2021-05-04 r80263)
-- macOS (macOS Catalina 10.15.7), R 4.0.5
-- windows R 3.6.3, 4.0.5
+- Ubuntu 20.04, R 3.6.3, R 4.1.0, R-devel
+- macOS (macOS Catalina 10.15.7), R 4.1.0
+- windows R 3.6.3, 4.1.0
 
 ## R CMD check results
 
