@@ -6,5 +6,5 @@ repos:
     -   id: parsable-R
     -   id: no-browser-statement
     -   id: readme-rmd-rendered
-#    -   id: roxygenize
+    -   id: roxygenize
     -   id: use-tidy-description
