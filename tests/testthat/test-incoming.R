@@ -44,3 +44,8 @@ test_that("specifying folders works", {
   res2 <- cran_incoming(folders = c("inspect", "pending"))
   expect_true(nrow(res2) > 1 && all(res2$cran_folder %in% c("inspect", "pending")))
 })
+
+test_that("handling of misformed package name works", {
+  expect_true(is.na(parse_pkg("pkgnm2.0_pkg_r.tar.gz")$version))
+  expect_true(is.na(parse_pkg("pkg.tar.gz")$version))
+})

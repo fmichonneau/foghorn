@@ -58,9 +58,6 @@ parse_http_cran_incoming <- function(res_raw) {
 parse_pkg_version <- function(pkg) {
   vapply(
     pkg, function(x) {
-      if (is.na(x[2])) {
-        return("0.0.0")
-      }
       x[2]
     },
     character(1)
@@ -72,7 +69,7 @@ parse_pkg <- function(pkg) {
   pkg <- strsplit(pkg, "_")
   tibble::tibble(
     package = vapply(pkg, function(x) x[1], character(1)),
-    version = as.package_version(parse_pkg_version(pkg))
+    version = package_version(parse_pkg_version(pkg), strict = FALSE)
   )
 }
 
