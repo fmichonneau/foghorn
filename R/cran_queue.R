@@ -159,7 +159,7 @@ cran_ftp <- function(pkg, folders, url) {
 ##' \item{size}{the size of the package tarball}
 ##' }
 ##'
-##' Note that if the package version is not provided, it will appear as `0.0.0`
+##' Note that if the package version is not provided, it will appear as `NA`
 ##' in the `tibble`.
 ##'
 ##' @examples
