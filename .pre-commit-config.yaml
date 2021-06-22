@@ -1,6 +1,6 @@
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.1.3
+    rev: v0.1.3.9014
     hooks:
     -   id: style-files
     -   id: parsable-R
