@@ -1,5 +1,14 @@
 # foghorn
 
+# v1.4.2
+
+## Other changes
+
+* The parsing of incorrectly formatted package names submitted to CRAN's queue
+  does not lead `foghorn` to error. The version number for such packages is now
+  `NA` instead of `0.0.0`. (#45, reported by @bastistician)
+* Rename internal function to reflect it does not use FTP anymore.
+
 # v1.4.1
 
 ## Other changes
