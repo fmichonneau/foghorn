@@ -73,9 +73,9 @@ parse_pkg <- function(pkg) {
   )
 }
 
-## internal function to scrape content of FTP server, used by `cran_incoming`
-## and `winbuilder_queue`.
-cran_ftp <- function(pkg, folders, url) {
+## internal function to scrape content of CRAN queue servers, used by
+## `cran_incoming` and `winbuilder_queue`.
+cran_queue <- function(pkg, folders, url) {
   if (!is.null(pkg) &&
     (!is.character(pkg) || any(is.na(pkg)))) {
     stop(sQuote("pkg"), " must be a character vector.")
@@ -148,7 +148,7 @@ cran_ftp <- function(pkg, folders, url) {
 ##' @title List packages in CRAN incoming queue.
 ##' @param pkg Optionally provide a vector of package names to limit the results
 ##'     to these packages.
-##' @param folders Which folders of the CRAN FTP site do you want to inspect? Default:
+##' @param folders Which folders of the CRAN queue do you want to inspect? Default:
 ##'     all the non-human folders.
 ##' @return A `tibble` with the following columns:
 ##' \describe{
@@ -182,7 +182,7 @@ cran_incoming <- function(pkg = NULL,
                           folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive", "waiting")) {
   folders <- match.arg(folders, several.ok = TRUE)
 
-  res_data <- cran_ftp(
+  res_data <- cran_queue(
     pkg = pkg,
     folders = folders,
     url = "https://cran.r-project.org/incoming/"

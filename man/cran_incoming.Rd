@@ -14,7 +14,7 @@ cran_incoming(
 \item{pkg}{Optionally provide a vector of package names to limit the results
 to these packages.}
 
-\item{folders}{Which folders of the CRAN FTP site do you want to inspect? Default:
+\item{folders}{Which folders of the CRAN queue do you want to inspect? Default:
 all the non-human folders.}
 }
 \value{
@@ -27,7 +27,7 @@ A \code{tibble} with the following columns:
 \item{size}{the size of the package tarball}
 }
 
-Note that if the package version is not provided, it will appear as \verb{0.0.0}
+Note that if the package version is not provided, it will appear as \code{NA}
 in the \code{tibble}.
 }
 \description{

@@ -88,7 +88,7 @@ winbuilder_queue <- function(pkg = NULL,
                              folders = c("R-release", "R-devel", "R-oldrelease")) {
   folders <- match.arg(folders, several.ok = TRUE)
 
-  res <- cran_ftp(
+  res <- cran_queue(
     pkg = pkg,
     folders = folders,
     url = "ftp://win-builder.r-project.org"
