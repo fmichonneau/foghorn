@@ -1,7 +1,7 @@
-pandoc: '2.10'
+pandoc: 2.14.0.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   foghorn: foghorn.html
-last_built: 2021-05-31T09:17Z
+last_built: 2021-07-11T10:16Z
 
