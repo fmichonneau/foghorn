@@ -70,13 +70,12 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
                                 progress = TRUE, ...) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
-  is_ftp <- if (identical(protocol, "ftp")) "/pub/R/" else character(0)
   file <- paste0("check_", file, ".rds")
   dest_file <- file.path(dest, paste0(file_prefix, file))
   if (!(file.exists(dest_file) &&
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
     overwrite) {
-    file_cran_url <- paste0(cran_url(protocol), is_ftp, "/web/checks/", file)
+    file_cran_url <- paste0(cran_url(protocol), "/web/checks/", file)
     if (interactive()) {
       pb <- progress_multi(
         i = 1, labels = list(paste("Downloading", file)), count = FALSE,

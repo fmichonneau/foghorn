@@ -1,12 +1,5 @@
 cran_url <- function(protocol = "https") {
-  protocol <- match.arg(protocol, c("https", "http", "ftp"))
-  if (identical(protocol, "ftp")) {
-    warning(
-      "The FTP protocol on the CRAN servers will soon be deprecated ",
-      "because they are insecure. Consider using HTTPS."
-    )
-    return("ftp://cran.r-project.org")
-  }
+  protocol <- match.arg(protocol, c("https", "http"))
 
   mirror <- getOption("repos")[["CRAN"]][1]
 
