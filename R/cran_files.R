@@ -1,4 +1,4 @@
-##' @importFrom httr GET write_disk status_code config
+##' @importFrom httr2 request req_options multi_req_perform
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, file_prefix = NULL,
@@ -7,21 +7,27 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
   protocol <- match.arg(protocol)
   file <- paste0("check_", file, ".rds")
   dest_file <- file.path(dest, paste0(file_prefix, file))
+  
   if (!(file.exists(dest_file) &&
-    file.info(dest_file, extra_cols = FALSE)$size > 0) ||
-    overwrite) {
+          file.info(dest_file, extra_cols = FALSE)$size > 0) ||
+        overwrite) {
+    
     file_cran_url <- paste0(cran_url(protocol), "/web/checks/", file)
-    d_status <- httr::GET(
-      url = file_cran_url,
-      httr::write_disk(dest_file, overwrite = overwrite),
-      httr::config(progressfunction = pb$callback), ...
-    )
+    
+    req <- httr2::request(file_cran_url)
+    req <- httr2::req_options(req)
 
-    if (!identical(httr::status_code(d_status), 200L)) {
+    ## we use multi_req_perform even though we do a single request
+    ## because it always succeed.
+    resp <- httr2::multi_req_perform(list(req), paths = dest_file)[[1]]
+
+    if (inherits(resp, "error")) {
       unlink(dest_file)
-      stop("Can't get ", file_cran_url, " (status code: ", httr::status_code(d_status), ")", call. = FALSE)
-    }
+      message("Can't get ", file_cran_url, "\nMessage: ", dQuote(resp$message), "")
+      rlang::interrupt()
+    }    
   }
+  
   invisible(dest_file)
 }
 
