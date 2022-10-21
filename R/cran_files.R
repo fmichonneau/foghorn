@@ -1,73 +1,8 @@
-## progress_multi taken from `provisionr` written by Rich FitzJohn:
-##   https://github.com/mrc-ide/provisionr/blob/master/R/download.R#L124-L179
-##
-progress_multi <- function(i, labels, count, progress) {
-  label <- format(labels[[i]], width = max(nchar(labels)), justify = "right")
-  if (count) {
-    is <- format(i, width = nchar(length(labels)))
-    prefix <- sprintf("[%s/%s] %s", is, length(labels), label)
-  } else {
-    prefix <- label
-  }
-  bar <- NULL
-  type <- "down"
-  seen <- 0
-
-  if (progress) {
-    callback <- function(down, up) {
-      if (type == "down") {
-        total <- down[[1L]]
-        now <- down[[2L]]
-      } else {
-        total <- up[[1L]]
-        now <- up[[2L]]
-      }
-
-      if (total == 0 && now == 0) {
-        bar <<- NULL
-        seen <<- 0
-        return(TRUE)
-      }
-
-      if (is.null(bar)) {
-        if (total == 0) {
-          fmt <- paste0(prefix, " [ :bytes in :elapsed ]")
-          total <- 1e8 # arbitrarily big
-        } else {
-          fmt <- paste0(prefix, " [:percent :bar]")
-        }
-        bar <<- progress::progress_bar$new(fmt, total,
-          clear = TRUE,
-          show_after = 0
-        )
-      }
-      if (total == 0) {
-        bar$tick(now)
-      } else {
-        bar$tick(now - seen)
-        seen <<- now
-      }
-
-      TRUE
-    }
-  } else {
-    callback <- function(down, up) {
-      TRUE
-    }
-  }
-
-  list(
-    callback = callback,
-    prefix = prefix
-  )
-}
-
-
 ##' @importFrom httr GET write_disk status_code config
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, file_prefix = NULL,
-                                progress = TRUE, ...) {
+                                ...) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
   file <- paste0("check_", file, ".rds")
@@ -76,14 +11,6 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     file.info(dest_file, extra_cols = FALSE)$size > 0) ||
     overwrite) {
     file_cran_url <- paste0(cran_url(protocol), "/web/checks/", file)
-    if (interactive()) {
-      pb <- progress_multi(
-        i = 1, labels = list(paste("Downloading", file)), count = FALSE,
-        progress = requireNamespace("progress", quietly = TRUE) && progress
-      )
-    } else {
-      pb <- NULL
-    }
     d_status <- httr::GET(
       url = file_cran_url,
       httr::write_disk(dest_file, overwrite = overwrite),
