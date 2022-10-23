@@ -31,29 +31,31 @@ clean_connection <- function(x) {
 }
 
 .internal_read_cran_web <- function(x) {
-  on.exit(clean_connection(x))
-  xml2::read_html(x)
+  stopifnot(identical(length(x), 1L))
+  on.exit(clean_connection(x), add = TRUE)
+
+  req <- httr2::request(x)
+  httr2::multi_req_perform(list(req))[[1]]
 }
+
 
 retry_connect <- function(f, n_attempts = 3) {
   res <- try(f, silent = TRUE)
   attempts <- 0
-  pred <- inherits(res, "try-error")
-
-  if (pred && grepl("HTTP error 404", res)) {
+  pred <- is_try_httr_multi_error(res)
+  
+  if (pred && grepl("HTTP 404", res$message)) {
     return(res)
   }
 
-  while (pred && attempts < n_attempts) {
+  while (is_try_httr_multi_error(res) && attempts < n_attempts) {
     Sys.sleep(exp(stats::runif(1) * attempts))
     res <- try(f, silent = TRUE)
-    pred <- inherits(res, "try-error")
     attempts <- attempts + 1
   }
 
   res
 }
-
 
 ##' @importFrom xml2 read_html
 ##' @importFrom curl has_internet
@@ -64,18 +66,31 @@ read_cran_web <- function(x) {
   retry_connect(.internal_read_cran_web(x))
 }
 
+##' @importFrom httr2 resp_status
+is_404 <- function(resp) {
+  inherits(resp, "httr2_http_404")
+}
+
+is_try_httr_multi_error <- function(x) {
+  inherits(x, "error") || inherits(x, "try-error")
+}
+
 handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
-  if (length(bad <- grep("HTTP error 404", res)) > 0) {
+  is_404 <- vapply(res, function(x) is_404(x), logical(1))
+  is_err <- vapply(res, function(x) is_try_httr_multi_error(x), logical(1))
+  if (any(is_404)) {
+    msgs <- vapply(res[is_404], function(x) x$message, character(1))
     stop(msg_404,
-      paste(sQuote(input[bad]), collapse = ", "),
-      ".\n", "Original error: ", sQuote(res[bad]),
+      paste(
+        sQuote(input[is_404]), collapse = ", "), ".\n",
+        "Error: ", paste(sQuote(msgs), collapse = ", "), ".", 
       call. = FALSE
     )
   }
-  if (length(bad <- which(vapply(res, inherits, logical(1), "try-error")))) {
+  if (any(is_err)) {
     stop(msg_other,
-      paste(sQuote(input[bad]), collapse = ", "), "\n",
-      "  ", res[[bad]],
+      paste(sQuote(input[is_err]), collapse = ", "), "\n",
+      "  ", res[is_err]$message,
       call. = FALSE
     )
   }
@@ -89,6 +104,7 @@ read_cran_web_from_email <- function(email) {
     "Invalid email address(es): ",
     "Something went wrong with getting data with email address(es): "
   )
+  res <- lapply(res, function(x) xml2::read_html(httr2::resp_body_raw(x)))
   class(res) <- c("cran_checks_email", class(res))
   res
 }
@@ -101,6 +117,7 @@ read_cran_web_from_pkg <- function(pkg) {
     "Invalid package name(s): ",
     "Something went wrong with getting data for package name(s): "
   )
+  res <- lapply(res, function(x) xml2::read_html(httr2::resp_body_raw(x)))
   names(res) <- pkg
   class(res) <- c("cran_checks_pkg", class(res))
   res

@@ -54,10 +54,6 @@ cran_checks_table.cran_checks_pkg <- function(parsed, ...) {
 cran_checks_table.crandb <- function(parsed, ...) {
   tbl <- parsed
   tbl$status <- gsub("WARNING", "WARN", tbl$status)
+  tbl$status <- gsub("FAILURE", "FAIL", tbl$status)
   process_cran_table(tbl)
-}
-
-
-cran_checks_table.api <- function(parsed, ...) {
-  process_cran_table(parsed)
 }

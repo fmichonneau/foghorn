@@ -54,7 +54,7 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##' @return a data frame that tabulates the number of CRAN flavors
 ##'     that return errors, warnings, notes, or OK for the packages.
 ##' @examples
-##'   if (curl::has_internet()) {
+##'   \dontrun{
 ##'     cran_results(pkg="MASS")
 ##'   }
 cran_results <- function(email = NULL, pkg = NULL,

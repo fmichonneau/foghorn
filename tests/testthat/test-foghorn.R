@@ -273,7 +273,7 @@ test_that("output of summary cran results", {
   )
 
   pkg_with_warn <- sample(
-    unique(cran_res$package[cran_res$status == "WARN"]),
+    unique(cran_res$package[cran_res$status == "WARNING"]),
     5
   )
   ## nolint start
@@ -284,8 +284,14 @@ test_that("output of summary cran results", {
   ## nolint end
 
   ## all have >= 1 values in column WARNING
-  expect_true(all(cran_results(pkg = pkg_with_warn, src = "website")$warn > 0))
-  expect_true(all(cran_results(pkg = pkg_with_warn, src = "crandb")$warn > 0))
+  expect_true({
+    message("Checking: ", paste(pkg_with_warn, collapse = ", "))
+    all(cran_results(pkg = pkg_with_warn, src = "website")$warn > 0) 
+  })
+  expect_true({
+    message("Checking: ", paste(pkg_with_warn, collapse = ", "))
+    all(cran_results(pkg = pkg_with_warn, src = "crandb")$warn > 0)
+  })
   ## all are listed under packages with WARNING
   expect_message(
     summary_cran_results(pkg = pkg_with_warn),
@@ -316,7 +322,7 @@ test_that("output of summary cran results", {
   )
 
   pkg_with_fail <- sample(
-    unique(cran_res$package[cran_res$status == "FAIL"]),
+    unique(cran_res$package[cran_res$status == "FAILURE"]),
     5
   )
 

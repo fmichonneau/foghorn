@@ -23,8 +23,7 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
 
     if (inherits(resp, "error")) {
       unlink(dest_file)
-      message("Can't get ", file_cran_url, "\nMessage: ", dQuote(resp$message), "")
-      rlang::interrupt()
+      stop("Cannot access ", file_cran_url, "\nMessage: ", dQuote(resp$message))
     }    
   }
   
@@ -59,12 +58,7 @@ read_cran_rds_file <- function(file) {
 ## fetch_cran_rds_file() call), or the type of file that one wants to
 ## download from CRAN servers (e.g., "results", "details", "issues", ...)
 get_cran_rds_file <- function(file, ...) {
-  if (grepl("\\.rds$", file, ignore.case = TRUE) &&
-    file.exists(file)) {
-    f <- file
-  } else {
-    f <- fetch_cran_rds_file(file, ...)
-  }
+  f <- fetch_cran_rds_file(file, ...)
   read_cran_rds_file(f)
 }
 

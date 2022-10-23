@@ -70,18 +70,10 @@ by default).}
 \code{dest} then it will not be downloaded again. When
 \code{TRUE} the file gets downloaded every time it's
 needed.}
-
-\item {progress} { when \code{TRUE} (default), a bar will be
-displayed to show the download progress (requires the
-\pkg{progress} package). }
-
-\item {...} { additional arguments that will be passed to
-\code{\link[httr]{GET}} function to control how
-the file will be downloaded.}
 }
 }
 \examples{
-  if (curl::has_internet()) {
+  \dontrun{
     cran_results(pkg="MASS")
   }
 }

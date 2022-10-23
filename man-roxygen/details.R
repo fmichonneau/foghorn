@@ -25,9 +25,6 @@
 ##'                       \code{dest} then it will not be downloaded again. When
 ##'                       \code{TRUE} the file gets downloaded every time it's
 ##'                       needed.}
-##'   \item {...} { additional arguments that will be passed to
-##'                 \code{\link[httr]{GET}} function to control how
-##'                 the file will be downloaded.}
 ##' }
 ##'
 ##' @seealso Note that the \code{tools} package contains unexported
