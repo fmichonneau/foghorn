@@ -2,30 +2,40 @@
 % Please edit documentation in R/cran_queue.R
 \name{cran_incoming}
 \alias{cran_incoming}
+\alias{cran_incoming_folders}
 \title{List packages in CRAN incoming queue.}
 \usage{
 cran_incoming(
   pkg = NULL,
-  folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish",
-    "archive", "waiting")
+  folders = cran_incoming_folders(),
+  sort_by_date = TRUE
 )
+
+cran_incoming_folders(include_archive = FALSE)
 }
 \arguments{
-\item{pkg}{Optionally provide a vector of package names to limit the results
-to these packages.}
+\item{pkg}{Optionally provide a vector of package names to limit
+the results to these packages.}
 
-\item{folders}{Which folders of the CRAN queue do you want to inspect? Default:
-all the non-human folders.}
+\item{folders}{Which folders of the CRAN queue do you want to
+inspect? Default: all the non-human folders.}
+
+\item{sort_by_date}{when \code{TRUE} (default), the output is sorted in
+decreasing order according to the submission time.}
+
+\item{include_archive}{when \code{TRUE}, the function
+\code{cran_incoming_folders()} also returns the \code{archive} folder.}
 }
 \value{
-A \code{tibble} with the following columns:
-\describe{
-\item{package}{package name}
-\item{version}{package version}
-\item{cran_folder}{folder where the package was found}
-\item{time}{date/time package was entered in the folder}
-\item{size}{the size of the package tarball}
-}
+\code{cran_incoming()} returns \code{tibble} with the following
+columns: \describe{ \item{package}{package name}
+\item{version}{package version} \item{cran_folder}{folder where
+the package was found} \item{time}{date/time package was entered
+in the folder} \item{size}{the size of the package tarball} }
+
+\code{cran_incoming_folders()} returns a character vector of the
+names of the folders used as part of the CRAN submission
+process, \code{archive} being included optionally.
 
 Note that if the package version is not provided, it will appear as \code{NA}
 in the \code{tibble}.
@@ -34,14 +44,16 @@ in the \code{tibble}.
 Check where your package stands in the CRAN incoming queue.
 }
 \details{
-When submitting a package to CRAN, it undergoes a series of checks before it
-is published and publicly available. \code{cran_incoming()} allows you to check
-the packages that are currently in the queue, and the folder where they are
-located. This information could help you track your package submission. Only
-the following folders are considered (approximately in order of the CRAN
-queue sequence): \code{newbies}, \code{inspect}, \code{pretest}, \code{recheck}, \code{pending},
-\code{waiting}, \code{publish}, \code{archive}. The folders named after the initials of the
-CRAN volunteers are not inspected.
+When submitting a package to CRAN, it undergoes a series of checks
+before it is published and publicly available. \code{cran_incoming()}
+allows you to check the packages that are currently in the queue,
+and the folder where they are located. This information could help
+you track your package submission. Only the following folders are
+considered (approximately in order of the CRAN queue sequence):
+\code{newbies}, \code{inspect}, \code{pretest}, \code{recheck}, \code{pending}, \code{waiting},
+\code{publish}. The folder \code{archive} is not inspected by default. The
+folders named after the initials of the CRAN volunteers are not
+inspected.
 }
 \note{
 The meaning of the package folders is as follows
@@ -70,6 +82,10 @@ any questions.
 \dontrun{
   ## all the packages in the CRAN incoming queue
   cran_incoming()
+  ## to include all the folders including `archive`
+  cran_incoming(folders = cran_incoming_folders(include_archive = TRUE)
+  ## to only include a folder, e.g., `inspect`
+  cran_incoming(folders = "inspect")
   ## if the package `foo` is in the queue, it will appear below
   cran_incoming(pkg = "foo")
 }

@@ -78,7 +78,7 @@ parse_pkg <- function(pkg) {
 cran_queue <- function(pkg, folders, url) {
   if (!is.null(pkg) &&
     (!is.character(pkg) || any(is.na(pkg)))) {
-    stop(sQuote("pkg"), " must be a character vector.")
+    stop(sQuote("pkg"), " must be a character vector.", call. = FALSE)
   }
 
   sub_folders <- paste0(folders, "/")
@@ -115,14 +115,16 @@ cran_queue <- function(pkg, folders, url) {
 
 ##' Check where your package stands in the CRAN incoming queue.
 ##'
-##' When submitting a package to CRAN, it undergoes a series of checks before it
-##' is published and publicly available. `cran_incoming()` allows you to check
-##' the packages that are currently in the queue, and the folder where they are
-##' located. This information could help you track your package submission. Only
-##' the following folders are considered (approximately in order of the CRAN
-##' queue sequence): `newbies`, `inspect`, `pretest`, `recheck`, `pending`,
-##' `waiting`, `publish`, `archive`. The folders named after the initials of the
-##' CRAN volunteers are not inspected.
+##' When submitting a package to CRAN, it undergoes a series of checks
+##' before it is published and publicly available. `cran_incoming()`
+##' allows you to check the packages that are currently in the queue,
+##' and the folder where they are located. This information could help
+##' you track your package submission. Only the following folders are
+##' considered (approximately in order of the CRAN queue sequence):
+##' `newbies`, `inspect`, `pretest`, `recheck`, `pending`, `waiting`,
+##' `publish`. The folder `archive` is not inspected by default. The
+##' folders named after the initials of the CRAN volunteers are not
+##' inspected.
 ##'
 ##' @note
 ##' The meaning of the package folders is as follows
@@ -137,6 +139,7 @@ cran_queue <- function(pkg, folders, url) {
 ##' \item{publish}{package is awaiting publication}
 ##' \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 ##' }
+##' 
 ##' @section Disclaimer:
 ##' The information provided here is only to give you an indication of where
 ##' your package stands in the submission process. It can be useful to confirm
@@ -146,18 +149,24 @@ cran_queue <- function(pkg, folders, url) {
 ##' any questions.
 ##'
 ##' @title List packages in CRAN incoming queue.
-##' @param pkg Optionally provide a vector of package names to limit the results
-##'     to these packages.
-##' @param folders Which folders of the CRAN queue do you want to inspect? Default:
-##'     all the non-human folders.
-##' @return A `tibble` with the following columns:
-##' \describe{
-##' \item{package}{package name}
-##' \item{version}{package version}
-##' \item{cran_folder}{folder where the package was found}
-##' \item{time}{date/time package was entered in the folder}
-##' \item{size}{the size of the package tarball}
-##' }
+##' @param pkg Optionally provide a vector of package names to limit
+##'   the results to these packages.
+##' @param folders Which folders of the CRAN queue do you want to
+##'   inspect? Default: all the non-human folders.
+##' @param include_archive when `TRUE`, the function
+##'   `cran_incoming_folders()` also returns the `archive` folder.
+##' @param sort_by_date when `TRUE` (default), the output is sorted in
+##'   decreasing order according to the submission time.
+##' @return `cran_incoming()` returns `tibble` with the following
+##'   columns: \describe{ \item{package}{package name}
+##'   \item{version}{package version} \item{cran_folder}{folder where
+##'   the package was found} \item{time}{date/time package was entered
+##'   in the folder} \item{size}{the size of the package tarball} }
+##'
+##'   `cran_incoming_folders()` returns a character vector of the
+##'   names of the folders used as part of the CRAN submission
+##'   process, `archive` being included optionally.
+##'   
 ##'
 ##' Note that if the package version is not provided, it will appear as `NA`
 ##' in the `tibble`.
@@ -166,6 +175,10 @@ cran_queue <- function(pkg, folders, url) {
 ##' \dontrun{
 ##'   ## all the packages in the CRAN incoming queue
 ##'   cran_incoming()
+##'   ## to include all the folders including `archive`
+##'   cran_incoming(folders = cran_incoming_folders(include_archive = TRUE)
+##'   ## to only include a folder, e.g., `inspect`
+##'   cran_incoming(folders = "inspect")
 ##'   ## if the package `foo` is in the queue, it will appear below
 ##'   cran_incoming(pkg = "foo")
 ##' }
@@ -179,8 +192,15 @@ cran_queue <- function(pkg, folders, url) {
 ##' @export
 ##' @md
 cran_incoming <- function(pkg = NULL,
-                          folders = c("newbies", "inspect", "pretest", "recheck", "pending", "publish", "archive", "waiting")) {
-  folders <- match.arg(folders, several.ok = TRUE)
+                          folders = cran_incoming_folders(),
+                          sort_by_date = TRUE
+                          ) {
+  
+  folders <- match.arg(
+    folders,
+    cran_incoming_folders(include_archive = TRUE),
+    several.ok = TRUE
+  )
 
   res_data <- cran_queue(
     pkg = pkg,
@@ -188,11 +208,37 @@ cran_incoming <- function(pkg = NULL,
     url = "https://cran.r-project.org/incoming/"
   )
 
-  res <- lapply(res_data, function(x) parse_http_cran_incoming(x))
+  res <- lapply(res_data, parse_http_cran_incoming)
   res <- do.call("rbind", res)
-
+  
   if (!is.null(pkg)) {
     res <- res[res$package %in% pkg, ]
   }
+
+  if (sort_by_date) {
+    res <- res[order(res$time, decreasing = TRUE), ]
+  }
+  
   res
+}
+
+##' @export
+##' @rdname cran_incoming
+cran_incoming_folders <- function(include_archive = FALSE) {
+  folders <- c(
+    "newbies",
+    "inspect",
+    "pretest",
+    "recheck",
+    "pending",
+    "publish",
+    "waiting"
+  )
+
+  if (include_archive) {
+    folders <- c(folders, "archive")
+  }
+  
+  folders
+  
 }

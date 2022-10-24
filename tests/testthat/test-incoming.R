@@ -45,7 +45,40 @@ test_that("specifying folders works", {
   expect_true(nrow(res2) > 1 && all(res2$cran_folder %in% c("inspect", "pending")))
 })
 
+test_that("sort_by_date works (without archive)", {
+  skip_on_cran()
+
+  unsorted <- cran_incoming(sort_by_date = FALSE)
+  sorted <- cran_incoming(sort_by_date = TRUE)
+
+  skip_if(nrow(sorted) < 2L)
+  expect_true(max(unsorted$time) == sorted$time[1])
+})
+
+test_that("sort_by_date works (with archive)", {
+  skip_on_cran()
+
+  unsorted <- cran_incoming(
+    sort_by_date = FALSE,
+    folders = cran_incoming_folders(include_archive = TRUE)
+  )
+  sorted <- cran_incoming(
+    sort_by_date = TRUE,
+    folders = cran_incoming_folders(include_archive = TRUE)
+  )
+
+  skip_if(nrow(sorted) < 2L)
+  expect_true(max(unsorted$time) == sorted$time[1])
+})
+
 test_that("handling of misformed package name works", {
   expect_true(is.na(parse_pkg("pkgnm2.0_pkg_r.tar.gz")$version))
   expect_true(is.na(parse_pkg("pkg.tar.gz")$version))
+})
+
+test_that("cran_incoming_folders works as expected", {
+  expect_identical(length(cran_incoming_folders()), 7L)
+  expect_false(any(grepl("archive", cran_incoming_folders())))
+  expect_identical(length(cran_incoming_folders(include_archive = TRUE)), 8L)
+  expect_true(any(grepl("archive", cran_incoming_folders(include_archive = TRUE))))
 })
