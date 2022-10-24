@@ -15,24 +15,33 @@ vignette: >
 library(foghorn)
 ```
 
-`foghorn` provides the results of the package CRAN checks. As a maintainer, you can easily get the results of the checks for your packages by using the email address included in the `DESCRIPTION` file of your packages. 
+`foghorn` provides the results of the package CRAN checks. As a
+maintainer, you can easily get the results of the checks for your
+packages by using the email address included in the `DESCRIPTION` file
+of your packages.
 
-`summary_cran_results()` provides you with a graphical summary of the results of the CRAN checks. The number in parenthesis after the name of the package indicates the number of platforms used by CRAN that produced this result.
+`summary_cran_results()` provides you with a graphical summary of the
+results of the CRAN checks. The number in parenthesis after the name
+of the package indicates the number of platforms used by CRAN that
+produced this result.
 
 ```{r graphical-interface}
 ## Graphical interface
 summary_cran_results(email = "francois.michonneau@gmail.com")
 ```
 
-`summary_cran_results()` is actually an alias of `summary(cran_results())`, meaning that you can call `cran_results()` directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.
+`summary_cran_results()` is actually an alias of
+`summary(cran_results())`, meaning that you can call `cran_results()`
+directly if you want to easily access the underlying data for the
+results of the CRAN checks. These results are stored in a tibble.
 
 ```{r tibble}
 ## Results as a tibble
 cran_results(email = "francois.michonneau@gmail.com")
 ```
 
-In addition of your own packages, you can also check the results for any other
-packages that might be of interest to you:
+In addition of your own packages, you can also check the results for
+any other packages that might be of interest to you:
 
 ```{r package-name}
 ## either by themselves
@@ -47,7 +56,8 @@ cran_results(email = "francois.michonneau@gmail.com",
 ```
 
 You can inspect the logs for the check results using
-`summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while `visit_cran_check(pkg)` takes you directly to the CRAN webpage.
+`summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while
+`visit_cran_check(pkg)` takes you directly to the CRAN webpage.
 
 
 ```{r cran-details}
@@ -58,18 +68,20 @@ summary(tidyr_details)
 
 ## Where does it get the data?
 
-The data from the check results used by this package are either scrapped from
-the CRAN web pages (default), or are from the CRAN database (that CRAN uses to
-build the webpages). The first option is faster if you want to regularly check a
-few packages. However, if you are doing statistics on a large number of
-packages, using the CRAN database is recommended (it's about 20Mb of data). To
-use the CRAN database, add `src = "crandb"` in your function calls:
+The data from the check results used by this package are either
+scrapped from the CRAN web pages (default), or are from the CRAN
+database (that CRAN uses to build the webpages). The first option is
+faster if you want to regularly check a few packages. However, if you
+are doing statistics on a large number of packages, using the CRAN
+database is recommended (it's about 20Mb of data). To use the CRAN
+database, add `src = "crandb"` in your function calls:
 
 ```{r show-cran-db, eval=FALSE}
 cran_results(pkg = "nlme", src = "crandb")
 ```
 
-Check out the "Details" section in the help files for more information.
+Check out the "Details" section in the help files for more
+information.
 
 
 ## Feedback? Suggestions?
