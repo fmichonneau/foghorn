@@ -1,0 +1,201 @@
+---
+title: "Get started"
+author: "Francois Michonneau"
+date: "2022-10-24"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+```r
+## load the package
+library(foghorn)
+```
+
+`foghorn` provides the results of the package CRAN checks. As a
+maintainer, you can easily get the results of the checks for your
+packages by using the email address included in the `DESCRIPTION` file
+of your packages.
+
+`summary_cran_results()` provides you with a graphical summary of the
+results of the CRAN checks. The number in parenthesis after the name
+of the package indicates the number of platforms used by CRAN that
+produced this result.
+
+
+```r
+## Graphical interface
+summary_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+```
+## ✔ All clear for riceware, rotl!
+```
+
+```
+## ✖  Package with errors on CRAN: 
+##   - foghorn (4)
+```
+
+```
+## ★  Packages with notes on CRAN: 
+##   - phylobase (5)
+##   - rncl (4)
+```
+
+`summary_cran_results()` is actually an alias of
+`summary(cran_results())`, meaning that you can call `cran_results()`
+directly if you want to easily access the underlying data for the
+results of the CRAN checks. These results are stored in a tibble.
+
+
+```r
+## Results as a tibble
+cran_results(email = "francois.michonneau@gmail.com")
+```
+
+```
+## # A tibble: 5 × 7
+##   package   error  fail  warn  note    ok has_other_issues
+##   <chr>     <int> <int> <int> <int> <int> <lgl>           
+## 1 foghorn       4     0     0     0     9 FALSE           
+## 2 phylobase     0     0     0     5     8 FALSE           
+## 3 riceware      0     0     0     0    13 FALSE           
+## 4 rncl          0     0     0     4     9 FALSE           
+## 5 rotl          0     0     0     0    13 FALSE
+```
+
+In addition of your own packages, you can also check the results for
+any other packages that might be of interest to you:
+
+
+```r
+## either by themselves
+summary_cran_results(pkg = c("ggplot2", "dplyr"))
+```
+
+```
+## ✖  Package with errors on CRAN: 
+##   - dplyr (1)
+```
+
+```
+## ★  Packages with notes on CRAN: 
+##   - dplyr (6)
+##   - ggplot2 (9)
+```
+
+```r
+cran_results(pkg = c("ggplot2", "dplyr"))
+```
+
+```
+## # A tibble: 2 × 7
+##   package error  fail  warn  note    ok has_other_issues
+##   <chr>   <int> <int> <int> <int> <int> <lgl>           
+## 1 dplyr       1     0     0     6     6 FALSE           
+## 2 ggplot2     0     0     0     9     4 FALSE
+```
+
+```r
+## or by combining them with email addresses
+summary_cran_results(email = "francois.michonneau@gmail.com",
+                     pkg = c("mregions", "ridigbio"))
+```
+
+```
+## ✔ All clear for mregions, riceware, ridigbio, rotl!
+```
+
+```
+## ✖  Package with errors on CRAN: 
+##   - foghorn (4)
+```
+
+```
+## ★  Packages with notes on CRAN: 
+##   - phylobase (5)
+##   - rncl (4)
+```
+
+```r
+cran_results(email = "francois.michonneau@gmail.com",
+                   pkg = c("mregions", "ridigbio"))
+```
+
+```
+## # A tibble: 7 × 7
+##   package   error  fail  warn  note    ok has_other_issues
+##   <chr>     <int> <int> <int> <int> <int> <lgl>           
+## 1 foghorn       4     0     0     0     9 FALSE           
+## 2 mregions      0     0     0     0    13 FALSE           
+## 3 phylobase     0     0     0     5     8 FALSE           
+## 4 riceware      0     0     0     0    13 FALSE           
+## 5 ridigbio      0     0     0     0    13 FALSE           
+## 6 rncl          0     0     0     4     9 FALSE           
+## 7 rotl          0     0     0     0    13 FALSE
+```
+
+You can inspect the logs for the check results using
+`summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while
+`visit_cran_check(pkg)` takes you directly to the CRAN webpage.
+
+
+
+```r
+tidyr_details <- cran_details(pkg = "tidyr")
+tidyr_details
+```
+
+```
+## # A tibble: 1 × 7
+##   package version result check                         flavors   n_fla…¹ message
+##   <chr>   <chr>   <chr>  <chr>                         <chr>       <dbl> <chr>  
+## 1 tidyr   1.2.1   NOTE   data for non-ASCII characters r-devel-…       6 "     …
+## # … with abbreviated variable name ¹​n_flavors
+```
+
+```r
+summary(tidyr_details)
+```
+
+```
+## ★ tidyr - note: data for non-ASCII characters
+##    ❯ r-devel-linux-x86_64-fedora-clang 
+##    ❯ r-devel-linux-x86_64-fedora-gcc 
+##    ❯ r-release-macos-arm64 
+##    ❯ r-release-macos-x86_64 
+##    ❯ r-oldrel-macos-arm64 
+##    ❯ r-oldrel-macos-x86_64 
+## 
+##      Note: found 24 marked UTF-8 strings
+```
+
+## Where does it get the data?
+
+The data from the check results used by this package are either
+scrapped from the CRAN web pages (default), or are from the CRAN
+database (that CRAN uses to build the webpages). The first option is
+faster if you want to regularly check a few packages. However, if you
+are doing statistics on a large number of packages, using the CRAN
+database is recommended (it's about 20Mb of data). To use the CRAN
+database, add `src = "crandb"` in your function calls:
+
+
+```r
+cran_results(pkg = "nlme", src = "crandb")
+```
+
+Check out the "Details" section in the help files for more
+information.
+
+
+## Feedback? Suggestions?
+
+Feel free to submit feedback and suggestions
+by [opening an issue](https://github.com/fmichonneau/foghorn/issues/new) on
+GitHub.

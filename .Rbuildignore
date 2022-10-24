@@ -17,3 +17,5 @@ man-roxygen
 ^revdep
 ^\.github$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
+^vignettes/make-vignette.R$

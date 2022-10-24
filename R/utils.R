@@ -43,3 +43,10 @@ add_cols <- function(tbl) {
   }
   convert_nas(tbl)[, names(default_cran_results)]
 }
+
+
+### for devtools::release()
+
+release_questions <- function() {
+  c("Did you re-render the vignettes by running `make_vignettes()` (in `vignettes/`)?")
+}
