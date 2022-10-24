@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">foghorn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.1</span>
       </span>
     </div>
 
@@ -96,75 +96,75 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Graphical interface</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔ All clear for riceware, rotl!</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #BB0000;">✖  Package with errors on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #BB0000;">## </span><span style="color: #BB0000; font-weight: bold;">  - foghorn (4)</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #0000BB;">★  Packages with notes on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## </span><span style="color: #0000BB; font-weight: bold;">  - phylobase (5)</span></span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">##   - rncl (4)</span></span></span></code></pre>
+<pre><code><span><span class="co">## ✔ All clear for riceware, rotl!</span></span></code></pre>
+<pre><code><span><span class="co">## ✖  Package with errors on CRAN: </span></span>
+<span><span class="co">##   - foghorn (4)</span></span></code></pre>
+<pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
+<span><span class="co">##   - phylobase (5)</span></span>
+<span><span class="co">##   - rncl (4)</span></span></code></pre>
 <p><code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> is actually an alias of <code>summary(cran_results())</code>, meaning that you can call <code><a href="../reference/cran_results.html">cran_results()</a></code> directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Results as a tibble</span></span>
 <span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 7</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 5 × 7</span></span>
 <span><span class="co">##   package   error  fail  warn  note    ok has_other_issues</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> foghorn       4     0     0     0     9 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> phylobase     0     0     0     5     8 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> riceware      0     0     0     0    13 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> rncl          0     0     0     4     9 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> rotl          0     0     0     0    13 FALSE</span></span></code></pre>
+<span><span class="co">##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
+<span><span class="co">## 1 foghorn       4     0     0     0     9 FALSE           </span></span>
+<span><span class="co">## 2 phylobase     0     0     0     5     8 FALSE           </span></span>
+<span><span class="co">## 3 riceware      0     0     0     0    13 FALSE           </span></span>
+<span><span class="co">## 4 rncl          0     0     0     4     9 FALSE           </span></span>
+<span><span class="co">## 5 rotl          0     0     0     0    13 FALSE</span></span></code></pre>
 <p>In addition of your own packages, you can also check the results for any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## either by themselves</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #BB0000;">✖  Package with errors on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #BB0000;">## </span><span style="color: #BB0000; font-weight: bold;">  - dplyr (1)</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #0000BB;">★  Packages with notes on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## </span><span style="color: #0000BB; font-weight: bold;">  - dplyr (6)</span></span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">##   - ggplot2 (9)</span></span></span></code></pre>
+<pre><code><span><span class="co">## ✖  Package with errors on CRAN: </span></span>
+<span><span class="co">##   - dplyr (1)</span></span></code></pre>
+<pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
+<span><span class="co">##   - dplyr (6)</span></span>
+<span><span class="co">##   - ggplot2 (9)</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 7</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 2 × 7</span></span>
 <span><span class="co">##   package error  fail  warn  note    ok has_other_issues</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> dplyr       1     0     0     6     6 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> ggplot2     0     0     0     9     4 FALSE</span></span></code></pre>
+<span><span class="co">##   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
+<span><span class="co">## 1 dplyr       1     0     0     6     6 FALSE           </span></span>
+<span><span class="co">## 2 ggplot2     0     0     0     9     4 FALSE</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## or by combining them with email addresses</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>                     pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #00BB00;">✔ All clear for mregions, riceware, ridigbio, rotl!</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #BB0000;">✖  Package with errors on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #BB0000;">## </span><span style="color: #BB0000; font-weight: bold;">  - foghorn (4)</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #0000BB;">★  Packages with notes on CRAN: </span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## </span><span style="color: #0000BB; font-weight: bold;">  - phylobase (5)</span></span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">##   - rncl (4)</span></span></span></code></pre>
+<pre><code><span><span class="co">## ✔ All clear for mregions, riceware, ridigbio, rotl!</span></span></code></pre>
+<pre><code><span><span class="co">## ✖  Package with errors on CRAN: </span></span>
+<span><span class="co">##   - foghorn (4)</span></span></code></pre>
+<pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
+<span><span class="co">##   - phylobase (5)</span></span>
+<span><span class="co">##   - rncl (4)</span></span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>                   pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 7</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 7 × 7</span></span>
 <span><span class="co">##   package   error  fail  warn  note    ok has_other_issues</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> foghorn       4     0     0     0     9 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> mregions      0     0     0     0    13 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">3</span> phylobase     0     0     0     5     8 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">4</span> riceware      0     0     0     0    13 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">5</span> ridigbio      0     0     0     0    13 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">6</span> rncl          0     0     0     4     9 FALSE           </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">7</span> rotl          0     0     0     0    13 FALSE</span></span></code></pre>
+<span><span class="co">##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
+<span><span class="co">## 1 foghorn       4     0     0     0     9 FALSE           </span></span>
+<span><span class="co">## 2 mregions      0     0     0     0    13 FALSE           </span></span>
+<span><span class="co">## 3 phylobase     0     0     0     5     8 FALSE           </span></span>
+<span><span class="co">## 4 riceware      0     0     0     0    13 FALSE           </span></span>
+<span><span class="co">## 5 ridigbio      0     0     0     0    13 FALSE           </span></span>
+<span><span class="co">## 6 rncl          0     0     0     4     9 FALSE           </span></span>
+<span><span class="co">## 7 rotl          0     0     0     0    13 FALSE</span></span></code></pre>
 <p>You can inspect the logs for the check results using <code>summary_cran_details(pkg)</code> (or <code>summary(cran_details(pkg))</code>), while <code>visit_cran_check(pkg)</code> takes you directly to the CRAN webpage.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidyr_details</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cran_details.html">cran_details</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"tidyr"</span><span class="op">)</span></span>
 <span><span class="va">tidyr_details</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 7</span></span></span>
+<pre><code><span><span class="co">## # A tibble: 1 × 7</span></span>
 <span><span class="co">##   package version result check                         flavors   n_fla…¹ message</span></span>
-<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> tidyr   1.2.1   NOTE   data for non-ASCII characters r-devel-…       6 <span style="color: #949494;">"</span>     …</span></span>
-<span><span class="co">## <span style="color: #949494;"># … with abbreviated variable name ¹​n_flavors</span></span></span></code></pre>
+<span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  </span></span>
+<span><span class="co">## 1 tidyr   1.2.1   NOTE   data for non-ASCII characters r-devel-…       6 "     …</span></span>
+<span><span class="co">## # … with abbreviated variable name ¹​n_flavors</span></span></code></pre>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tidyr_details</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #0000BB;">★ </span><span style="color: #0000BB; font-weight: bold;">tidyr - note</span><span style="color: #0000BB;">: data for non-ASCII characters</span></span></span>
+<pre><code><span><span class="co">## ★ tidyr - note: data for non-ASCII characters</span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-clang </span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-gcc </span></span>
 <span><span class="co">##    ❯ r-release-macos-arm64 </span></span>
