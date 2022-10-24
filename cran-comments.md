@@ -1,12 +1,9 @@
-
-### v1.4.2
-
-## Test environments
-
-- Ubuntu 20.04, R 3.6.3, R 4.1.0, R-devel
-- macOS (macOS Catalina 10.15.7), R 4.1.0
-- windows R 3.6.3, 4.1.0
-
 ## R CMD check results
 
-- There were no ERRORs or WARNINGs
+0 errors | 0 warnings | 0 note
+
+* This release addresses the content of the email sent by Kurt Hornik on 2022-10-13.
+
+## Reverse Dependencies
+
+No changes

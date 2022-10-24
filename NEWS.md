@@ -1,5 +1,26 @@
 # foghorn
 
+# v1.5.0
+
+## New Features
+
+* The `cran_incoming()` function does not include the packages found the
+  `archive` folder by default. (#49, suggested by @krlmlr)
+* The `cran_incoming()` gains a new argument. The results are sorted
+  by date (in decreasing order) by default. Using `sort_by_date = FALSE`
+  to get the old behavior (#49, suggested by @krlmlr).
+  
+
+## Other changes
+
+* The progress bar for larger file downloads from CRAN server has been
+  removed.
+* The `httr2` package is now used internally to download files and
+  data from the CRAN servers.
+* The unexported code to use the crancheck API
+  (https://cranchecks.info/) has been removed from the code base.
+* All support for FTP access has been removed.
+
 # v1.4.2
 
 ## Other changes

@@ -8,7 +8,6 @@
 ^appveyor\.yml$
 ^codecov\.yml$
 ^CODE_OF_CONDUCT\.md$
-^cran-comments.md$
 man-roxygen
 ^docs$
 ^_pkgdown\.yml$
@@ -17,3 +16,4 @@ man-roxygen
 ^CRAN-RELEASE$
 ^revdep
 ^\.github$
+^cran-comments\.md$
