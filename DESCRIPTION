@@ -12,7 +12,7 @@ Authors@R:
 Description: The CRAN check results and where your package stands in the
     CRAN submission queue in your R terminal.
 License: MIT + file LICENSE
-URL: https://github.com/fmichonneau/foghorn
+URL: https://fmichonneau.github.io/foghorn/, https://github.com/fmichonneau/foghorn
 BugReports: https://github.com/fmichonneau/foghorn/issues
 Depends:
     R (>= 3.1.0)
