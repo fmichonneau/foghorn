@@ -3,5 +3,8 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   foghorn: foghorn.html
-last_built: 2023-03-14T14:02Z
+last_built: 2023-06-12T14:16Z
+urls:
+  reference: https://fmichonneau.github.io/foghorn/reference
+  article: https://fmichonneau.github.io/foghorn/articles
 
