@@ -1,4 +1,4 @@
-##' @importFrom httr2 request req_options multi_req_perform
+##' @importFrom httr2 request req_options req_perform_parallel
 fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, file_prefix = NULL,
@@ -17,9 +17,14 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     req <- httr2::request(file_cran_url)
     req <- httr2::req_options(req)
 
-    ## we use multi_req_perform even though we do a single request
+    ## we use req_perform_parallel even though we do a single request
     ## because it always succeed.
-    resp <- httr2::multi_req_perform(list(req), paths = dest_file)[[1]]
+    resp <- httr2::req_perform_parallel(
+      list(req),
+      paths = dest_file,
+      on_error = "return",
+      progress = FALSE
+    )[[1]]
 
     if (inherits(resp, "error")) {
       unlink(dest_file)

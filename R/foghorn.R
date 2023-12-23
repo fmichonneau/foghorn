@@ -35,7 +35,9 @@ clean_connection <- function(x) {
   on.exit(clean_connection(x), add = TRUE)
 
   req <- httr2::request(x)
-  httr2::multi_req_perform(list(req))[[1]]
+  httr2::req_perform_parallel(
+    list(req), on_error = "continue", progress = FALSE
+  )[[1]]
 }
 
 
