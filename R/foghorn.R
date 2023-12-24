@@ -84,8 +84,9 @@ handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
     msgs <- vapply(res[is_404], function(x) x$message, character(1))
     stop(msg_404,
       paste(
-        sQuote(input[is_404]), collapse = ", "), ".\n",
-        "Error: ", paste(sQuote(msgs), collapse = ", "), ".", 
+        sQuote(input[is_404]), collapse = ", "
+      ), ".\n",
+      "Error: ", paste(sQuote(msgs), collapse = ", "),
       call. = FALSE
     )
   }
