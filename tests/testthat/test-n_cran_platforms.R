@@ -1,5 +1,5 @@
 cache_file <- file.path(tempdir(), "foghorn-n_cran_flavors.rds")
-current_cran_flavors <- 13L
+current_cran_flavors <- 12L
 
 test_that("caching for CRAN flavors", {
   skip_on_cran()

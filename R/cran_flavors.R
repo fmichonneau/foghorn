@@ -26,7 +26,7 @@
 ##'   written from the cache? (default: `TRUE`)
 ##' @param force_default Should the default value be used? (default: `FALSE`).
 ##'   When `TRUE`, the number of flavors is read from the Internet.
-##' @param n_flavors What is the default number of flavors? (default: `14L`)
+##' @param n_flavors What is the default number of flavors? (default: `12L`)
 ##' @return The number of CRAN check flavors (as an integer).
 ##' @export
 ##' @importFrom rlang is_logical is_integer is_lgl_na
@@ -37,7 +37,7 @@ n_cran_flavors <- function(use_cache = getOption("foghorn.use_cache", TRUE),
                              "foghorn.force_default",
                              FALSE
                            ),
-                           n_flavors = getOption("foghorn.n_flavors", 14L)) {
+                           n_flavors = getOption("foghorn.n_flavors", 12L)) {
   stopifnot(rlang::is_logical(use_cache, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_logical(force_default, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_integer(n_flavors, 1))
