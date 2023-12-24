@@ -17,7 +17,7 @@ functions to view the logs of the CRAN check results (see
 by CRAN (see \code{\link{visit_cran_check}}).
 You can also use \code{foghorn} to follow your package during
 its submission process to CRAN or to WinBuilder with,
-\code{\link{cran_queue}} and \code{\link{winbuilder_queue}}.
+\code{\link{cran_incoming}} and \code{\link{winbuilder_queue}}.
 }
 \seealso{
 Useful links:

@@ -11,7 +11,7 @@
 ##' by CRAN (see \code{\link{visit_cran_check}}).
 ##' You can also use \code{foghorn} to follow your package during
 ##' its submission process to CRAN or to WinBuilder with,
-##' \code{\link{cran_queue}} and \code{\link{winbuilder_queue}}.
+##' \code{\link{cran_incoming}} and \code{\link{winbuilder_queue}}.
 ##'
 ##' @name foghorn
 ##' @docType package
