@@ -7,7 +7,7 @@
 n_cran_flavors(
   use_cache = getOption("foghorn.use_cache", TRUE),
   force_default = getOption("foghorn.force_default", FALSE),
-  n_flavors = getOption("foghorn.n_flavors", 14L)
+  n_flavors = getOption("foghorn.n_flavors", 12L)
 )
 }
 \arguments{
@@ -17,7 +17,7 @@ written from the cache? (default: \code{TRUE})}
 \item{force_default}{Should the default value be used? (default: \code{FALSE}).
 When \code{TRUE}, the number of flavors is read from the Internet.}
 
-\item{n_flavors}{What is the default number of flavors? (default: \code{14L})}
+\item{n_flavors}{What is the default number of flavors? (default: \code{12L})}
 }
 \value{
 The number of CRAN check flavors (as an integer).
