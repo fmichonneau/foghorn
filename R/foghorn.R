@@ -153,7 +153,7 @@ all_packages.cran_checks_email <- function(parsed, ...) {
 
 all_packages.cran_checks_pkg <- function(parsed, ...) {
   lapply(parsed, function(x) {
-    res <- xml2::xml_find_all(x, ".//h2/a/text()")
+    res <- xml2::xml_find_all(x, ".//h2/a/span/text()")
     gsub("\\s", "", xml2::xml_text(res))
   })
 }
