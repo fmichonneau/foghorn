@@ -118,20 +118,14 @@ CRAN website. If you only need to check a few packages, this is a
 good option. If you choose <code>src = "crandb"</code> the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.</p>
 <p>When choosing <code>src = "crandb"</code> you can also specify the
-following options:</p>
-<dl>
-
- dest  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
-by default).
-
-\item protocol  either <code>https</code> (default) or <code>http</code>. 
-
-\item overwrite  when <code>FALSE</code> (default), if the file exists in
+following options:</p><ul><li><p><code>dest</code>:  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
+by default).</p></li>
+<li><p><code>protocol</code>: either <code>https</code> or <code>http</code>.</p></li>
+<li><p><code>overwrite</code>: when <code>FALSE</code> (default), if the file exists in
 <code>dest</code> then it will not be downloaded again. When
 <code>TRUE</code> the file gets downloaded every time it's
-needed.
-
-</dl></div>
+needed.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Note that the <code>tools</code> package contains unexported
