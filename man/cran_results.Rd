@@ -59,7 +59,7 @@ good option. If you choose \code{src = "crandb"} the RDS files
 When choosing \code{src = "crandb"} you can also specify the
 following options:
 
-\itemize{
+\describe{
 
 \item {dest} { a folder where to store the RDS files (\code{tempdir()}
 by default).}

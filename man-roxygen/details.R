@@ -14,7 +14,7 @@
 ##' When choosing \code{src = "crandb"} you can also specify the
 ##' following options:
 ##'
-##' \itemize{
+##' \describe{
 ##'
 ##'   \item {dest} { a folder where to store the RDS files (\code{tempdir()}
 ##'                  by default).}

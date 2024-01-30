@@ -2,8 +2,8 @@
 % Please edit documentation in R/foghorn-package.R
 \docType{package}
 \name{foghorn}
-\alias{foghorn}
 \alias{foghorn-package}
+\alias{foghorn}
 \title{CRAN check results at the terminal}
 \description{
 \code{foghorn} brings the results of the CRAN checks into your R
