@@ -45,12 +45,13 @@ process_cran_table <- function(tbl) {
   add_cols(ctbl)
 }
 
+##' @export
 cran_checks_table.cran_checks_pkg <- function(parsed, ...) {
   tbl <- get_cran_table(parsed, ...)
   process_cran_table(tbl)
 }
 
-
+##' @export
 cran_checks_table.crandb <- function(parsed, ...) {
   tbl <- parsed
   tbl$status <- gsub("WARNING", "WARN", tbl$status)

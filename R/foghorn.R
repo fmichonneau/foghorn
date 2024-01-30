@@ -144,14 +144,17 @@ get_cran_table <- function(parsed, ...) {
 
 all_packages <- function(parsed, ...) UseMethod("all_packages")
 
+##' @export
 all_packages_by_email <- function(x) {
   xml2::xml_text(xml2::xml_find_all(x, ".//h3/@id"))
 }
 
+##' @export
 all_packages.cran_checks_email <- function(parsed, ...) {
   lapply(parsed, all_packages_by_email)
 }
 
+##' @export
 all_packages.cran_checks_pkg <- function(parsed, ...) {
   lapply(parsed, function(x) {
     res <- xml2::xml_find_all(x, ".//h2/a/span/text()")
