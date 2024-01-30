@@ -5,8 +5,7 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ![R-CMD-check](https://github.com/fmichonneau/foghorn/workflows/R-CMD-check/badge.svg)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&svg=true)](https://ci.appveyor.com/project/fmichonneau/foghorn)
-[![Coverage Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://codecov.io/github/fmichonneau/foghorn?branch=master)
+[![Coverage Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://app.codecov.io/github/fmichonneau/foghorn?branch=master)
 [![CRAN version](https://www.r-pkg.org/badges/version/foghorn)](https://www.r-pkg.org/pkg/foghorn)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/foghorn)](https://www.r-pkg.org/pkg/foghorn)
 
