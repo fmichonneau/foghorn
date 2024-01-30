@@ -205,7 +205,7 @@ cran_incoming <- function(pkg = NULL,
   res_data <- cran_queue(
     pkg = pkg,
     folders = folders,
-    url = "https://cran.r-project.org/incoming/"
+    url = "https://cran.r-project.org/incoming"
   )
 
   res <- lapply(res_data, parse_http_cran_incoming)
