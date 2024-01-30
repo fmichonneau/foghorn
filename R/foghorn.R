@@ -144,7 +144,6 @@ get_cran_table <- function(parsed, ...) {
 
 all_packages <- function(parsed, ...) UseMethod("all_packages")
 
-##' @export
 all_packages_by_email <- function(x) {
   xml2::xml_text(xml2::xml_find_all(x, ".//h3/@id"))
 }
