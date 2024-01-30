@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="index.html">foghorn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,77 +104,85 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Graphical interface</span></span>
 <span><span class="fu"><a href="reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ✔ All clear for foghorn, riceware, rotl!</span></span>
+<span><span class="co">#&gt; ✔ All clear for riceware!</span></span>
 <span><span class="co">#&gt; ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">#&gt;   - phylobase (1)</span></span>
-<span><span class="co">#&gt;   - rncl (3)</span></span></code></pre></div>
+<span><span class="co">#&gt;   - foghorn (2)</span></span>
+<span><span class="co">#&gt;   - phylobase (6)</span></span>
+<span><span class="co">#&gt;   - rncl (5)</span></span>
+<span><span class="co">#&gt;   - rotl (2)</span></span></code></pre></div>
 <p><code><a href="reference/summary_cran_results.html">summary_cran_results()</a></code> is actually an alias of <code>summary(cran_results())</code>, meaning that you can call <code><a href="reference/cran_results.html">cran_results()</a></code> directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Results of the checks as a tibble</span></span>
 <span><span class="fu"><a href="reference/cran_results.html">cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 5 x 7</span></span>
+<span><span class="co">#&gt; # A tibble: 5 × 7</span></span>
 <span><span class="co">#&gt;   package   error  fail  warn  note    ok has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 foghorn       0     0     0     0    12 FALSE           </span></span>
-<span><span class="co">#&gt; 2 phylobase     0     0     0     1    11 FALSE           </span></span>
+<span><span class="co">#&gt; 1 foghorn       0     0     0     2    10 FALSE           </span></span>
+<span><span class="co">#&gt; 2 phylobase     0     0     0     6     6 FALSE           </span></span>
 <span><span class="co">#&gt; 3 riceware      0     0     0     0    12 FALSE           </span></span>
-<span><span class="co">#&gt; 4 rncl          0     0     0     3     9 FALSE           </span></span>
-<span><span class="co">#&gt; 5 rotl          0     0     0     0    12 FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 4 rncl          0     0     0     5     7 FALSE           </span></span>
+<span><span class="co">#&gt; 5 rotl          0     0     0     2    10 FALSE</span></span></code></pre></div>
 <p>In addition of your own packages, you can also check the results for any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## either by themselves</span></span>
 <span><span class="fu"><a href="reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">#&gt;   - dplyr (5)</span></span>
-<span><span class="co">#&gt;   - ggplot2 (5)</span></span>
+<span><span class="co">#&gt;   - dplyr (2)</span></span>
+<span><span class="co">#&gt;   - ggplot2 (7)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 x 7</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
 <span><span class="co">#&gt;   package error  fail  warn  note    ok has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 dplyr       0     0     0     5     7 FALSE           </span></span>
-<span><span class="co">#&gt; 2 ggplot2     0     0     0     5     7 FALSE</span></span>
+<span><span class="co">#&gt; 1 dplyr       0     0     0     2    10 FALSE           </span></span>
+<span><span class="co">#&gt; 2 ggplot2     0     0     0     7     5 FALSE</span></span>
 <span></span>
 <span><span class="co">## or by combining them with email addresses</span></span>
 <span><span class="fu"><a href="reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span></span>
 <span>  email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; ✔ All clear for foghorn, mregions, riceware, ridigbio, rotl!</span></span>
+<span><span class="co">#&gt; ✔ All clear for riceware, ridigbio!</span></span>
 <span><span class="co">#&gt; ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">#&gt;   - phylobase (1)</span></span>
-<span><span class="co">#&gt;   - rncl (3)</span></span>
+<span><span class="co">#&gt;   - foghorn (2)</span></span>
+<span><span class="co">#&gt;   - mregions (6)</span></span>
+<span><span class="co">#&gt;   - phylobase (6)</span></span>
+<span><span class="co">#&gt;   - rncl (5)</span></span>
+<span><span class="co">#&gt;   - rotl (2)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/cran_results.html">cran_results</a></span><span class="op">(</span></span>
 <span>  email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mregions"</span>, <span class="st">"ridigbio"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 7 x 7</span></span>
+<span><span class="co">#&gt; # A tibble: 7 × 7</span></span>
 <span><span class="co">#&gt;   package   error  fail  warn  note    ok has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 foghorn       0     0     0     0    12 FALSE           </span></span>
-<span><span class="co">#&gt; 2 mregions      0     0     0     0    12 FALSE           </span></span>
-<span><span class="co">#&gt; 3 phylobase     0     0     0     1    11 FALSE           </span></span>
+<span><span class="co">#&gt; 1 foghorn       0     0     0     2    10 FALSE           </span></span>
+<span><span class="co">#&gt; 2 mregions      0     0     0     6     6 FALSE           </span></span>
+<span><span class="co">#&gt; 3 phylobase     0     0     0     6     6 FALSE           </span></span>
 <span><span class="co">#&gt; 4 riceware      0     0     0     0    12 FALSE           </span></span>
 <span><span class="co">#&gt; 5 ridigbio      0     0     0     0    12 FALSE           </span></span>
-<span><span class="co">#&gt; 6 rncl          0     0     0     3     9 FALSE           </span></span>
-<span><span class="co">#&gt; 7 rotl          0     0     0     0    12 FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 6 rncl          0     0     0     5     7 FALSE           </span></span>
+<span><span class="co">#&gt; 7 rotl          0     0     0     2    10 FALSE</span></span></code></pre></div>
 <p>You can inspect the logs for the check results using <code>summary_cran_details(pkg)</code> (or <code>summary(cran_details(pkg))</code>), while <code>visit_cran_check(pkg)</code> takes you directly to the CRAN webpage.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">tidyr_checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cran_details.html">cran_details</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"tidyr"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 x 7</span></span>
-<span><span class="co">#&gt;   package version result check      flavors              n_flavors message      </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;                    &lt;dbl&gt; &lt;chr&gt;        </span></span>
-<span><span class="co">#&gt; 1 tidyr   1.1.2   NOTE   data for … r-devel-linux-x86_6…         5 "     Note: …</span></span>
+<span><span class="co">#&gt; # A tibble: 2 × 7</span></span>
+<span><span class="co">#&gt;   package version result check                         flavors n_flavors message</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  </span></span>
+<span><span class="co">#&gt; 1 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …</span></span>
+<span><span class="co">#&gt; 2 tidyr   1.3.0   NOTE   C++ specification             r-patc…         2 "     …</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tidyr_checks</span><span class="op">)</span></span>
 <span><span class="co">#&gt; ★ tidyr - note: data for non-ASCII characters</span></span>
 <span><span class="co">#&gt;    ❯ r-devel-linux-x86_64-fedora-clang </span></span>
 <span><span class="co">#&gt;    ❯ r-devel-linux-x86_64-fedora-gcc </span></span>
-<span><span class="co">#&gt;    ❯ r-patched-solaris-x86 </span></span>
-<span><span class="co">#&gt;    ❯ r-release-macos-x86_64 </span></span>
-<span><span class="co">#&gt;    ❯ r-oldrel-macos-x86_64 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;      Note: found 24 marked UTF-8 strings</span></span></code></pre></div>
+<span><span class="co">#&gt;      Note: found 24 marked UTF-8 strings</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ★ tidyr - note: C++ specification</span></span>
+<span><span class="co">#&gt;    ❯ r-patched-linux-x86_64 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;      Specified C++11: please drop specification unless essential</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="where-does-the-data-come-from">Where does the data come from?<a class="anchor" aria-label="anchor" href="#where-does-the-data-come-from"></a>
@@ -182,7 +190,7 @@
 <p>The data from the check results used by this package are either scraped from the CRAN web pages (default), or are from the CRAN database (that CRAN uses to build the webpages). The first option is faster if you want to regularly check a few packages. However, if you are doing statistics on a large number of packages, using the CRAN database is recommended (it’s about 20Mb of data). To use the CRAN database, add <code>src = "crandb"</code> in your function calls:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"nlme"</span>, src <span class="op">=</span> <span class="st">"crandb"</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 1 x 7</span></span>
+<span><span class="co">#&gt; # A tibble: 1 × 7</span></span>
 <span><span class="co">#&gt;   package error  fail  warn  note    ok has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;           </span></span>
 <span><span class="co">#&gt; 1 nlme        0     0     0     0    12 FALSE</span></span></code></pre></div>
@@ -243,8 +251,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://ci.appveyor.com/project/fmichonneau/foghorn" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/fmichonneau/foghorn?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
-<li><a href="https://codecov.io/github/fmichonneau/foghorn?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg" alt="Coverage Status"></a></li>
+<li><a href="https://app.codecov.io/github/fmichonneau/foghorn?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg" alt="Coverage Status"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/foghorn" class="external-link"><img src="https://www.r-pkg.org/badges/version/foghorn" alt="CRAN version"></a></li>
 <li><a href="https://www.r-pkg.org/pkg/foghorn" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/foghorn" alt="CRAN RStudio mirror downloads"></a></li>
 </ul>
