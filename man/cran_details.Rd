@@ -63,18 +63,14 @@ good option. If you choose \code{src = "crandb"} the RDS files
 
 When choosing \code{src = "crandb"} you can also specify the
 following options:
-
-\describe{
-
-\item {dest} { a folder where to store the RDS files (\code{tempdir()}
-by default).}
-
-\item {protocol} { either \code{https} (default) or \code{http}. }
-
-\item {overwrite} { when \code{FALSE} (default), if the file exists in
+\itemize{
+\item \code{dest}:  a folder where to store the RDS files (\code{tempdir()}
+by default).
+\item \code{protocol}: either \code{https} or \code{http}.
+\item \code{overwrite}: when \code{FALSE} (default), if the file exists in
 \code{dest} then it will not be downloaded again. When
 \code{TRUE} the file gets downloaded every time it's
-needed.}
+needed.
 }
 }
 \seealso{
