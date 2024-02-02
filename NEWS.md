@@ -1,5 +1,15 @@
 # foghorn
 
+
+# v1.5.2
+
+## Other changes
+
+* Address change in formatting of CRAN result page that affected the retrieval
+  of the results.
+* `cran_results()` will now error if the package fails to retrieve results from
+  CRAN. (#53, suggested by @eddelbuettel)
+
 # v1.5.1
 
 ## New Features

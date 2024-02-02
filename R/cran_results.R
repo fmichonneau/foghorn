@@ -78,6 +78,15 @@ cran_results <- function(email = NULL, pkg = NULL,
   } else if (identical(src, "crandb")) {
     res <- cran_results_crandb(email, pkg, ...)
   }
+
+  if (nrow(res) < 1L) {
+    stop(
+      "Failed to get CRAN results, please report this issue: ",
+      "https://github.com/fmichonneau/foghorn/issues/new/",
+      call. = FALSE
+    )
+  }
+
   res <- res[!duplicated(res$package), ]
   res <- res[order(res$package), show]
   class(res) <- c("cran_results", class(res))
