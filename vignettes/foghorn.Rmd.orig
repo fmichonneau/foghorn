@@ -50,9 +50,9 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 
 ## or by combining them with email addresses
 summary_cran_results(email = "francois.michonneau@gmail.com",
-                     pkg = c("mregions", "ridigbio"))
+  pkg = c("arrow", "duckdb"))
 cran_results(email = "francois.michonneau@gmail.com",
-                   pkg = c("mregions", "ridigbio"))
+  pkg = c("arrow", "duckdb"))
 ```
 
 You can inspect the logs for the check results using

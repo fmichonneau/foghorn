@@ -1,7 +1,7 @@
 ---
 title: "Get started"
 author: "Francois Michonneau"
-date: "2024-02-02"
+date: "2024-02-20"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Get started}
@@ -33,13 +33,11 @@ summary_cran_results(email = "francois.michonneau@gmail.com")
 ```
 
 ```
-## ✔ All clear for riceware!
+## ✔ All clear for foghorn, phylobase, and riceware!
 ```
 
 ```
 ## ★  Packages with notes on CRAN: 
-##   - foghorn (2)
-##   - phylobase (2)
 ##   - rncl (5)
 ##   - rotl (2)
 ```
@@ -59,8 +57,8 @@ cran_results(email = "francois.michonneau@gmail.com")
 ## # A tibble: 5 × 7
 ##   package   error  fail  warn  note    ok has_other_issues
 ##   <chr>     <int> <int> <int> <int> <int> <lgl>           
-## 1 foghorn       0     0     0     2    10 FALSE           
-## 2 phylobase     0     0     0     2    10 FALSE           
+## 1 foghorn       0     0     0     0    12 FALSE           
+## 2 phylobase     0     0     0     0    12 FALSE           
 ## 3 riceware      0     0     0     0    12 FALSE           
 ## 4 rncl          0     0     0     5     7 FALSE           
 ## 5 rotl          0     0     0     2    10 FALSE
@@ -96,36 +94,45 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 ```r
 ## or by combining them with email addresses
 summary_cran_results(email = "francois.michonneau@gmail.com",
-                     pkg = c("mregions", "ridigbio"))
+  pkg = c("arrow", "duckdb"))
 ```
 
 ```
-## ✔ All clear for riceware, ridigbio!
+## ✔ All clear for foghorn, phylobase, and riceware!
+```
+
+```
+## ✖  Package with errors on CRAN: 
+##   - arrow (2)
 ```
 
 ```
 ## ★  Packages with notes on CRAN: 
-##   - foghorn (2)
-##   - mregions (6)
-##   - phylobase (2)
+##   - arrow (6)
+##   - duckdb (8)
 ##   - rncl (5)
 ##   - rotl (2)
 ```
 
+```
+## ◉  Package with other issues on CRAN: 
+##   - arrow
+```
+
 ```r
 cran_results(email = "francois.michonneau@gmail.com",
-                   pkg = c("mregions", "ridigbio"))
+  pkg = c("arrow", "duckdb"))
 ```
 
 ```
 ## # A tibble: 7 × 7
 ##   package   error  fail  warn  note    ok has_other_issues
 ##   <chr>     <int> <int> <int> <int> <int> <lgl>           
-## 1 foghorn       0     0     0     2    10 FALSE           
-## 2 mregions      0     0     0     6     6 FALSE           
-## 3 phylobase     0     0     0     2    10 FALSE           
-## 4 riceware      0     0     0     0    12 FALSE           
-## 5 ridigbio      0     0     0     0    12 FALSE           
+## 1 arrow         2     0     0     6     4 TRUE            
+## 2 duckdb        0     0     0     8     4 FALSE           
+## 3 foghorn       0     0     0     0    12 FALSE           
+## 4 phylobase     0     0     0     0    12 FALSE           
+## 5 riceware      0     0     0     0    12 FALSE           
 ## 6 rncl          0     0     0     5     7 FALSE           
 ## 7 rotl          0     0     0     2    10 FALSE
 ```
@@ -143,9 +150,9 @@ tidyr_details
 
 ```
 ## # A tibble: 1 × 7
-##   package version result check                         flavors            n_flavors message
-##   <chr>   <chr>   <chr>  <chr>                         <chr>                  <dbl> <chr>  
-## 1 tidyr   1.3.1   NOTE   data for non-ASCII characters r-devel-linux-x86…         2 "     …
+##   package version result check                         flavors n_flavors message
+##   <chr>   <chr>   <chr>  <chr>                         <chr>       <dbl> <chr>  
+## 1 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …
 ```
 
 ```r
