@@ -196,10 +196,7 @@ add_other_issues <- function(tbl, parsed, ...) {
 }
 
 print_all_clear <- function(pkgs) {
-  message(crayon::green(paste0(
-    clisymbols::symbol$tick, " All clear for ",
-    paste0(pkgs, collapse = ", "), "!"
-  )))
+  cli::cli_alert_success("All clear for {pkgs}!")
 }
 
 get_pkg_with_results <- function(tbl_pkg,
@@ -244,6 +241,7 @@ get_pkg_with_results <- function(tbl_pkg,
   print_summary_cran(what, res, compact)
 }
 
+##' @importFrom cli style_bold
 print_summary_cran <- function(type = c(
                                  "ok", "error", "fail", "warn",
                                  "note", "has_other_issues"
@@ -274,7 +272,7 @@ print_summary_cran <- function(type = c(
     paste0(
       foghorn_components[[type]]$symbol,
       msg, nl,
-      crayon::bold(pkgs)
+      cli::style_bold(pkgs)
     )
   ))
 }

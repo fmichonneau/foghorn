@@ -117,7 +117,7 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##'     notes on the CRAN flavors. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     flavors that produce these results.
-##' @importFrom crayon red yellow blue bold cyan magenta
+##' @importFrom cli col_red col_yellow col_blue style_bold col_cyan col_magenta
 ##' @importFrom clisymbols symbol
 ##' @export
 summary_cran_results <- function(email = NULL, pkg = NULL,

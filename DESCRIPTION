@@ -17,8 +17,8 @@ BugReports: https://github.com/fmichonneau/foghorn/issues
 Depends:
     R (>= 3.1.0)
 Imports:
+    cli (>= 3.6.1),
     clisymbols (>= 1.0.0),
-    crayon (>= 1.3.2),
     curl (>= 2.2),
     httr2 (>= 1.0.0),
     rlang (>= 0.4.3),

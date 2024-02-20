@@ -21,36 +21,36 @@ default_cran_details <- tibble::tibble(
 
 ##' @importFrom tibble tibble
 ##' @importFrom clisymbols symbol
-##' @importFrom crayon red magenta yellow blue cyan
+##' @importFrom cli col_red col_magenta col_yellow col_blue col_cyan
 foghorn_components <- list(
   `error` = c(
     symbol = clisymbols::symbol$cross,
-    color = crayon::red,
+    color = cli::col_red,
     word = "errors"
   ),
   `fail` = c(
     symbol = clisymbols::symbol$cross,
-    color = crayon::magenta,
+    color = cli::col_magenta,
     word = "fails"
   ),
   `warn` = c(
     symbol = clisymbols::symbol$warning,
-    color = crayon::yellow,
+    color = cli::col_yellow,
     word = "warnings"
   ),
   `note` = c(
     symbol = clisymbols::symbol$star,
-    color = crayon::blue,
+    color = cli::col_blue,
     word = "notes"
   ),
   `has_other_issues` = c(
     symbol = clisymbols::symbol$circle_filled,
-    color = crayon::cyan,
+    color = cli::col_cyan,
     word = "other issues"
   ),
   `other_issue` = c(
     symbol = clisymbols::symbol$circle_filled,
-    color = crayon::cyan,
+    color = cli::col_cyan,
     word = "additional issues"
   )
 )
