@@ -27,6 +27,7 @@ cran_results_crandb <- function(email, pkg, ...) {
     res_pkg <- read_crandb_from_pkg(pkg, ...)
     tbl_pkg <- cran_checks_table(res_pkg)
     res_pkg <- add_other_issues_crandb(tbl_pkg)
+    res_pkg <- add_fix_before(res_pkg, fix_before_pkg_crandb(pkg))
     res <- rbind(res_pkg, res)
   }
   res
