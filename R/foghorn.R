@@ -230,10 +230,15 @@ get_pkg_with_results <- function(tbl_pkg,
     } else {
       sptr <- c("  - ", "\n")
     }
-    res <- paste0(sptr[1], tbl_pkg$package[!is.na(tbl_pkg[[what]]) &
-      tbl_pkg[[what]] > 0],
-    n,
-    collapse = sptr[2]
+    cond <- !is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0
+    fix_before_date <- tbl_pkg$fix_before[cond]
+    fix_before_date[is.na(fix_before_date)] <- ""
+    fix_before_date <- paste0(" [Fix before: ", fix_before_date, "]")
+    fix_before_date[length(fix_before_date) == 2] <- ""
+    res <- paste0(sptr[1], tbl_pkg$package[cond],
+      n,
+      fix_before_date,
+      collapse = sptr[2]
     )
   } else {
     res <- NULL
