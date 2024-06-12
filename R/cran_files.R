@@ -1,19 +1,27 @@
 ##' @importFrom httr2 request req_options req_perform_parallel
-fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues"),
+fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues", "packages"),
                                 dest = tempdir(), protocol = c("https", "http"),
                                 overwrite = FALSE, file_prefix = NULL,
                                 ...) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
-  file <- paste0("check_", file, ".rds")
+  if (file == "packages") {
+    file <- paste0(file, ".rds")
+  } else {
+    file <- paste0("check_", file, ".rds")
+  }
   dest_file <- file.path(dest, paste0(file_prefix, file))
-  
+
   if (!(file.exists(dest_file) &&
           file.info(dest_file, extra_cols = FALSE)$size > 0) ||
         overwrite) {
-    
-    file_cran_url <- paste0(cran_url(protocol), "/web/checks/", file)
-    
+
+    if (file == "packages.rds") {
+      file_cran_url <- paste0(cran_url(protocol), "/web/packages/", file)
+    } else {
+      file_cran_url <- paste0(cran_url(protocol), "/web/checks/", file)
+    }
+
     req <- httr2::request(file_cran_url)
     req <- httr2::req_options(req)
 
@@ -29,9 +37,9 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
     if (inherits(resp, "error")) {
       unlink(dest_file)
       stop("Cannot access ", file_cran_url, "\nMessage: ", dQuote(resp$message))
-    }    
+    }
   }
-  
+
   invisible(dest_file)
 }
 
