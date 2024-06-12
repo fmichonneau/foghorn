@@ -2,6 +2,13 @@
 
 # v1.5.2.9000 (development version)
 
+## Bug fixes
+
+* Packages that only have "other issues" will no longer show "All clear" in the
+  summary output.
+
+## Other changes
+
 * The `crayon` package has been replaced with `cli` for styling the output.
 
 # v1.5.2
