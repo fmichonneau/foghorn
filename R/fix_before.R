@@ -1,0 +1,65 @@
+url_pkg <- function(pkg) {
+  paste0(cran_url(), "/package=", pkg)
+}
+
+.internal_read_pkg_page <- function(url) {
+  stopifnot(identical(length(url), 1L))
+  on.exit(clean_connection(url), add = TRUE)
+  req <- httr2::request(url)
+  httr2::req_perform_parallel(
+    list(req), on_error = "continue", progress = FALSE
+  )[[1]]
+}
+
+read_pkg_page <- function(url) {
+  if (!curl::has_internet()) {
+    stop("No internet connection detected", call. = FALSE)
+  }
+  retry_connect(.internal_read_pkg_page(url))
+}
+
+read_pkg_pages <- function(pkg) {
+  url <- url_pkg(pkg)
+  res <- lapply(url, read_pkg_page)
+  handle_cran_web_issues(
+    pkg, res,
+    "Invalid package name(s): ",
+    "Something went wrong with getting data for package name(s): "
+  )
+  res <- lapply(res, function(x) {
+    xml2::read_html(httr2::resp_body_raw(x))
+  })
+  res
+}
+
+extract_fix_before <- function(parsed, ...)  {
+  lapply(parsed, function(x) {
+    needs_fix <- xml2::xml_find_all(x, ".//tr//td//span[@style]")
+    needs_fix <- xml2::xml_text(needs_fix)
+    if (identical(length(needs_fix), 0L)) {
+      return(NA_character_)
+    }
+    if (!grepl("issues need fixing before", needs_fix)) {
+      warning("Unrecognized value: ", needs_fix)
+      return(NA_character_)
+    }
+    date_match <- regexpr("\\d{4}-\\d{2}-\\d{2}", needs_fix)
+    regmatches(needs_fix, date_match)
+  })
+}
+
+fix_before_pkg_web <- function(pkg) {
+  res <- read_pkg_pages(pkg)
+  res <- extract_fix_before(res)
+  res <- .mapply(function(.pkg, .res) {
+    tibble(
+      package = .pkg,
+      fix_before = .res
+    )
+  }, list(pkg, res), NULL)
+  Reduce(rbind, res)
+}
+
+add_fix_before <- function(res, fix) {
+  tibble::as_tibble(merge(res, fix, by = "package"))
+}

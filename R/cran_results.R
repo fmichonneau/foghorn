@@ -9,6 +9,7 @@ cran_results_web <- function(email, pkg, ...) {
     res_pkg <- read_cran_web_from_pkg(pkg, ...)
     tbl_pkg <- cran_checks_table(res_pkg)
     res_pkg <- add_other_issues(tbl_pkg, res_pkg)
+    res_pkg <- add_fix_before(res_pkg, fix_before_pkg_web(pkg))
     res <- rbind(res, res_pkg)
   }
   res
@@ -62,7 +63,7 @@ cran_results <- function(email = NULL, pkg = NULL,
                          src = c("website", "crandb"), ...) {
   show <- tolower(show)
   show <- match.arg(show, several.ok = TRUE)
-  show <- c("package", show, "has_other_issues")
+  show <- c("package", show, "has_other_issues", "fix_before")
 
   src <- match.arg(src, c("website", "crandb"))
 
