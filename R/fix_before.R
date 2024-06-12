@@ -60,6 +60,15 @@ fix_before_pkg_web <- function(pkg) {
   Reduce(rbind, res)
 }
 
+fix_before_pkg_crandb <- function(pkg, ...) {
+  pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
+  res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
+  tibble(
+    package = res$Package,
+    fix_before = res$Deadline
+  )
+}
+
 add_fix_before <- function(res, fix) {
   tibble::as_tibble(merge(res, fix, by = "package"))
 }
