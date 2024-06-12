@@ -1,5 +1,8 @@
 # foghorn
 
+# v1.5.2.9000 (development version)
+
+* The `crayon` package has been replaced with `cli` for styling the output.
 
 # v1.5.2
 
