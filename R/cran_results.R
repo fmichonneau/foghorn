@@ -1,10 +1,11 @@
-cran_results_web <- function(email, pkg, ...) {
 cran_results_web <- function(email, pkg, max_requests, ...) {
   res <- NULL
   check_n_requests(email, pkg, max_requests = max_requests)
   if (!is.null(email)) {
     res_email <- read_cran_web_from_email(email, ...)
     res <- cran_checks_table(res_email)
+    to_fix <- fix_before_pkg_web(unlist(all_packages(res_email)), max_requests = max_requests)
+    res <- add_fix_before(res, to_fix)
     res <- add_other_issues(res, res_email)
   }
   if (!is.null(pkg)) {
