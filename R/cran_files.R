@@ -81,6 +81,8 @@ read_crandb_from_email <- function(email, file = "results", ...) {
   idx <- lapply(tolower(email), function(x) {
     grepl(paste0("<", x, ">"), maintainer, fixed = TRUE)
   })
+
+  check_no_email_match(idx, email)
   idx <- Reduce("+", idx)
 
   res <- crandb[as.logical(idx), ]
