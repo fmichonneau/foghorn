@@ -61,6 +61,10 @@ CRAN website. If you only need to check a few packages, this is a
 good option. If you choose \code{src = "crandb"} the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.
 
+The option \code{max_requests} can be used to limit how many pages will be
+scrapped from the CRAN website. The default is set to 20. Consider using
+\code{src = "crandb"} if you need to get data from many packages/authors.
+
 When choosing \code{src = "crandb"} you can also specify the
 following options:
 \itemize{
