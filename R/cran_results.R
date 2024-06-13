@@ -22,6 +22,7 @@ cran_results_crandb <- function(email, pkg, ...) {
     res_email <- read_crandb_from_email(email, ...)
     res <- cran_checks_table(res_email)
     res <- add_other_issues_crandb(res)
+    res <- add_fix_before(res, fix_before_email_crandb(email))
   }
   if (!is.null(pkg)) {
     res_pkg <- read_crandb_from_pkg(pkg, ...)
