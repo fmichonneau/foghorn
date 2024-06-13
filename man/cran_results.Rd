@@ -9,6 +9,7 @@ cran_results(
   pkg = NULL,
   show = c("error", "fail", "warn", "note", "ok"),
   src = c("website", "crandb"),
+  max_requests = 20,
   ...
 )
 }
@@ -25,6 +26,8 @@ default)}
 website, if \code{"crandb"} the data is downloaded from a RDS
 file hosted on the CRAN servers (which is used to generate the
 information found on the CRAN website).}
+
+\item{max_requests}{maximum number of requests allowed to be performed.}
 
 \item{...}{additional arguments to control where the data from the
 check results are coming from and how they are downloaded from
@@ -55,6 +58,10 @@ you choose \code{src = "website"} the data is scrapped from the
 CRAN website. If you only need to check a few packages, this is a
 good option. If you choose \code{src = "crandb"} the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.
+
+The option \code{max_requests} can be used to limit how many pages will be
+scrapped from the CRAN website. The default is set to 20. Consider using
+\code{src = "crandb"} if you need to get data from many packages/authors.
 
 When choosing \code{src = "crandb"} you can also specify the
 following options:
