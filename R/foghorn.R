@@ -233,8 +233,7 @@ get_pkg_with_results <- function(tbl_pkg,
     cond <- !is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0
     fix_before_date <- tbl_pkg$fix_before[cond]
     fix_before_date[is.na(fix_before_date)] <- ""
-    fix_before_date <- paste0(" [Fix before: ", fix_before_date, "]")
-    fix_before_date[length(fix_before_date) == 2] <- ""
+    fix_before_date <- ifelse(nzchar(fix_before_date), paste0(" [Fix before: ", fix_before_date, "]"), "")
     res <- paste0(sptr[1], tbl_pkg$package[cond],
       n,
       fix_before_date,
