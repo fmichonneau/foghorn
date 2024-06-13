@@ -1,5 +1,7 @@
 cran_results_web <- function(email, pkg, ...) {
+cran_results_web <- function(email, pkg, max_requests, ...) {
   res <- NULL
+  check_n_requests(email, pkg, max_requests = max_requests)
   if (!is.null(email)) {
     res_email <- read_cran_web_from_email(email, ...)
     res <- cran_checks_table(res_email)
@@ -52,6 +54,7 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##' @param show columns of the data frame to show (all are shown by
 ##'     default)
 ##' @template src
+##' @param max_requests maximum number of requests allowed to be performed.
 ##' @template dots
 ##' @template details
 ##' @return a data frame that tabulates the number of CRAN flavors
@@ -62,7 +65,8 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##'   }
 cran_results <- function(email = NULL, pkg = NULL,
                          show = c("error", "fail", "warn", "note", "ok"),
-                         src = c("website", "crandb"), ...) {
+                         src = c("website", "crandb"),
+                         max_requests = 20, ...) {
   show <- tolower(show)
   show <- match.arg(show, several.ok = TRUE)
   show <- c("package", show, "has_other_issues", "fix_before")
@@ -77,7 +81,7 @@ cran_results <- function(email = NULL, pkg = NULL,
   }
 
   if (identical(src, "website")) {
-    res <- cran_results_web(email, pkg, ...)
+    res <- cran_results_web(email, pkg, max_requests = max_requests, ...)
   } else if (identical(src, "crandb")) {
     res <- cran_results_crandb(email, pkg, ...)
   }
