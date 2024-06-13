@@ -48,7 +48,8 @@ extract_fix_before <- function(parsed, ...)  {
   })
 }
 
-fix_before_pkg_web <- function(pkg) {
+fix_before_pkg_web <- function(pkg, max_requests) {
+  check_n_requests(pkg, max_requests = max_requests)
   res <- read_pkg_pages(pkg)
   res <- extract_fix_before(res)
   res <- .mapply(function(.pkg, .res) {
