@@ -64,6 +64,12 @@ fix_before_pkg_crandb <- function(pkg, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
   tibble(
+check_no_email_match <- function(idx, email) {
+  check_no_match <- vapply(idx, sum, integer(1))
+  if (any(check_no_match < 1)) {
+    stop("No package found for: ", paste(email[check_no_match < 1], collapse = ", "), call. = FALSE)
+  }
+}
     package = res$Package,
     fix_before = res$Deadline
   )

@@ -10,6 +10,9 @@
 ## Other changes
 
 * The `crayon` package has been replaced with `cli` for styling the output.
+* When using the CRAN database as a data source, functions will error if the
+  email address specified is invalid. This behavior is consistent with what
+  happens when using the CRAN website as a data source.
 
 # v1.5.2
 
