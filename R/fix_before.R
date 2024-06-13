@@ -60,16 +60,36 @@ fix_before_pkg_web <- function(pkg) {
   Reduce(rbind, res)
 }
 
+##' @importFrom tibble tibble
 fix_before_pkg_crandb <- function(pkg, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
-  tibble(
+  tibble::tibble(
+    package = res$Package,
+    fix_before = res$Deadline
+  )
+}
+
 check_no_email_match <- function(idx, email) {
   check_no_match <- vapply(idx, sum, integer(1))
   if (any(check_no_match < 1)) {
     stop("No package found for: ", paste(email[check_no_match < 1], collapse = ", "), call. = FALSE)
   }
 }
+
+##' @importFrom tibble tibble
+fix_before_email_crandb <- function(email, ...) {
+  pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
+  maintainer <- tolower(pkgs$Maintainer)
+  idx <- lapply(tolower(email), function(x) {
+    grepl(paste0("<", x, ">"), maintainer, fixed = TRUE)
+  })
+
+  check_no_email_match(idx, email)
+  idx <- Reduce("+", idx)
+
+  res <- pkgs[as.logical(idx), c("Package", "Deadline")]
+  tibble::tibble(
     package = res$Package,
     fix_before = res$Deadline
   )
