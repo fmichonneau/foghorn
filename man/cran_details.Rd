@@ -62,8 +62,11 @@ good option. If you choose \code{src = "crandb"} the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.
 
 The option \code{max_requests} can be used to limit how many pages will be
-scrapped from the CRAN website. The default is set to 20. Consider using
-\code{src = "crandb"} if you need to get data from many packages/authors.
+scrapped from the CRAN website. The default is set to 50, use \code{Inf} to
+ignore this check. Consider using \code{src = "crandb"} if you need to get data
+from many packages or maintainers. Note that this an approximation of the
+number of requests that will be performed and there will be situations where
+more requests than this limit will be performed to retrieve the results.
 
 When choosing \code{src = "crandb"} you can also specify the
 following options:
