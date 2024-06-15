@@ -25,7 +25,6 @@
   email address specified is invalid. This behavior is consistent with what
   happens when using the CRAN website as a data source.
 
-
 # v1.5.2
 
 ## Other changes

@@ -65,6 +65,7 @@ fix_before_pkg_web <- function(pkg, max_requests) {
 fix_before_pkg_crandb <- function(pkg, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
+
   tibble::tibble(
     package = res$Package,
     fix_before = res$Deadline
