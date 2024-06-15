@@ -37,7 +37,7 @@ cran_details_from_web <- function(pkg, ...) {
     res_idx <- grep("^Result:", p)
     flv_idx <- grep("^Flavors?:", p)
     if (!identical(length(chk_idx), length(res_idx)) &&
-      !identical(length(chk_idx), length(flv_idx))) {
+          !identical(length(chk_idx), length(flv_idx))) {
       stop("File an issue on Github indicating the name of your package.")
     }
     msg <- mapply(function(c, v, r, f) {

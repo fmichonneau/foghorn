@@ -45,6 +45,11 @@ add_cols <- function(tbl) {
 }
 
 check_n_requests <- function(..., max_requests) {
+  stopifnot(
+    identical(length(max_requests), 1L),
+    is.numeric(max_requests),
+    max_requests >= 1
+  )
   if (is.infinite(max_requests)) {
     return(NULL)
   }
@@ -52,8 +57,8 @@ check_n_requests <- function(..., max_requests) {
   if (sum(lengths(elements)) > max_requests) {
     stop(
       "This query would require more than ", max_requests,
-      "web requests. Consider using ", sQuote("src = \"crandb\""),
-      "before increasing the number of requests allowed.",
+      " web requests. Consider using ", sQuote("src = \"crandb\""),
+      " before increasing the number of requests allowed.",
       call. = FALSE
     )
   }

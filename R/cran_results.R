@@ -12,7 +12,7 @@ cran_results_web <- function(email, pkg, max_requests, ...) {
     res_pkg <- read_cran_web_from_pkg(pkg, ...)
     tbl_pkg <- cran_checks_table(res_pkg)
     res_pkg <- add_other_issues(tbl_pkg, res_pkg)
-    res_pkg <- add_fix_before(res_pkg, fix_before_pkg_web(pkg))
+    res_pkg <- add_fix_before(res_pkg, fix_before_pkg_web(pkg, max_requests = max_requests))
     res <- rbind(res, res_pkg)
   }
   res
@@ -49,17 +49,16 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##'
 ##' @title Table of the CRAN check results
 ##' @export
-##' @param email email address for package maintainers (character
-##'     vector)
+##' @param email email address for package maintainers (character vector)
 ##' @param pkg package names (character vector)
-##' @param show columns of the data frame to show (all are shown by
-##'     default)
+##' @param show columns of the data frame to show (all are shown by default)
 ##' @template src
-##' @param max_requests maximum number of requests allowed to be performed.
+##' @param max_requests maximum number of requests allowed to be performed
+##'   (ignored when using `src = "crandb"`).
 ##' @template dots
 ##' @template details
-##' @return a data frame that tabulates the number of CRAN flavors
-##'     that return errors, warnings, notes, or OK for the packages.
+##' @return a data frame that tabulates the number of CRAN flavors that return
+##'   errors, warnings, notes, or OK for the packages.
 ##' @examples
 ##'   \dontrun{
 ##'     cran_results(pkg="MASS")
