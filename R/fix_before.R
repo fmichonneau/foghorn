@@ -63,7 +63,7 @@ fix_before_pkg_web <- function(pkg, max_requests) {
 
 ##' @importFrom tibble tibble
 fix_before_pkg_crandb <- function(pkg, ...) {
-  pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
+  pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
   tibble::tibble(
     package = res$Package,
@@ -80,7 +80,7 @@ check_no_email_match <- function(idx, email) {
 
 ##' @importFrom tibble tibble
 fix_before_email_crandb <- function(email, ...) {
-  pkgs <- as.data.frame(get_cran_rds_file("packages", ...))
+  pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   maintainer <- tolower(pkgs$Maintainer)
   idx <- lapply(tolower(email), function(x) {
     grepl(paste0("<", x, ">"), maintainer, fixed = TRUE)
