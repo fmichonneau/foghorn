@@ -178,13 +178,13 @@ cran_details <- function(pkg, src = c("website", "crandb"),
 }
 
 
-##' @importFrom clisymbols symbol
+##' @importFrom cli symbol
 render_flavors <- function(x) {
   ## transform the comma separated list of platform flavors into
   ## unordered list
   if (!is.na(x)) {
     res <- unlist(strsplit(x, ", "))
-    paste("  ", clisymbols::symbol$pointer, res, "\n")
+    paste("  ", cli::symbol$pointer, res, "\n")
   } else {
     ""
   }
@@ -220,7 +220,7 @@ filter_pkg_ok <- function(res) {
 ##' @rdname cran_details
 ##' @export
 ##' @importFrom cli col_green
-##' @importFrom clisymbols symbol
+##' @importFrom cli symbol
 summary.cran_details <- function(object, show_log = TRUE, print_ok = TRUE, ...) {
   res_ok <- filter_pkg_ok(object)
 
