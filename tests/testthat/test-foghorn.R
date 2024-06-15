@@ -34,17 +34,17 @@ test_that("invalid email address", {
 
 # nolint start
 validate_cran_results <- function(x) {
-  length(x) == 7L &&
+  length(x) == 8L &&
     inherits(x, "tbl_df") &&
     all(names(x) %in% c(
       "package", "error", "fail", "warn",
-      "note", "ok", "has_other_issues"
+      "note", "ok", "has_other_issues", "fix_before"
     )) &&
     nrow(x) > 0 &&
     is.logical(x[["has_other_issues"]]) &&
     ## 2 allows for something other that "has_issues_notes" to be in the table
-    any(x[1, ] > 2) &&
-    !any(is.na(x)) ## no NAs allowed
+    any(x[1, -match("fix_before", names(x))] > 2) &&
+    !any(is.na(x[, -match("fix_before", names(x))])) ## no NAs allowed
 }
 
 validate_cran_details <- function(x) {
@@ -137,7 +137,7 @@ test_that("works for multiple packages, multiple addresses (website)", {
   res_emails <- cran_results(email = c(
     "francois.michonneau@gmail.com",
     "hadley@rstudio.com"
-  ))
+  ), max_requests = Inf)
   res_both <- cran_results(
     email = c(
       "francois.michonneau@gmail.com",
@@ -175,6 +175,80 @@ test_that("works for multiple packages, multiple addresses (crandb)", {
   expect_true(validate_cran_results(res_emails))
   expect_true(validate_cran_results(res_both))
 })
+
+test_that("fails if too many requests", {
+  expect_error(
+    cran_results(pkg = c("rotl", "rncl"), max_requests = 1),
+    "This query would require more than "
+  )
+})
+
+test_that("fails if max requests is malformed", {
+  expect_error(
+    cran_results(pkg = "rotl", max_requests = NA_integer_)
+  )
+  expect_error(
+    cran_results(pkg = "rotl", max_requests = TRUE)
+  )
+  expect_error(
+    cran_results(pkg = "rotl", max_requests = c(4L, 5L))
+  )
+})
+
+test_that("max requests is ignored if using crandb", {
+  skip_on_cran()
+  expect_true(
+    validate_cran_results(cran_results(pkg = c("rncl", "rotl"), max_requests = 1, src = "crandb"))
+  )
+})
+
+test_that("infinite is accepted for max_requests", {
+  skip_on_cran()
+  expect_true(validate_cran_results(
+    cran_results(pkg = "rotl", max_requests = Inf)
+  ))
+})
+
+test_that("fix_before column valid", {
+  skip_on_cran()
+  pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
+  pkg_with_deadline <- pkg_data[!is.na(pkg_data$Deadline), , drop = FALSE]
+  n_pkg_with_deadline <- nrow(pkg_with_deadline)
+
+  if (n_pkg_with_deadline < 1) {
+    skip("No package with deadline")
+  }
+
+  pkg_with_deadline <- pkg_with_deadline[
+    sample(
+      seq_len(n_pkg_with_deadline),
+      min(max(1, n_pkg_with_deadline), 10)
+    ),
+    "Package"
+  ]
+
+  res_web <- cran_results(pkg = pkg_with_deadline, max_requests = Inf)
+  res_crandb <- cran_results(pkg = pkg_with_deadline, src = "crandb")
+
+  expect_true(sum(!is.na(res_web$fix_before)) > 0)
+  expect_true(sum(!is.na(res_web$fix_before)) <= nrow(res_web))
+  expect_true(
+    identical(
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web$fix_before)),
+      sum(!is.na(res_web$fix_before))
+    )
+  )
+  expect_true(
+    identical(
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_crandb$fix_before)),
+      sum(!is.na(res_crandb$fix_before))
+    )
+  )
+  expect_true(
+    sum(!is.na(res_web$fix_before)) <= sum(!is.na(res_crandb$fix_before))
+  )
+})
+
 
 ### visit_cran_check -----------------------------------------------------------
 
@@ -288,7 +362,7 @@ test_that("output of summary cran results", {
   ## all have >= 1 values in column WARNING
   expect_true({
     message("Checking: ", paste(pkg_with_warn, collapse = ", "))
-    all(cran_results(pkg = pkg_with_warn, src = "website")$warn > 0) 
+    all(cran_results(pkg = pkg_with_warn, src = "website")$warn > 0)
   })
   expect_true({
     message("Checking: ", paste(pkg_with_warn, collapse = ", "))
