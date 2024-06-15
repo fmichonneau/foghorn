@@ -2,6 +2,15 @@
 
 # v1.5.2.9000 (development version)
 
+## New Features
+
+* The output of `cran_results()` and `summary_cran_results()` now includes the
+  deadline fixed by CRAN. This deadline is the date by which requested changes
+  need to be implemented before the package gets archived.
+* The `cran_results()` function gains the `max_requests` argument that limits
+  the number of requests that are performed against the CRAN website in a single
+  query. 
+
 ## Bug fixes
 
 * Packages that only have "other issues" will no longer show "All clear" in the
