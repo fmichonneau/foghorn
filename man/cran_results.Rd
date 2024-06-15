@@ -9,33 +9,33 @@ cran_results(
   pkg = NULL,
   show = c("error", "fail", "warn", "note", "ok"),
   src = c("website", "crandb"),
-  max_requests = 20,
+  max_requests = 50,
   ...
 )
 }
 \arguments{
-\item{email}{email address for package maintainers (character
-vector)}
+\item{email}{email address for package maintainers (character vector)}
 
 \item{pkg}{package names (character vector)}
 
-\item{show}{columns of the data frame to show (all are shown by
-default)}
+\item{show}{columns of the data frame to show (all are shown by default)}
 
 \item{src}{if \code{"website"} the data is scrapped from the CRAN
 website, if \code{"crandb"} the data is downloaded from a RDS
 file hosted on the CRAN servers (which is used to generate the
 information found on the CRAN website).}
 
-\item{max_requests}{maximum number of requests allowed to be performed.}
+\item{max_requests}{maximum number of requests allowed to be performed,
+ignored when using \code{src = "crandb"}. Use \code{Inf} to skip this check. (See
+Details)}
 
 \item{...}{additional arguments to control where the data from the
 check results are coming from and how they are downloaded from
 the CRAN servers (see Details section).}
 }
 \value{
-a data frame that tabulates the number of CRAN flavors
-that return errors, warnings, notes, or OK for the packages.
+a data frame that tabulates the number of CRAN flavors that return
+errors, warnings, notes, or OK for the packages.
 }
 \description{
 Make a table that summarizes the results of the CRAN checks for a
@@ -60,8 +60,11 @@ good option. If you choose \code{src = "crandb"} the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.
 
 The option \code{max_requests} can be used to limit how many pages will be
-scrapped from the CRAN website. The default is set to 20. Consider using
-\code{src = "crandb"} if you need to get data from many packages/authors.
+scrapped from the CRAN website. The default is set to 50, use \code{Inf} to
+ignore this check. Consider using \code{src = "crandb"} if you need to get data
+from many packages or maintainers. Note that this an approximation of the
+number of requests that will be performed and there will be situations where
+more requests than this limit will be performed to retrieve the results.
 
 When choosing \code{src = "crandb"} you can also specify the
 following options:
