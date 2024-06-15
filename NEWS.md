@@ -9,7 +9,9 @@
 
 ## Other changes
 
-* The `crayon` package has been replaced with `cli` for styling the output.
+* The `{crayon}` package has been replaced with `cli` for styling the output.
+* The `{clisymbols}` package has been replaced with `cli` for the symbols
+  displayed in the output. (#60, reported by @olivroy)
 
 # v1.5.2
 
