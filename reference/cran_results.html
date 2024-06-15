@@ -62,6 +62,7 @@ set of packages specified by a maintainer or by names.</p>
 <span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"fail"</span>, <span class="st">"warn"</span>, <span class="st">"note"</span>, <span class="st">"ok"</span><span class="op">)</span>,</span>
 <span>  src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"website"</span>, <span class="st">"crandb"</span><span class="op">)</span>,</span>
+<span>  max_requests <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -69,8 +70,7 @@ set of packages specified by a maintainer or by names.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>email</dt>
-<dd><p>email address for package maintainers (character
-vector)</p></dd>
+<dd><p>email address for package maintainers (character vector)</p></dd>
 
 
 <dt>pkg</dt>
@@ -78,8 +78,7 @@ vector)</p></dd>
 
 
 <dt>show</dt>
-<dd><p>columns of the data frame to show (all are shown by
-default)</p></dd>
+<dd><p>columns of the data frame to show (all are shown by default)</p></dd>
 
 
 <dt>src</dt>
@@ -87,6 +86,12 @@ default)</p></dd>
 website, if <code>"crandb"</code> the data is downloaded from a RDS
 file hosted on the CRAN servers (which is used to generate the
 information found on the CRAN website).</p></dd>
+
+
+<dt>max_requests</dt>
+<dd><p>maximum number of requests allowed to be performed,
+ignored when using <code>src = "crandb"</code>. Use <code>Inf</code> to skip this check. (See
+Details)</p></dd>
 
 
 <dt>...</dt>
@@ -99,8 +104,8 @@ the CRAN servers (see Details section).</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a data frame that tabulates the number of CRAN flavors
-that return errors, warnings, notes, or OK for the packages.</p>
+<p>a data frame that tabulates the number of CRAN flavors that return
+errors, warnings, notes, or OK for the packages.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -117,6 +122,12 @@ you choose <code>src = "website"</code> the data is scrapped from the
 CRAN website. If you only need to check a few packages, this is a
 good option. If you choose <code>src = "crandb"</code> the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.</p>
+<p>The option <code>max_requests</code> can be used to limit how many pages will be
+scrapped from the CRAN website. The default is set to 50, use <code>Inf</code> to
+ignore this check. Consider using <code>src = "crandb"</code> if you need to get data
+from many packages or maintainers. Note that this an approximation of the
+number of requests that will be performed and there will be situations where
+more requests than this limit will be performed to retrieve the results.</p>
 <p>When choosing <code>src = "crandb"</code> you can also specify the
 following options:</p><ul><li><p><code>dest</code>:  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
 by default).</p></li>

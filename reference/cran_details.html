@@ -124,6 +124,12 @@ you choose <code>src = "website"</code> the data is scrapped from the
 CRAN website. If you only need to check a few packages, this is a
 good option. If you choose <code>src = "crandb"</code> the RDS files
 (about 20Mb) are downloaded first from the CRAN servers.</p>
+<p>The option <code>max_requests</code> can be used to limit how many pages will be
+scrapped from the CRAN website. The default is set to 50, use <code>Inf</code> to
+ignore this check. Consider using <code>src = "crandb"</code> if you need to get data
+from many packages or maintainers. Note that this an approximation of the
+number of requests that will be performed and there will be situations where
+more requests than this limit will be performed to retrieve the results.</p>
 <p>When choosing <code>src = "crandb"</code> you can also specify the
 following options:</p><ul><li><p><code>dest</code>:  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
 by default).</p></li>
