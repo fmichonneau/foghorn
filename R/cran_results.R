@@ -53,8 +53,9 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##' @param pkg package names (character vector)
 ##' @param show columns of the data frame to show (all are shown by default)
 ##' @template src
-##' @param max_requests maximum number of requests allowed to be performed
-##'   (ignored when using `src = "crandb"`).
+##' @param max_requests maximum number of requests allowed to be performed,
+##'   ignored when using `src = "crandb"`. Use `Inf` to skip this check. (See
+##'   Details)
 ##' @template dots
 ##' @template details
 ##' @return a data frame that tabulates the number of CRAN flavors that return
@@ -66,7 +67,7 @@ cran_results_crandb <- function(email, pkg, ...) {
 cran_results <- function(email = NULL, pkg = NULL,
                          show = c("error", "fail", "warn", "note", "ok"),
                          src = c("website", "crandb"),
-                         max_requests = 20, ...) {
+                         max_requests = 50, ...) {
   show <- tolower(show)
   show <- match.arg(show, several.ok = TRUE)
   show <- c("package", show, "has_other_issues", "fix_before")
