@@ -1,10 +1,8 @@
-# foghorn
-
-# v1.5.2.9000 (development version)
+#  foghorn (development version)
 
 ## New Features
 
-* The output of `cran_results()` and `summary_cran_results()` now includes the
+* The output of `cran_results()` and `summary_cran_results()` now include the
   deadline fixed by CRAN. This deadline is the date by which requested changes
   need to be implemented before the package gets archived.
 * The `cran_results()` function gains the `max_requests` argument that limits
@@ -25,7 +23,7 @@
   email address specified is invalid. This behavior is consistent with what
   happens when using the CRAN website as a data source.
 
-# v1.5.2
+# foghorn 1.5.2
 
 ## Other changes
 
@@ -34,7 +32,7 @@
 * `cran_results()` will now error if the package fails to retrieve results from
   CRAN. (#53, suggested by @eddelbuettel)
 
-# v1.5.1
+# foghorn 1.5.1
 
 ## New Features
 
@@ -55,7 +53,7 @@
   (https://cranchecks.info/) has been removed from the code base.
 * All support for FTP access has been removed.
 
-# v1.4.2
+# foghorn 1.4.2
 
 ## Other changes
 
@@ -64,13 +62,13 @@
   `NA` instead of `0.0.0`. (#45, reported by @bastistician)
 * Rename internal function to reflect it does not use FTP anymore.
 
-# v1.4.1
+# foghorn 1.4.1
 
 ## Other changes
 
 * The number of CRAN flavors is now at 14.
 
-# v1.4.0
+# foghorn 1.4.0
 
 ## Other Changes
 
@@ -79,14 +77,14 @@
 * The data in the `size` column for the object returned by `cran_incoming()` is
   now of type character.
 
-# v1.3.2
+# foghorn 1.3.2
 
 ## Bug fixes
 
 * The output of `winbuilder_queue()` was always empty following a change to the
   content returned by the Win-builder FTP server (#43, reported by @bbolker).
 
-# v1.3.1
+# foghorn 1.3.1
 
 ## New feature
 
@@ -102,15 +100,15 @@
 * The argument `progress` was not documented (and not implemented properly) for
   `cran_results()` and `cran_details()`.
 
-# v1.2.3
+# foghorn 1.2.3
 
 * The number of CRAN check flavors is back to 12.
 
-# v1.2.2
+# foghorn 1.2.2
 
 * The number of CRAN check flavors is now 11.
 
-# v1.2.1
+# foghorn 1.2.1
 
 * The number of CRAN check flavors is back to 12. A new function
   `n_cran_flavors` reads the table on the CRAN website that lists the number of
@@ -120,16 +118,16 @@
   caching) using options, see the help for the `n_cran_flavors()` function for
   more information.
 
-# v1.1.5
+# foghorn 1.1.5
 
 * internally replaced `as.tibble` with `as_tibble`
 
-# v1.1.4
+# foghorn 1.1.4
 
 * The number of CRAN check flavors is now 13. Code and tests have been adjusted
   to take this change into account.
 
-# v1.1.3
+# foghorn 1.1.3
 
 ## New feature
 
@@ -147,7 +145,7 @@
   (#37 by @jennybc).
 
 
-# v1.1.0
+# foghorn 1.1.0
 
 ## New features
 
@@ -170,7 +168,7 @@
   report that everything was clear (#33, @coatless)
 
 
-# v1.0.2
+# foghorn 1.0.2
 
 ## New features
 
@@ -188,7 +186,7 @@
 * `foghorn` has an hex logo. Thanks to Maëlle Salmon for feedback on initial
   design.
 
-# v1.0.1
+# foghorn 1.0.1
 
 ## New features
 
@@ -197,7 +195,7 @@
   
 * `foghorn` is now compatible with R >= 3.1. Suggested by @jimhester, #26.
 
-# v1.0.0
+# foghorn 1.0.0
 
 ## API changes
 
@@ -232,12 +230,12 @@
 * Fix bug that would display a number instead of the package name in some
   situations.
 
-# v0.4.4
+# foghorn 0.4.4
 
 * CRAN has merged memtest notes with a new "other issues" that run valgrind and
   other memory issues on multiple platforms/compilers. Therefore, memtest is
   renamed "other issues".
 
-# v0.4.2
+# foghorn 0.4.2
 
 * initial release on CRAN
