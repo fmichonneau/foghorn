@@ -23,9 +23,11 @@ knitr::opts_chunk$set(
 >     1. Device used to facilitate navigation in foggy conditions by warning of
 >        potential hazards ahead.
 
-`foghorn` makes accessible to the R terminal the CRAN check
-results for packages maintained by individuals, or for other packages of
-interest. The results are presented as a colored summary, or as a tibble. The function that generates the summary is designed to be called from your `.Rprofile` so you can check on the status of the packages regularly.
+`foghorn` makes accessible to the R terminal the CRAN check results for packages
+maintained by individuals, or for other packages of interest. The results are
+presented as a colored summary, or as a tibble. The function that generates the
+summary is designed to be called from your `.Rprofile` so you can check on the
+status of the packages regularly.
 
 As new features are introduced in development versions of R, or new policies are
 put in place, packages that are not updated frequently may start generating
@@ -35,10 +37,10 @@ R session to know the results of the CRAN checks for your packages.
 
 ## Installation
 
-You can install the development version of **`foghorn`** from github with:
+You can install the development version of **`foghorn`** from GitHub with:
 
 ```{r gh-installation, eval = FALSE}
-remotes::install_github("fmichonneau/foghorn")
+pak::pkg_install("fmichonneau/foghorn")
 ```
 
 or the stable version from CRAN:
@@ -54,16 +56,25 @@ install.packages("foghorn")
 library(foghorn)
 ```
 
-`foghorn` provides the results of the package CRAN checks. As a maintainer, you can easily get the results of the checks for your packages by using the email address included in the `DESCRIPTION` file of your packages. 
+`foghorn` provides the results of the package CRAN checks. As a maintainer, you
+can easily get the results of the checks for your packages by using the email
+address included in the `DESCRIPTION` file of your packages.
 
-`summary_cran_results()` provides you with a graphical summary of the results of the CRAN checks. The number in parenthesis after the name of the package indicates the number of platforms used by CRAN that produced this result.
+`summary_cran_results()` provides you with a graphical summary of the results of
+the CRAN checks. The number in parenthesis after the name of the package
+indicates the number of platforms used by CRAN that produced this result. If
+CRAN has set a deadline by which your package needs to be updated before it gets
+archived, that date will be shown in the output.
 
 ```{r graphical-interface}
 ## Graphical interface
-summary_cran_results(email = "francois.michonneau@gmail.com")
+summary_cran_results(email = "francois.michonneau@gmail.com", pkg = "lme4")
 ```
 
-`summary_cran_results()` is actually an alias of `summary(cran_results())`, meaning that you can call `cran_results()` directly if you want to easily access the underlying data for the results of the CRAN checks. These results are stored in a tibble.
+`summary_cran_results()` is actually an alias of `summary(cran_results())`,
+meaning that you can call `cran_results()` directly if you want to easily access
+the underlying data for the results of the CRAN checks. These results are stored
+in a tibble.
 
 ```{r tibble}
 ## Results of the checks as a tibble
@@ -91,8 +102,9 @@ cran_results(
 )
 ```
 
-You can inspect the logs for the check results using
-`summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while `visit_cran_check(pkg)` takes you directly to the CRAN webpage.
+You can inspect the logs for the check results using `summary_cran_details(pkg)`
+(or `summary(cran_details(pkg))`), while `visit_cran_check(pkg)` takes you
+directly to the CRAN webpage.
 
 ```{r cran-details}
 (tidyr_checks <- cran_details(pkg = "tidyr"))

@@ -29,11 +29,11 @@ results of the CRAN checks for your packages.
 
 ## Installation
 
-You can install the development version of **`foghorn`** from github
+You can install the development version of **`foghorn`** from GitHub
 with:
 
 ``` r
-remotes::install_github("fmichonneau/foghorn")
+pak::pkg_install("fmichonneau/foghorn")
 ```
 
 or the stable version from CRAN:
@@ -57,17 +57,20 @@ of your packages.
 `summary_cran_results()` provides you with a graphical summary of the
 results of the CRAN checks. The number in parenthesis after the name of
 the package indicates the number of platforms used by CRAN that produced
-this result.
+this result. If CRAN has set a deadline by which your package needs to
+be updated before it gets archived, that date will be shown in the
+output.
 
 ``` r
 ## Graphical interface
-summary_cran_results(email = "francois.michonneau@gmail.com")
-#> ✔ All clear for riceware!
+summary_cran_results(email = "francois.michonneau@gmail.com", pkg = "lme4")
+#> ✔ All clear for foghorn, phylobase, and riceware!
 #> ★  Packages with notes on CRAN: 
-#>   - foghorn (2)
-#>   - phylobase (6)
-#>   - rncl (5)
-#>   - rotl (2)
+#>   - lme4 (8) [Fix before: 2024-06-17]
+#>   - rncl (12)
+#>   - rotl (10)
+#> ◉  Package with other issues on CRAN: 
+#>   - lme4 [Fix before: 2024-06-17]
 ```
 
 `summary_cran_results()` is actually an alias of
@@ -78,14 +81,14 @@ results of the CRAN checks. These results are stored in a tibble.
 ``` r
 ## Results of the checks as a tibble
 cran_results(email = "francois.michonneau@gmail.com")
-#> # A tibble: 5 × 7
-#>   package   error  fail  warn  note    ok has_other_issues
-#>   <chr>     <int> <int> <int> <int> <int> <lgl>           
-#> 1 foghorn       0     0     0     2    10 FALSE           
-#> 2 phylobase     0     0     0     6     6 FALSE           
-#> 3 riceware      0     0     0     0    12 FALSE           
-#> 4 rncl          0     0     0     5     7 FALSE           
-#> 5 rotl          0     0     0     2    10 FALSE
+#> # A tibble: 5 × 8
+#>   package   error  fail  warn  note    ok has_other_issues fix_before
+#>   <chr>     <int> <int> <int> <int> <int> <lgl>            <chr>     
+#> 1 foghorn       0     0     0     0    13 FALSE            <NA>      
+#> 2 phylobase     0     0     0     0    13 FALSE            <NA>      
+#> 3 riceware      0     0     0     0    13 FALSE            <NA>      
+#> 4 rncl          0     0     0    12     1 FALSE            <NA>      
+#> 5 rotl          0     0     0    10     3 FALSE            <NA>
 ```
 
 In addition of your own packages, you can also check the results for any
@@ -95,43 +98,55 @@ other packages that might be of interest to you:
 ## either by themselves
 summary_cran_results(pkg = c("ggplot2", "dplyr"))
 #> ★  Packages with notes on CRAN: 
-#>   - dplyr (2)
-#>   - ggplot2 (7)
+#>   - dplyr (5)
+#>   - ggplot2 (8)
+```
+
+``` r
 
 cran_results(pkg = c("ggplot2", "dplyr"))
-#> # A tibble: 2 × 7
-#>   package error  fail  warn  note    ok has_other_issues
-#>   <chr>   <int> <int> <int> <int> <int> <lgl>           
-#> 1 dplyr       0     0     0     2    10 FALSE           
-#> 2 ggplot2     0     0     0     7     5 FALSE
+#> # A tibble: 2 × 8
+#>   package error  fail  warn  note    ok has_other_issues fix_before
+#>   <chr>   <int> <int> <int> <int> <int> <lgl>            <chr>     
+#> 1 dplyr       0     0     0     5     8 FALSE            <NA>      
+#> 2 ggplot2     0     0     0     8     5 FALSE            <NA>
+```
+
+``` r
 
 ## or by combining them with email addresses
 summary_cran_results(
   email = "francois.michonneau@gmail.com",
-  pkg = c("mregions", "ridigbio")
+  pkg = c("arrow", "duckdb")
 )
-#> ✔ All clear for riceware, ridigbio!
+#> ✔ All clear for foghorn, phylobase, and riceware!
+#> ⚠  Package with warnings on CRAN: 
+#>   - duckdb (1)
 #> ★  Packages with notes on CRAN: 
-#>   - foghorn (2)
-#>   - mregions (6)
-#>   - phylobase (6)
-#>   - rncl (5)
-#>   - rotl (2)
+#>   - arrow (11)
+#>   - duckdb (11)
+#>   - rncl (12)
+#>   - rotl (10)
+#> ◉  Package with other issues on CRAN: 
+#>   - duckdb
+```
+
+``` r
 
 cran_results(
   email = "francois.michonneau@gmail.com",
-  pkg = c("mregions", "ridigbio")
+  pkg = c("arrow", "duckdb")
 )
-#> # A tibble: 7 × 7
-#>   package   error  fail  warn  note    ok has_other_issues
-#>   <chr>     <int> <int> <int> <int> <int> <lgl>           
-#> 1 foghorn       0     0     0     2    10 FALSE           
-#> 2 mregions      0     0     0     6     6 FALSE           
-#> 3 phylobase     0     0     0     6     6 FALSE           
-#> 4 riceware      0     0     0     0    12 FALSE           
-#> 5 ridigbio      0     0     0     0    12 FALSE           
-#> 6 rncl          0     0     0     5     7 FALSE           
-#> 7 rotl          0     0     0     2    10 FALSE
+#> # A tibble: 7 × 8
+#>   package   error  fail  warn  note    ok has_other_issues fix_before
+#>   <chr>     <int> <int> <int> <int> <int> <lgl>            <chr>     
+#> 1 arrow         0     0     0    11     2 FALSE            <NA>      
+#> 2 duckdb        0     0     1    11     1 TRUE             <NA>      
+#> 3 foghorn       0     0     0     0    13 FALSE            <NA>      
+#> 4 phylobase     0     0     0     0    13 FALSE            <NA>      
+#> 5 riceware      0     0     0     0    13 FALSE            <NA>      
+#> 6 rncl          0     0     0    12     1 FALSE            <NA>      
+#> 7 rotl          0     0     0    10     3 FALSE            <NA>
 ```
 
 You can inspect the logs for the check results using
@@ -140,22 +155,79 @@ You can inspect the logs for the check results using
 
 ``` r
 (tidyr_checks <- cran_details(pkg = "tidyr"))
-#> # A tibble: 2 × 7
+#> # A tibble: 4 × 7
 #>   package version result check                         flavors n_flavors message
 #>   <chr>   <chr>   <chr>  <chr>                         <chr>       <dbl> <chr>  
-#> 1 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …
-#> 2 tidyr   1.3.0   NOTE   C++ specification             r-patc…         2 "     …
+#> 1 tidyr   1.3.1   NOTE   compiled code                 r-deve…         4 "     …
+#> 2 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …
+#> 3 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …
+#> 4 tidyr   1.3.1   ERROR  re-building of vignette outp… r-rele…         2 "     …
+```
+
+``` r
 summary(tidyr_checks)
+#> ★ tidyr - note: compiled code
+#>    ❯ r-devel-linux-x86_64-debian-clang 
+#>    ❯ r-devel-linux-x86_64-debian-gcc 
+#>    ❯ r-devel-linux-x86_64-fedora-clang 
+#>    ❯ r-devel-linux-x86_64-fedora-gcc 
+#> 
+#>      File ‘tidyr/libs/tidyr.so’:
+#>      Found non-API calls to R: ‘SETLENGTH’, ‘SET_GROWABLE_BIT’,
+#>      ‘SET_TRUELENGTH’
+#>      
+#>      Compiled code should not call non-API entry points in R.
+#>      
+#>      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.
+#> 
 #> ★ tidyr - note: data for non-ASCII characters
 #>    ❯ r-devel-linux-x86_64-fedora-clang 
 #>    ❯ r-devel-linux-x86_64-fedora-gcc 
 #> 
 #>      Note: found 24 marked UTF-8 strings
 #> 
-#> ★ tidyr - note: C++ specification
-#>    ❯ r-patched-linux-x86_64 
+#> ★ tidyr - note: compiled code
+#>    ❯ r-devel-windows-x86_64 
 #> 
-#>      Specified C++11: please drop specification unless essential
+#>      File 'tidyr/libs/x64/tidyr.dll':
+#>      Found non-API calls to R: 'SETLENGTH', 'SET_GROWABLE_BIT',
+#>      'SET_TRUELENGTH'
+#>      
+#>      Compiled code should not call non-API entry points in R.
+#>      
+#>      See 'Writing portable packages' in the 'Writing R Extensions' manual.
+#> 
+#> ✖ tidyr - error: re-building of vignette outputs
+#>    ❯ r-release-macos-arm64 
+#> 
+#>      Error(s) in re-building vignettes:
+#>      --- re-building ‘in-packages.Rmd’ using rmarkdown
+#>      --- finished re-building ‘in-packages.Rmd’
+#>      
+#>      --- re-building ‘nest.Rmd’ using rmarkdown
+#>      --- finished re-building ‘nest.Rmd’
+#>      
+#>      --- re-building ‘pivot.Rmd’ using rmarkdown
+#>      
+#>      Quitting from lines 44-47 [setup] (pivot.Rmd)
+#>      Error: processing vignette 'pivot.Rmd' failed with diagnostics:
+#>      there is no package called 'readr'
+#>      --- failed re-building ‘pivot.Rmd’
+#>      
+#>      --- re-building ‘programming.Rmd’ using rmarkdown
+#>      --- finished re-building ‘programming.Rmd’
+#>      
+#>      --- re-building ‘rectangle.Rmd’ using rmarkdown
+#>      --- finished re-building ‘rectangle.Rmd’
+#>      
+#>      --- re-building ‘tidy-data.Rmd’ using rmarkdown
+#>      --- finished re-building ‘tidy-data.Rmd’
+#>      
+#>      SUMMARY: processing the following file failed:
+#>      ‘pivot.Rmd’
+#>      
+#>      Error: Vignette re-building failed.
+#>      Execution halted
 ```
 
 ## Where does the data come from?
@@ -170,10 +242,10 @@ on a large number of packages, using the CRAN database is recommended
 
 ``` r
 cran_results(pkg = "nlme", src = "crandb", progress = FALSE)
-#> # A tibble: 1 × 7
-#>   package error  fail  warn  note    ok has_other_issues
-#>   <chr>   <int> <int> <int> <int> <int> <lgl>           
-#> 1 nlme        0     0     0     0    12 FALSE
+#> # A tibble: 1 × 8
+#>   package error  fail  warn  note    ok has_other_issues fix_before
+#>   <chr>   <int> <int> <int> <int> <int> <lgl>            <chr>     
+#> 1 nlme        0     0     0     0    13 FALSE            <NA>
 ```
 
 Check out the “Details” section in the help files for more information.
