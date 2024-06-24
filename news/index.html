@@ -47,7 +47,202 @@
       <small>Source: <a href="https://github.com/fmichonneau/foghorn/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
-  </main></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="foghorn-development-version">foghorn (development version)<a class="anchor" aria-label="anchor" href="#foghorn-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>The output of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> now include the deadline fixed by CRAN. This deadline is the date by which requested changes need to be implemented before the package gets archived.</li>
+<li>The <code><a href="../reference/cran_results.html">cran_results()</a></code> function gains the <code>max_requests</code> argument that limits the number of requests that are performed against the CRAN website in a single query.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>Packages that only have “other issues” will no longer show “All clear” in the summary output.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
+<ul><li>The <a href="https://r-lib.github.io/crayon/" class="external-link">crayon</a> package has been replaced with <code>cli</code> for styling the output.</li>
+<li>The <a href="https://github.com/gaborcsardi/clisymbols" class="external-link">clisymbols</a> package has been replaced with <code>cli</code> for the symbols displayed in the output. (<a href="https://github.com/fmichonneau/foghorn/issues/60" class="external-link">#60</a>, reported by <a href="https://github.com/olivroy" class="external-link">@olivroy</a>)</li>
+<li>When using the CRAN database as a data source, functions will error if the email address specified is invalid. This behavior is consistent with what happens when using the CRAN website as a data source.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.2" id="foghorn-152">foghorn 1.5.2<a class="anchor" aria-label="anchor" href="#foghorn-152"></a></h2><p class="text-muted">CRAN release: 2024-02-02</p>
+<div class="section level3">
+<h3 id="other-changes-1-5-2">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-5-2"></a></h3>
+<ul><li>Address change in formatting of CRAN result page that affected the retrieval of the results.</li>
+<li>
+<code><a href="../reference/cran_results.html">cran_results()</a></code> will now error if the package fails to retrieve results from CRAN. (<a href="https://github.com/fmichonneau/foghorn/issues/53" class="external-link">#53</a>, suggested by <a href="https://github.com/eddelbuettel" class="external-link">@eddelbuettel</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.5.1" id="foghorn-151">foghorn 1.5.1<a class="anchor" aria-label="anchor" href="#foghorn-151"></a></h2><p class="text-muted">CRAN release: 2022-10-24</p>
+<div class="section level3">
+<h3 id="new-features-1-5-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-5-1"></a></h3>
+<ul><li>The <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> function does not include the packages found the <code>archive</code> folder by default. (<a href="https://github.com/fmichonneau/foghorn/issues/49" class="external-link">#49</a>, suggested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>)</li>
+<li>The <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> gains a new argument. The results are sorted by date (in decreasing order) by default. Using <code>sort_by_date = FALSE</code> to get the old behavior (<a href="https://github.com/fmichonneau/foghorn/issues/49" class="external-link">#49</a>, suggested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-1-5-1">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-5-1"></a></h3>
+<ul><li>The progress bar for larger file downloads from CRAN server has been removed.</li>
+<li>The <code>httr2</code> package is now used internally to download files and data from the CRAN servers.</li>
+<li>The unexported code to use the crancheck API (<a href="https://cranchecks.info/" class="external-link uri">https://cranchecks.info/</a>) has been removed from the code base.</li>
+<li>All support for FTP access has been removed.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.2" id="foghorn-142">foghorn 1.4.2<a class="anchor" aria-label="anchor" href="#foghorn-142"></a></h2><p class="text-muted">CRAN release: 2021-07-11</p>
+<div class="section level3">
+<h3 id="other-changes-1-4-2">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-4-2"></a></h3>
+<ul><li>The parsing of incorrectly formatted package names submitted to CRAN’s queue does not lead <code>foghorn</code> to error. The version number for such packages is now <code>NA</code> instead of <code>0.0.0</code>. (<a href="https://github.com/fmichonneau/foghorn/issues/45" class="external-link">#45</a>, reported by <a href="https://github.com/bastistician" class="external-link">@bastistician</a>)</li>
+<li>Rename internal function to reflect it does not use FTP anymore.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.1" id="foghorn-141">foghorn 1.4.1<a class="anchor" aria-label="anchor" href="#foghorn-141"></a></h2><p class="text-muted">CRAN release: 2021-05-31</p>
+<div class="section level3">
+<h3 id="other-changes-1-4-1">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-4-1"></a></h3>
+<ul><li>The number of CRAN flavors is now at 14.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.4.0" id="foghorn-140">foghorn 1.4.0<a class="anchor" aria-label="anchor" href="#foghorn-140"></a></h2><p class="text-muted">CRAN release: 2021-05-05</p>
+<div class="section level3">
+<h3 id="other-changes-1-4-0">Other Changes<a class="anchor" aria-label="anchor" href="#other-changes-1-4-0"></a></h3>
+<ul><li>The inspection of the queue from CRAN incoming is now using HTTPS instead of FTP.</li>
+<li>The data in the <code>size</code> column for the object returned by <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> is now of type character.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.2" id="foghorn-132">foghorn 1.3.2<a class="anchor" aria-label="anchor" href="#foghorn-132"></a></h2><p class="text-muted">CRAN release: 2020-12-17</p>
+<div class="section level3">
+<h3 id="bug-fixes-1-3-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-3-2"></a></h3>
+<ul><li>The output of <code><a href="../reference/winbuilder_queue.html">winbuilder_queue()</a></code> was always empty following a change to the content returned by the Win-builder FTP server (<a href="https://github.com/fmichonneau/foghorn/issues/43" class="external-link">#43</a>, reported by <a href="https://github.com/bbolker" class="external-link">@bbolker</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.1" id="foghorn-131">foghorn 1.3.1<a class="anchor" aria-label="anchor" href="#foghorn-131"></a></h2><p class="text-muted">CRAN release: 2020-09-08</p>
+<div class="section level3">
+<h3 id="new-feature-1-3-1">New feature<a class="anchor" aria-label="anchor" href="#new-feature-1-3-1"></a></h3>
+<ul><li>Implement scrapping of Win-builder queue (<a href="https://github.com/fmichonneau/foghorn/issues/40" class="external-link">#40</a> suggested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-1-3-1">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-3-1"></a></h3>
+<ul><li>In <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> and <code><a href="../reference/winbuilder_queue.html">winbuilder_queue()</a></code> the version numbers in the tibbles are of class <code>package_version</code> (suggested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>).</li>
+<li>
+<code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> output includes the size of the tarball archive.</li>
+<li>
+<code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> returns a zero-row tibble instead of <code>NULL</code> when the inspected folder is empty.</li>
+<li>The argument <code>progress</code> was not documented (and not implemented properly) for <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/cran_details.html">cran_details()</a></code>.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.3" id="foghorn-123">foghorn 1.2.3<a class="anchor" aria-label="anchor" href="#foghorn-123"></a></h2><p class="text-muted">CRAN release: 2020-07-30</p>
+<ul><li>The number of CRAN check flavors is back to 12.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.2" id="foghorn-122">foghorn 1.2.2<a class="anchor" aria-label="anchor" href="#foghorn-122"></a></h2><p class="text-muted">CRAN release: 2020-07-22</p>
+<ul><li>The number of CRAN check flavors is now 11.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.2.1" id="foghorn-121">foghorn 1.2.1<a class="anchor" aria-label="anchor" href="#foghorn-121"></a></h2><p class="text-muted">CRAN release: 2020-05-05</p>
+<ul><li>The number of CRAN check flavors is back to 12. A new function <code>n_cran_flavors</code> reads the table on the CRAN website that lists the number of flavors, caches it, and returns this number. This is a more robust way to ensure that the number of flavors (used in the package) is always accurate. There is also the possibility of setting the number of flavors (and disabling caching) using options, see the help for the <code><a href="../reference/n_cran_flavors.html">n_cran_flavors()</a></code> function for more information.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.5" id="foghorn-115">foghorn 1.1.5<a class="anchor" aria-label="anchor" href="#foghorn-115"></a></h2><p class="text-muted">CRAN release: 2020-04-07</p>
+<ul><li>internally replaced <code>as.tibble</code> with <code>as_tibble</code>
+</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.4" id="foghorn-114">foghorn 1.1.4<a class="anchor" aria-label="anchor" href="#foghorn-114"></a></h2><p class="text-muted">CRAN release: 2019-11-28</p>
+<ul><li>The number of CRAN check flavors is now 13. Code and tests have been adjusted to take this change into account.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.3" id="foghorn-113">foghorn 1.1.3<a class="anchor" aria-label="anchor" href="#foghorn-113"></a></h2><p class="text-muted">CRAN release: 2019-11-10</p>
+<div class="section level3">
+<h3 id="new-feature-1-1-3">New feature<a class="anchor" aria-label="anchor" href="#new-feature-1-1-3"></a></h3>
+<ul><li>The documentation of <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> is improved (<a href="https://github.com/fmichonneau/foghorn/issues/35" class="external-link">#35</a> by <a href="https://github.com/bbolker" class="external-link">@bbolker</a>).</li>
+<li>The folder <code>waiting</code> in the CRAN submission queue wasn’t documented and could not be inspected by using the argument <code>folders</code> in the function <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> (<a href="https://github.com/fmichonneau/foghorn/issues/35" class="external-link">#35</a> by <a href="https://github.com/bbolker" class="external-link">@bbolker</a> and <a href="https://github.com/fmichonneau/foghorn/issues/38" class="external-link">#38</a>, reported by <a href="https://github.com/HenrikBengtsson" class="external-link">@HenrikBengtsson</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-1-1-3">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-1-3"></a></h3>
+<ul><li>The vignette “Quick start” has been renamed “Get started” so it could be more visible and easily accessible in the documentation website (<a href="https://github.com/fmichonneau/foghorn/issues/36" class="external-link">#36</a> reported by <a href="https://github.com/maelle" class="external-link">@maelle</a>).</li>
+<li>The argument <code>v.names</code> in the function <code><a href="https://rdrr.io/r/stats/reshape.html" class="external-link">stats::reshape</a></code> wasn’t fully spelled (<a href="https://github.com/fmichonneau/foghorn/issues/37" class="external-link">#37</a> by <a href="https://github.com/jennybc" class="external-link">@jennybc</a>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="foghorn-110">foghorn 1.1.0<a class="anchor" aria-label="anchor" href="#foghorn-110"></a></h2><p class="text-muted">CRAN release: 2019-02-17</p>
+<div class="section level3">
+<h3 id="new-features-1-1-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-1-0"></a></h3>
+<ul><li>The output of <code>cran_incoming</code> now includes the date/time (contribution by <a href="https://github.com/bbolker" class="external-link">@bbolker</a>, <a href="https://github.com/fmichonneau/foghorn/issues/30" class="external-link">#30</a>)</li>
+<li>
+<code>foghorn</code> respects the CRAN mirror set by the users instead of using <code>https://cran.r-project.org</code>.</li>
+<li>When a failure (other than 404) occurs while trying to obtain the data for a package, <code>foghorn</code> will retry up to three times.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-1-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-1-0"></a></h3>
+<ul><li>
+<code>foghorn</code> would, in some cases, return that a valid package name published on CRAN did not exit (<a href="https://github.com/fmichonneau/foghorn/issues/29" class="external-link">#29</a>, <a href="https://github.com/zkamvar" class="external-link">@zkamvar</a>).</li>
+<li>The recent <code>newbies</code> folder found on the CRAN FTP incoming server has been added to the list of places to check packages in CRAN’s submission queue (<a href="https://github.com/fmichonneau/foghorn/issues/32" class="external-link">#32</a>).</li>
+<li>When a package only had “additional issues”, the summary functions would report that everything was clear (<a href="https://github.com/fmichonneau/foghorn/issues/33" class="external-link">#33</a>, <a href="https://github.com/coatless" class="external-link">@coatless</a>)</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.2" id="foghorn-102">foghorn 1.0.2<a class="anchor" aria-label="anchor" href="#foghorn-102"></a></h2><p class="text-muted">CRAN release: 2018-04-14</p>
+<div class="section level3">
+<h3 id="new-features-1-0-2">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-2"></a></h3>
+<ul><li>Let users filter the CRAN incoming folder they want to inspect. Feature requested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>, <a href="https://github.com/fmichonneau/foghorn/issues/28" class="external-link">#28</a>.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-0-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-2"></a></h3>
+<ul><li>Don’t display progress bar in non-interactive mode for file download.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="other-changes-1-0-2">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-0-2"></a></h3>
+<ul><li>The <code>noemail</code> folder has been removed from the CRAN FTP incoming server. <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> has been updated to reflect this change.</li>
+<li>
+<code>foghorn</code> has an hex logo. Thanks to Maëlle Salmon for feedback on initial design.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.1" id="foghorn-101">foghorn 1.0.1<a class="anchor" aria-label="anchor" href="#foghorn-101"></a></h2><p class="text-muted">CRAN release: 2018-02-28</p>
+<div class="section level3">
+<h3 id="new-features-1-0-1">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-1"></a></h3>
+<ul><li><p>Add <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> to retrieve the list of packages currently in the CRAN incoming queue. Feature requested by <a href="https://github.com/krlmlr" class="external-link">@krlmlr</a>, <a href="https://github.com/fmichonneau/foghorn/issues/24" class="external-link">#24</a>.</p></li>
+<li><p><code>foghorn</code> is now compatible with R &gt;= 3.1. Suggested by <a href="https://github.com/jimhester" class="external-link">@jimhester</a>, <a href="https://github.com/fmichonneau/foghorn/issues/26" class="external-link">#26</a>.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.0" id="foghorn-100">foghorn 1.0.0<a class="anchor" aria-label="anchor" href="#foghorn-100"></a></h2><p class="text-muted">CRAN release: 2017-12-05</p>
+<div class="section level3">
+<h3 id="api-changes-1-0-0">API changes<a class="anchor" aria-label="anchor" href="#api-changes-1-0-0"></a></h3>
+<ul><li>
+<code><a href="../reference/check_cran_results.html">check_cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">show_cran_results()</a></code> are deprecated in favor of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/cran_details.html">summary_cran_details()</a></code> respectively.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-1-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-0"></a></h3>
+<ul><li><p>Add initial support for <a href="https://cranchecks.info" class="external-link uri">https://cranchecks.info</a> as a data source (not exported/tested at this stage).</p></li>
+<li><p>Take into consideration issues other than memtest when parsing the HTML CRAN check page.</p></li>
+<li><p>Add argument <code>print_ok</code> to <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method for <code>cran_results</code> that can optionally print an “all clear” message when all CRAN checks return “OK” for a package.</p></li>
+<li><p>A progress bar is displayed when the RDS files are being downloaded from CRAN if the <a href="https://github.com/r-lib/progress" class="external-link">progress package</a> is installed (<a href="https://github.com/fmichonneau/foghorn/issues/17" class="external-link">#17</a>).</p></li>
+<li><p>The version number of the packages are displayed in <code><a href="../reference/cran_details.html">cran_details()</a></code>.</p></li>
+<li><p>All the functions return tibbles, with column names in lower case.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugs-fixed-1-0-0">Bugs fixed<a class="anchor" aria-label="anchor" href="#bugs-fixed-1-0-0"></a></h3>
+<ul><li><p>Fix bug <a href="https://github.com/fmichonneau/foghorn/issues/14" class="external-link">#14</a> reported by <a href="https://github.com/hadley" class="external-link">@hadley</a>, no issues are now represented as 0 instead of <code>NA</code>.</p></li>
+<li><p>Fix bug that would display a number instead of the package name in some situations.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.4" id="foghorn-044">foghorn 0.4.4<a class="anchor" aria-label="anchor" href="#foghorn-044"></a></h2><p class="text-muted">CRAN release: 2017-05-23</p>
+<ul><li>CRAN has merged memtest notes with a new “other issues” that run valgrind and other memory issues on multiple platforms/compilers. Therefore, memtest is renamed “other issues”.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.4.2" id="foghorn-042">foghorn 0.4.2<a class="anchor" aria-label="anchor" href="#foghorn-042"></a></h2><p class="text-muted">CRAN release: 2017-02-08</p>
+<ul><li>initial release on CRAN</li>
+</ul></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
