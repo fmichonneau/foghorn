@@ -4,10 +4,11 @@ cran_results_web <- function(email, pkg, max_requests, ...) {
   if (!is.null(email)) {
     res_email <- read_cran_web_from_email(email, ...)
     res <- cran_checks_table(res_email)
-    to_fix <- fix_before_pkg_web(unlist(all_packages(res_email)), max_requests = max_requests)
-    res <- add_fix_before(res, to_fix)
     res <- add_other_issues(res, res_email)
-  }
+    to_fix <- fix_before_pkg_web(pkg_with_issues(res), max_requests = max_requests)
+    res <- add_fix_before(res, to_fix)
+
+}
   if (!is.null(pkg)) {
     res_pkg <- read_cran_web_from_pkg(pkg, ...)
     tbl_pkg <- cran_checks_table(res_pkg)

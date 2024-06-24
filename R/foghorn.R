@@ -199,6 +199,14 @@ print_all_clear <- function(pkgs) {
   cli::cli_alert_success("All clear for {pkgs}!")
 }
 
+pkg_all_clear <- function(tbl_pkg) {
+  tbl_pkg[["package"]][tbl_pkg[["ok"]] == n_cran_flavors() & !tbl_pkg[["has_other_issues"]]]
+}
+
+pkg_with_issues <- function(tbl_pkg) {
+  tbl_pkg[["package"]][!tbl_pkg[["package"]] %in% pkg_all_clear(tbl_pkg)]
+}
+
 get_pkg_with_results <- function(tbl_pkg,
                                  what,
                                  compact = FALSE,
@@ -206,9 +214,8 @@ get_pkg_with_results <- function(tbl_pkg,
   what <- match.arg(what, names(tbl_pkg)[-1])
 
   if (identical(what, "ok")) {
-    pkg_all_clear <- tbl_pkg[["package"]][tbl_pkg[["ok"]] == n_cran_flavors() & !tbl_pkg[["has_other_issues"]]]
-    if (length(pkg_all_clear) && print_ok) {
-      print_all_clear(pkg_all_clear)
+    if (length(pkg_all_clear(tbl_pkg)) && print_ok) {
+      print_all_clear(pkg_all_clear(tbl_pkg))
     }
     return(NULL)
   }
