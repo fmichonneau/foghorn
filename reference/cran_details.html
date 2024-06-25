@@ -130,6 +130,18 @@ ignore this check. Consider using <code>src = "crandb"</code> if you need to get
 from many packages or maintainers. Note that this an approximation of the
 number of requests that will be performed and there will be situations where
 more requests than this limit will be performed to retrieve the results.</p>
+<p>The <code>deadline</code> column contains the date set by CRAN to fix issues with the
+CRAN checks before the package gets archived. To limit the number of
+requests to the CRAN mirror, the existence of a deadline is checked only for
+packages where issues have been detected. If the dealine is not checked
+(either because the argument <code>include_deadline</code> is set to <code>FALSE</code>, or
+because there is no issues detected with the CRAN checks), the content of
+the <code>deadline</code> column for the package will be set to <code>NA</code>. If the existence
+of a deadline has been checked but no date has been set by the CRAN
+Maintainers, the <code>deadline</code> column for the pacakge will be set to <code>""</code>. If
+there is a deadline, the content will be a date stored as <code>character</code>.</p>
+<p>The value of the argument <code>include_deadline</code> can be set using the
+local option <code>foghorn_include_deadline</code>.</p>
 <p>When choosing <code>src = "crandb"</code> you can also specify the
 following options:</p><ul><li><p><code>dest</code>:  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
 by default).</p></li>

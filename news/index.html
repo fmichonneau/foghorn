@@ -51,7 +51,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="foghorn-development-version">foghorn (development version)<a class="anchor" aria-label="anchor" href="#foghorn-development-version"></a></h2>
 <div class="section level3">
 <h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>The output of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> now include the deadline fixed by CRAN. This deadline is the date by which requested changes need to be implemented before the package gets archived.</li>
+<ul><li>The output of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> can now include the deadline fixed by CRAN. This deadline is the date by which requested changes need to be implemented before the package gets archived. By default, this is turned off. To see any deadline that might have been set by CRAN Maintainers, set the <code>include_deadline</code> argument to <code>TRUE</code>. The value for this argument can also be set using the local option <code>foghorn_include_deadline</code>.</li>
 <li>The <code><a href="../reference/cran_results.html">cran_results()</a></code> function gains the <code>max_requests</code> argument that limits the number of requests that are performed against the CRAN website in a single query.</li>
 </ul></div>
 <div class="section level3">
