@@ -238,12 +238,12 @@ get_pkg_with_results <- function(tbl_pkg,
       sptr <- c("  - ", "\n")
     }
     cond <- !is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0
-    fix_before_date <- tbl_pkg$fix_before[cond]
-    fix_before_date[is.na(fix_before_date)] <- ""
-    fix_before_date <- ifelse(nzchar(fix_before_date), paste0(" [Fix before: ", fix_before_date, "]"), "")
+    deadline_date <- tbl_pkg$deadline[cond]
+    deadline_date[is.na(deadline_date)] <- ""
+    deadline_date <- ifelse(nzchar(deadline_date), paste0(" [Fix before: ", deadline_date, "]"), "")
     res <- paste0(sptr[1], tbl_pkg$package[cond],
       n,
-      fix_before_date,
+      deadline_date,
       collapse = sptr[2]
     )
   } else {

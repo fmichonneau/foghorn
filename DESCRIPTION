@@ -30,7 +30,8 @@ Suggests:
     knitr,
     progress,
     rmarkdown,
-    testthat
+    testthat,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

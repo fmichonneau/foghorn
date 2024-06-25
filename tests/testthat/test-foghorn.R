@@ -38,13 +38,13 @@ validate_cran_results <- function(x) {
     inherits(x, "tbl_df") &&
     all(names(x) %in% c(
       "package", "error", "fail", "warn",
-      "note", "ok", "has_other_issues", "fix_before"
+      "note", "ok", "has_other_issues", "deadline"
     )) &&
     nrow(x) > 0 &&
     is.logical(x[["has_other_issues"]]) &&
     ## 2 allows for something other that "has_issues_notes" to be in the table
-    any(x[1, -match("fix_before", names(x))] > 2) &&
-    !any(is.na(x[, -match("fix_before", names(x))])) ## no NAs allowed
+    any(x[1, -match("deadline", names(x))] > 2) &&
+    !any(is.na(x[, -match("deadline", names(x))])) ## no NAs allowed
 }
 
 validate_cran_details <- function(x) {
@@ -209,7 +209,7 @@ test_that("infinite is accepted for max_requests", {
   ))
 })
 
-test_that("fix_before column valid", {
+test_that("deadline column valid", {
   skip_on_cran()
   pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
   pkg_with_deadline <- pkg_data[!is.na(pkg_data$Deadline), , drop = FALSE]
@@ -227,26 +227,62 @@ test_that("fix_before column valid", {
     "Package"
   ]
 
-  res_web <- cran_results(pkg = pkg_with_deadline, max_requests = Inf)
+  res_web_no_deadline <- cran_results(pkg = pkg_with_deadline, include_deadline = FALSE, max_requests = Inf)
+  res_web <- cran_results(pkg = pkg_with_deadline, include_deadline = TRUE, max_requests = Inf)
   res_crandb <- cran_results(pkg = pkg_with_deadline, src = "crandb")
 
-  expect_true(sum(!is.na(res_web$fix_before)) > 0)
-  expect_true(sum(!is.na(res_web$fix_before)) <= nrow(res_web))
+  expect_equal(sum(is.na(res_web_no_deadline$deadline)), nrow(res_web_no_deadline))
+
+  expect_true(sum(!is.na(res_web$deadline)) > 0)
+  expect_true(sum(!is.na(res_web$deadline)) <= nrow(res_web))
   expect_true(
     identical(
-      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web$fix_before)),
-      sum(!is.na(res_web$fix_before))
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web$deadline)),
+      sum(!is.na(res_web$deadline))
     )
   )
   expect_true(
     identical(
-      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_crandb$fix_before)),
-      sum(!is.na(res_crandb$fix_before))
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_crandb$deadline)),
+      sum(!is.na(res_crandb$deadline))
     )
   )
   expect_true(
-    sum(!is.na(res_web$fix_before)) <= sum(!is.na(res_crandb$fix_before))
+    sum(!is.na(res_web$deadline)) <= sum(!is.na(res_crandb$deadline))
   )
+})
+
+test_that("environment variable for deadline (only needed for src = 'website')", {
+  skip_on_cran()
+
+  pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
+  pkg_with_deadline <- pkg_data[!is.na(pkg_data$Deadline), , drop = FALSE]
+  n_pkg_with_deadline <- nrow(pkg_with_deadline)
+
+  if (n_pkg_with_deadline < 1) {
+    skip("No package with deadline")
+  }
+
+  pkg_with_deadline <- pkg_with_deadline[
+    sample(
+      seq_len(n_pkg_with_deadline),
+      min(max(1, n_pkg_with_deadline), 10)
+    ),
+    "Package"
+  ]
+
+
+  ## when deadline is not checked column contains NAs
+  withr::local_options(list(foghorn_include_deadline = FALSE))
+  res_web <- cran_results(pkg = pkg_with_deadline, src = "website")
+  expect_true(sum(is.na(res_web$deadline)) > 0)
+
+  ## when deadline is checked columns contains "" (but only with pkgs that have
+  ## issues)
+  withr::local_options(list(foghorn_include_deadline = TRUE))
+  res_web <- cran_results(pkg = pkg_with_deadline, src = "website")
+  expect_equal(sum(is.na(res_web$deadline)), 0)
+
 })
 
 
@@ -303,7 +339,7 @@ test_that("check for interactive", {
 ## summary_cran_results --------------------------------------------------------
 
 build_regexp <- function(what, pkg) {
-  pkg <- paste0("(.|\\W)+", sort(pkg), "(.|\\W)+", collapse = "")
+  pkg <- paste0("(.|\\W)+", sort(pkg), "(.|\\W)+|\\[Fix before: \\d{4}-\\d{2}-\\d{2}\\]?", collapse = "")
   paste0(what, pkg)
 }
 
@@ -311,8 +347,8 @@ test_that("output of summary cran results", {
   skip_on_cran()
 
   pkgs <- c("rotl", "rncl")
-  res_web <- suppressMessages(summary_cran_results(pkg = pkgs, src = "website"))
-  res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, src = "crandb"))
+  res_web <- suppressMessages(summary_cran_results(pkg = pkgs, include_deadline = TRUE, src = "website"))
+  res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, include_deadline = TRUE, src = "crandb"))
   expect_true(all(pkgs %in% res_web$package))
   expect_true(all(pkgs %in% res_cran$package))
   expect_identical(res_web, res_cran)
@@ -399,7 +435,7 @@ test_that("output of summary cran results", {
 
   pkg_with_fail <- sample(
     unique(cran_res$package[cran_res$status == "FAILURE"]),
-    5
+    min(length(unique(cran_res$package[cran_res$status == "FAILURE"])), 5)
   )
 
   ## output from website and CRAN db identical

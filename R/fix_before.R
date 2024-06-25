@@ -32,43 +32,56 @@ read_pkg_pages <- function(pkg) {
   res
 }
 
-extract_fix_before <- function(parsed, ...)  {
-  lapply(parsed, function(x) {
+extract_deadline <- function(parsed, ...)  {
+  vapply(parsed, function(x) {
     needs_fix <- xml2::xml_find_all(x, ".//tr//td//span[@style]")
     needs_fix <- xml2::xml_text(needs_fix)
     if (identical(length(needs_fix), 0L)) {
-      return(NA_character_)
+      return(character(1))
     }
     if (!grepl("issues need fixing before", needs_fix)) {
-      warning("Unrecognized value: ", needs_fix)
-      return(NA_character_)
+      warning("Unrecognized value: ", needs_fix, call. = FALSE)
+      return(character(1))
     }
     date_match <- regexpr("\\d{4}-\\d{2}-\\d{2}", needs_fix)
     regmatches(needs_fix, date_match)
-  })
+  }, character(1))
 }
 
-fix_before_pkg_web <- function(pkg, max_requests) {
+deadline_pkg_web <- function(pkg, include_deadline, max_requests) {
+  if (!include_deadline) {
+    return(
+      tibble(
+        package = pkg,
+        deadline = rep(NA_character_, length(pkg))
+      )
+    )
+  }
   check_n_requests(pkg, max_requests = max_requests)
   res <- read_pkg_pages(pkg)
-  res <- extract_fix_before(res)
+  res <- extract_deadline(res)
   res <- .mapply(function(.pkg, .res) {
-    tibble(
+    tibble::tibble(
       package = .pkg,
-      fix_before = .res
+      deadline = .res
     )
   }, list(pkg, res), NULL)
-  Reduce(rbind, res)
+  do.call("rbind", res)
 }
 
 ##' @importFrom tibble tibble
-fix_before_pkg_crandb <- function(pkg, ...) {
+deadline_pkg_crandb <- function(pkg, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
 
+  ## we overwrite CRAN's content to match foghorn's logic
+  ## NA means that we didn't check if there is a deadline when using the website data;
+  ## "" means that we checked and there is no deadline set.
+  res$Deadline[is.na(res$Deadline)] <- ""
+
   tibble::tibble(
     package = res$Package,
-    fix_before = res$Deadline
+    deadline = res$Deadline
   )
 }
 
@@ -80,7 +93,7 @@ check_no_email_match <- function(idx, email) {
 }
 
 ##' @importFrom tibble tibble
-fix_before_email_crandb <- function(email, ...) {
+deadline_email_crandb <- function(email, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   maintainer <- tolower(pkgs$Maintainer)
   idx <- lapply(tolower(email), function(x) {
@@ -93,10 +106,10 @@ fix_before_email_crandb <- function(email, ...) {
   res <- pkgs[as.logical(idx), c("Package", "Deadline")]
   tibble::tibble(
     package = res$Package,
-    fix_before = res$Deadline
+    deadline = res$Deadline
   )
 }
 
-add_fix_before <- function(res, fix) {
-  tibble::as_tibble(merge(res, fix, by = "package"))
+add_deadline <- function(res, fix) {
+  tibble::as_tibble(merge(res, fix, by = "package", all = TRUE))
 }
