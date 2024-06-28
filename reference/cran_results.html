@@ -12,7 +12,7 @@ set of packages specified by a maintainer or by names."><meta property="og:image
     
     <a class="navbar-brand me-2" href="../index.html">foghorn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,12 +139,12 @@ more requests than this limit will be performed to retrieve the results.</p>
 <p>The <code>deadline</code> column contains the date set by CRAN to fix issues with the
 CRAN checks before the package gets archived. To limit the number of
 requests to the CRAN mirror, the existence of a deadline is checked only for
-packages where issues have been detected. If the dealine is not checked
+packages where issues have been detected. If the deadline is not checked
 (either because the argument <code>include_deadline</code> is set to <code>FALSE</code>, or
 because there is no issues detected with the CRAN checks), the content of
 the <code>deadline</code> column for the package will be set to <code>NA</code>. If the existence
 of a deadline has been checked but no date has been set by the CRAN
-Maintainers, the <code>deadline</code> column for the pacakge will be set to <code>""</code>. If
+Maintainers, the <code>deadline</code> column for the package will be set to <code>""</code>. If
 there is a deadline, the content will be a date stored as <code>character</code>.</p>
 <p>The value of the argument <code>include_deadline</code> can be set using the
 local option <code>foghorn_include_deadline</code>.</p>

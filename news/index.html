@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">foghorn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,18 +48,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="foghorn-development-version">foghorn (development version)<a class="anchor" aria-label="anchor" href="#foghorn-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.6.0" id="foghorn-160">foghorn 1.6.0<a class="anchor" aria-label="anchor" href="#foghorn-160"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li>The output of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> can now include the deadline fixed by CRAN. This deadline is the date by which requested changes need to be implemented before the package gets archived. By default, this is turned off. To see any deadline that might have been set by CRAN Maintainers, set the <code>include_deadline</code> argument to <code>TRUE</code>. The value for this argument can also be set using the local option <code>foghorn_include_deadline</code>.</li>
+<h3 id="new-features-1-6-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-6-0"></a></h3>
+<ul><li>The output of <code><a href="../reference/cran_results.html">cran_results()</a></code> and <code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> can now include the deadline fixed by CRAN. This deadline is the date by which requested changes need to be implemented before the package gets archived. To see any deadline that might have been set by CRAN Maintainers, set the <code>include_deadline</code> argument to <code>TRUE</code> (default). The value for this argument can also be set using the local option <code>foghorn_include_deadline</code>.</li>
 <li>The <code><a href="../reference/cran_results.html">cran_results()</a></code> function gains the <code>max_requests</code> argument that limits the number of requests that are performed against the CRAN website in a single query.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<h3 id="bug-fixes-1-6-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-0"></a></h3>
 <ul><li>Packages that only have “other issues” will no longer show “All clear” in the summary output.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="other-changes-development-version">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-development-version"></a></h3>
+<h3 id="other-changes-1-6-0">Other changes<a class="anchor" aria-label="anchor" href="#other-changes-1-6-0"></a></h3>
 <ul><li>The <a href="https://r-lib.github.io/crayon/" class="external-link">crayon</a> package has been replaced with <code>cli</code> for styling the output.</li>
 <li>The <a href="https://github.com/gaborcsardi/clisymbols" class="external-link">clisymbols</a> package has been replaced with <code>cli</code> for the symbols displayed in the output. (<a href="https://github.com/fmichonneau/foghorn/issues/60" class="external-link">#60</a>, reported by <a href="https://github.com/olivroy" class="external-link">@olivroy</a>)</li>
 <li>When using the CRAN database as a data source, functions will error if the email address specified is invalid. This behavior is consistent with what happens when using the CRAN website as a data source.</li>
