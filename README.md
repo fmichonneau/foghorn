@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-![R-CMD-check](https://github.com/fmichonneau/foghorn/workflows/R-CMD-check/badge.svg)
+[![R-CMD-check](https://github.com/fmichonneau/foghorn/actions/workflows/check-full.yaml/badge.svg)](https://github.com/fmichonneau/foghorn/actions/workflows/check-full.yaml)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/fmichonneau/foghorn/master.svg)](https://app.codecov.io/github/fmichonneau/foghorn?branch=master)
 [![CRAN
