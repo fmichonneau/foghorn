@@ -116,11 +116,11 @@
 <span><span class="co">#&gt; # A tibble: 5 × 8</span></span>
 <span><span class="co">#&gt;   package   error  fail  warn  note    ok deadline has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 foghorn       0     0     0     0    13 ""       FALSE           </span></span>
-<span><span class="co">#&gt; 2 phylobase     0     0     0     0    13 ""       FALSE           </span></span>
-<span><span class="co">#&gt; 3 riceware      0     0     0     0    13 ""       FALSE           </span></span>
-<span><span class="co">#&gt; 4 rncl          0     0     0    12     1 ""       FALSE           </span></span>
-<span><span class="co">#&gt; 5 rotl          0     0     0    10     3 ""       FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 foghorn       0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">#&gt; 2 phylobase     0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">#&gt; 3 riceware      0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">#&gt; 4 rncl          0     0     0    12     1 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">#&gt; 5 rotl          0     0     0    10     3 &lt;NA&gt;     FALSE</span></span></code></pre></div>
 <p>In addition of your own packages, you can also check the results for any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## either by themselves</span></span>
@@ -134,8 +134,8 @@
 <span><span class="co">#&gt; # A tibble: 2 × 8</span></span>
 <span><span class="co">#&gt;   package error  fail  warn  note    ok deadline has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 dplyr       0     0     0     5     8 ""       FALSE           </span></span>
-<span><span class="co">#&gt; 2 ggplot2     0     0     0     8     5 ""       FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 dplyr       0     0     0     5     8 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">#&gt; 2 ggplot2     0     0     0     8     5 &lt;NA&gt;     FALSE</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## or by combining them with email addresses</span></span>
@@ -160,15 +160,15 @@
 <span>  pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arrow"</span>, <span class="st">"duckdb"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 8</span></span>
-<span><span class="co">#&gt;   package   error  fail  warn  note    ok deadline     has_other_issues</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;        &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 arrow         0     0     0    11     2 ""           FALSE           </span></span>
-<span><span class="co">#&gt; 2 duckdb        0     0     5     6     2 "2024-07-10" TRUE            </span></span>
-<span><span class="co">#&gt; 3 foghorn       0     0     0     0    13 ""           FALSE           </span></span>
-<span><span class="co">#&gt; 4 phylobase     0     0     0     0    13 ""           FALSE           </span></span>
-<span><span class="co">#&gt; 5 riceware      0     0     0     0    13 ""           FALSE           </span></span>
-<span><span class="co">#&gt; 6 rncl          0     0     0    12     1 ""           FALSE           </span></span>
-<span><span class="co">#&gt; 7 rotl          0     0     0    10     3 ""           FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt;   package   error  fail  warn  note    ok deadline   has_other_issues</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;           </span></span>
+<span><span class="co">#&gt; 1 arrow         0     0     0    11     2 &lt;NA&gt;       FALSE           </span></span>
+<span><span class="co">#&gt; 2 duckdb        0     0     5     6     2 2024-07-10 TRUE            </span></span>
+<span><span class="co">#&gt; 3 foghorn       0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
+<span><span class="co">#&gt; 4 phylobase     0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
+<span><span class="co">#&gt; 5 riceware      0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
+<span><span class="co">#&gt; 6 rncl          0     0     0    12     1 &lt;NA&gt;       FALSE           </span></span>
+<span><span class="co">#&gt; 7 rotl          0     0     0    10     3 &lt;NA&gt;       FALSE</span></span></code></pre></div>
 <p>You can inspect the logs for the check results using <code>summary_cran_details(pkg)</code> (or <code>summary(cran_details(pkg))</code>), while <code>visit_cran_check(pkg)</code> takes you directly to the CRAN webpage.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">tidyr_checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cran_details.html">cran_details</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"tidyr"</span><span class="op">)</span><span class="op">)</span></span>
@@ -270,7 +270,7 @@
 <span><span class="co">#&gt; # A tibble: 1 × 8</span></span>
 <span><span class="co">#&gt;   package error  fail  warn  note    ok deadline has_other_issues</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
-<span><span class="co">#&gt; 1 nlme        0     0     0     0    13 ""       FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 nlme        0     0     0     0    13 &lt;NA&gt;     FALSE</span></span></code></pre></div>
 <p>Check out the “Details” section in the help files for more information.</p>
 </div>
 <div class="section level2">
