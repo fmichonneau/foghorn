@@ -69,18 +69,13 @@ number of requests that will be performed and there will be situations where
 more requests than this limit will be performed to retrieve the results.
 
 The \code{deadline} column contains the date set by CRAN to fix issues with the
-CRAN checks before the package gets archived. To limit the number of
-requests to the CRAN mirror, the existence of a deadline is checked only for
-packages where issues have been detected. If the deadline is not checked
-(either because the argument \code{include_deadline} is set to \code{FALSE}, or
-because there is no issues detected with the CRAN checks), the content of
-the \code{deadline} column for the package will be set to \code{NA}. If the existence
-of a deadline has been checked but no date has been set by the CRAN
-Maintainers, the \code{deadline} column for the package will be set to \code{""}. If
-there is a deadline, the content will be a date stored as \code{character}.
+CRAN checks before the package gets archived. If the existence of a deadline
+has been checked but no date has been set by the CRAN Maintainers, the
+\code{deadline} column for the package will be set to \code{""}. If there is a
+deadline, the content will be a date stored as \code{character}.
 
-The value of the argument \code{include_deadline} can be set using the
-local option \code{foghorn_include_deadline}.
+The value of the argument \code{show} can be set using the local option
+\code{foghorn_columns}.
 
 When choosing \code{src = "crandb"} you can also specify the
 following options:

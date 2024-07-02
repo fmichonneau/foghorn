@@ -5,9 +5,9 @@
 * The output of `cran_results()` and `summary_cran_results()` can now include
   the deadline fixed by CRAN. This deadline is the date by which requested
   changes need to be implemented before the package gets archived. To see any
-  deadline that might have been set by CRAN Maintainers, set the
-  `include_deadline` argument to `TRUE` (default). The value for this argument
-  can also be set using the local option `foghorn_include_deadline`.
+  deadline that might have been set by CRAN Maintainers, add (`"deadline"`) as
+  one of the values to the `show` argument. The value of the `show` argument
+  can also be controled by the local option `foghorn_columns`.
 * The `cran_results()` function gains the `max_requests` argument that limits
   the number of requests that are performed against the CRAN website in a single
   query. 

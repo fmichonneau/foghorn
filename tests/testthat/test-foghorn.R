@@ -33,18 +33,32 @@ test_that("invalid email address", {
 ## check cran results
 
 # nolint start
-validate_cran_results <- function(x) {
-  length(x) == 8L &&
+validate_cran_results <- function(x, deadline = TRUE) {
+  result_names <- c(
+    "package", "error", "fail", "warn",
+    "note", "ok", "has_other_issues"
+  )
+  expected_size <- 7L
+  if (deadline) {
+    result_names <- c(result_names, "deadline")
+    expected_size <- 8L
+  }
+  length(x) == expected_size &&
     inherits(x, "tbl_df") &&
-    all(names(x) %in% c(
-      "package", "error", "fail", "warn",
-      "note", "ok", "has_other_issues", "deadline"
-    )) &&
+    all(names(x) %in% result_names) &&
     nrow(x) > 0 &&
     is.logical(x[["has_other_issues"]]) &&
     ## 2 allows for something other that "has_issues_notes" to be in the table
-    any(x[1, -match("deadline", names(x))] > 2) &&
-    !any(is.na(x[, -match("deadline", names(x))])) ## no NAs allowed
+    if (!deadline) {
+      any(x[1, ] > 2)
+    } else {
+      any(x[1, -match("deadline", names(x))] > 2)
+    } &&
+    if (!deadline) {
+      !any(is.na(x)) ## no NAs allowed
+    } else {
+      !any(is.na(x[, -match("deadline", names(x))])) ## no NAs allowed
+    }
 }
 
 validate_cran_details <- function(x) {
@@ -227,32 +241,55 @@ test_that("deadline column valid", {
     "Package"
   ]
 
-  res_web_no_deadline <- cran_results(pkg = pkg_with_deadline, include_deadline = FALSE, max_requests = Inf)
-  res_web <- cran_results(pkg = pkg_with_deadline, include_deadline = TRUE, max_requests = Inf)
-  res_crandb <- cran_results(pkg = pkg_with_deadline, src = "crandb")
+  res_web_no_deadline <- cran_results(
+    pkg = pkg_with_deadline,
+    show = c("error", "fail", "warn", "note", "ok"),
+    max_requests = Inf
+  )
+  res_web_with_deadline <- cran_results(
+    pkg = pkg_with_deadline,
+    show = c("error", "fail", "warn", "note", "ok", "deadline"),
+    max_requests = Inf
+  )
+  res_crandb_no_deadline <- cran_results(
+    pkg = pkg_with_deadline,
+    show = c("error", "fail", "warn", "note", "ok"),
+    src = "crandb"
+  )
+  res_crandb_with_deadline <- cran_results(
+    pkg = pkg_with_deadline,
+    show = c("error", "fail", "warn", "note", "ok", "deadline"),
+    src = "crandb"
+  )
 
-  expect_equal(sum(is.na(res_web_no_deadline$deadline)), nrow(res_web_no_deadline))
+  expect_true(validate_cran_results(res_web_no_deadline, deadline = FALSE))
+  expect_true(validate_cran_results(res_crandb_no_deadline, deadline = FALSE))
+  expect_true(validate_cran_results(res_web_with_deadline, deadline = TRUE))
+  expect_true(validate_cran_results(res_crandb_with_deadline, deadline = TRUE))
 
-  expect_true(sum(!is.na(res_web$deadline)) > 0)
-  expect_true(sum(!is.na(res_web$deadline)) <= nrow(res_web))
+
+  ## deadline content is character
+  expect_true(is.character(res_web_with_deadline$deadline))
+  expect_true(sum(!is.na(res_web_with_deadline$deadline)) <= nrow(res_web_with_deadline))
   expect_true(
     identical(
-      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web$deadline)),
-      sum(!is.na(res_web$deadline))
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web_with_deadline$deadline)),
+      sum(!is.na(res_web_with_deadline$deadline))
     )
   )
   expect_true(
     identical(
-      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_crandb$deadline)),
-      sum(!is.na(res_crandb$deadline))
+      sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_crandb_with_deadline$deadline)),
+      sum(!is.na(res_crandb_with_deadline$deadline))
     )
   )
   expect_true(
-    sum(!is.na(res_web$deadline)) <= sum(!is.na(res_crandb$deadline))
+    sum(!is.na(res_web_with_deadline$deadline)) <= sum(!is.na(res_crandb_with_deadline$deadline))
   )
 })
 
-test_that("environment variable for deadline (only needed for src = 'website')", {
+
+test_that("local variable can be used to control content of the output", {
   skip_on_cran()
 
   pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
@@ -271,17 +308,17 @@ test_that("environment variable for deadline (only needed for src = 'website')",
     "Package"
   ]
 
+  ## deadline is not included in the results when using the `foghorn_columns`
+  ## local variable
+  withr::local_options(list(foghorn_columns = c("error", "fail", "warn", "note", "ok")))
+  res_web_no_deadline <- cran_results(pkg = pkg_with_deadline, src = "website")
+  expect_false("deadline" %in%  names(res_web_no_deadline))
 
-  ## when deadline is not checked column contains NAs
-  withr::local_options(list(foghorn_include_deadline = FALSE))
-  res_web <- cran_results(pkg = pkg_with_deadline, src = "website")
-  expect_true(sum(is.na(res_web$deadline)) > 0)
-
-  ## when deadline is checked columns contains "" (but only with pkgs that have
-  ## issues)
-  withr::local_options(list(foghorn_include_deadline = TRUE))
-  res_web <- cran_results(pkg = pkg_with_deadline, src = "website")
-  expect_equal(sum(is.na(res_web$deadline)), 0)
+  ## deadline is included in the results
+  withr::local_options(list(foghorn_columns = c("error", "fail", "warn", "note", "ok", "deadline")))
+  res_web_with_deadline <- cran_results(pkg = pkg_with_deadline, src = "website")
+  expect_true("deadline" %in% names(res_web_with_deadline))
+  expect_true(identical(sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web_with_deadline$deadline)), nrow(res_web_with_deadline)))
 
 })
 
@@ -347,8 +384,8 @@ test_that("output of summary cran results", {
   skip_on_cran()
 
   pkgs <- c("rotl", "rncl")
-  res_web <- suppressMessages(summary_cran_results(pkg = pkgs, include_deadline = TRUE, src = "website"))
-  res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, include_deadline = TRUE, src = "crandb"))
+  res_web <- suppressMessages(summary_cran_results(pkg = pkgs, src = "website"))
+  res_cran <- suppressMessages(summary_cran_results(pkg = pkgs, src = "crandb"))
   expect_true(all(pkgs %in% res_web$package))
   expect_true(all(pkgs %in% res_cran$package))
   expect_identical(res_web, res_cran)

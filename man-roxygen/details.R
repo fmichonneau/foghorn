@@ -19,18 +19,13 @@
 ##' more requests than this limit will be performed to retrieve the results.
 ##'
 ##' The `deadline` column contains the date set by CRAN to fix issues with the
-##' CRAN checks before the package gets archived. To limit the number of
-##' requests to the CRAN mirror, the existence of a deadline is checked only for
-##' packages where issues have been detected. If the deadline is not checked
-##' (either because the argument `include_deadline` is set to `FALSE`, or
-##' because there is no issues detected with the CRAN checks), the content of
-##' the `deadline` column for the package will be set to `NA`. If the existence
-##' of a deadline has been checked but no date has been set by the CRAN
-##' Maintainers, the `deadline` column for the package will be set to `""`. If
-##' there is a deadline, the content will be a date stored as `character`.
+##' CRAN checks before the package gets archived. If the existence of a deadline
+##' has been checked but no date has been set by the CRAN Maintainers, the
+##' `deadline` column for the package will be set to `""`. If there is a
+##' deadline, the content will be a date stored as `character`.
 ##'
-##' The value of the argument `include_deadline` can be set using the
-##' local option `foghorn_include_deadline`.
+##' The value of the argument `show` can be set using the local option
+##' `foghorn_columns`.
 ##'
 ##' When choosing `src = "crandb"` you can also specify the
 ##' following options:

@@ -66,11 +66,11 @@ output.
 summary_cran_results(email = "francois.michonneau@gmail.com", pkg = "lme4")
 #> ✔ All clear for foghorn, phylobase, and riceware!
 #> ★  Packages with notes on CRAN: 
-#>   - lme4 (8) [Fix before: 2024-06-17]
+#>   - lme4 (11) [Fix before: 2024-07-16]
 #>   - rncl (12)
 #>   - rotl (10)
 #> ◉  Package with other issues on CRAN: 
-#>   - lme4 [Fix before: 2024-06-17]
+#>   - lme4 [Fix before: 2024-07-16]
 ```
 
 `summary_cran_results()` is actually an alias of
@@ -82,13 +82,13 @@ results of the CRAN checks. These results are stored in a tibble.
 ## Results of the checks as a tibble
 cran_results(email = "francois.michonneau@gmail.com")
 #> # A tibble: 5 × 8
-#>   package   error  fail  warn  note    ok has_other_issues fix_before
-#>   <chr>     <int> <int> <int> <int> <int> <lgl>            <chr>     
-#> 1 foghorn       0     0     0     0    13 FALSE            <NA>      
-#> 2 phylobase     0     0     0     0    13 FALSE            <NA>      
-#> 3 riceware      0     0     0     0    13 FALSE            <NA>      
-#> 4 rncl          0     0     0    12     1 FALSE            <NA>      
-#> 5 rotl          0     0     0    10     3 FALSE            <NA>
+#>   package   error  fail  warn  note    ok deadline has_other_issues
+#>   <chr>     <int> <int> <int> <int> <int> <chr>    <lgl>           
+#> 1 foghorn       0     0     0     0    13 ""       FALSE           
+#> 2 phylobase     0     0     0     0    13 ""       FALSE           
+#> 3 riceware      0     0     0     0    13 ""       FALSE           
+#> 4 rncl          0     0     0    12     1 ""       FALSE           
+#> 5 rotl          0     0     0    10     3 ""       FALSE
 ```
 
 In addition of your own packages, you can also check the results for any
@@ -106,10 +106,10 @@ summary_cran_results(pkg = c("ggplot2", "dplyr"))
 
 cran_results(pkg = c("ggplot2", "dplyr"))
 #> # A tibble: 2 × 8
-#>   package error  fail  warn  note    ok has_other_issues fix_before
-#>   <chr>   <int> <int> <int> <int> <int> <lgl>            <chr>     
-#> 1 dplyr       0     0     0     5     8 FALSE            <NA>      
-#> 2 ggplot2     0     0     0     8     5 FALSE            <NA>
+#>   package error  fail  warn  note    ok deadline has_other_issues
+#>   <chr>   <int> <int> <int> <int> <int> <chr>    <lgl>           
+#> 1 dplyr       0     0     0     5     8 ""       FALSE           
+#> 2 ggplot2     0     0     0     8     5 ""       FALSE
 ```
 
 ``` r
@@ -121,14 +121,14 @@ summary_cran_results(
 )
 #> ✔ All clear for foghorn, phylobase, and riceware!
 #> ⚠  Package with warnings on CRAN: 
-#>   - duckdb (1)
+#>   - duckdb (5) [Fix before: 2024-07-10]
 #> ★  Packages with notes on CRAN: 
 #>   - arrow (11)
-#>   - duckdb (11)
+#>   - duckdb (6) [Fix before: 2024-07-10]
 #>   - rncl (12)
 #>   - rotl (10)
 #> ◉  Package with other issues on CRAN: 
-#>   - duckdb
+#>   - duckdb [Fix before: 2024-07-10]
 ```
 
 ``` r
@@ -138,15 +138,15 @@ cran_results(
   pkg = c("arrow", "duckdb")
 )
 #> # A tibble: 7 × 8
-#>   package   error  fail  warn  note    ok has_other_issues fix_before
-#>   <chr>     <int> <int> <int> <int> <int> <lgl>            <chr>     
-#> 1 arrow         0     0     0    11     2 FALSE            <NA>      
-#> 2 duckdb        0     0     1    11     1 TRUE             <NA>      
-#> 3 foghorn       0     0     0     0    13 FALSE            <NA>      
-#> 4 phylobase     0     0     0     0    13 FALSE            <NA>      
-#> 5 riceware      0     0     0     0    13 FALSE            <NA>      
-#> 6 rncl          0     0     0    12     1 FALSE            <NA>      
-#> 7 rotl          0     0     0    10     3 FALSE            <NA>
+#>   package   error  fail  warn  note    ok deadline     has_other_issues
+#>   <chr>     <int> <int> <int> <int> <int> <chr>        <lgl>           
+#> 1 arrow         0     0     0    11     2 ""           FALSE           
+#> 2 duckdb        0     0     5     6     2 "2024-07-10" TRUE            
+#> 3 foghorn       0     0     0     0    13 ""           FALSE           
+#> 4 phylobase     0     0     0     0    13 ""           FALSE           
+#> 5 riceware      0     0     0     0    13 ""           FALSE           
+#> 6 rncl          0     0     0    12     1 ""           FALSE           
+#> 7 rotl          0     0     0    10     3 ""           FALSE
 ```
 
 You can inspect the logs for the check results using
@@ -155,13 +155,14 @@ You can inspect the logs for the check results using
 
 ``` r
 (tidyr_checks <- cran_details(pkg = "tidyr"))
-#> # A tibble: 4 × 7
+#> # A tibble: 5 × 7
 #>   package version result check                         flavors n_flavors message
 #>   <chr>   <chr>   <chr>  <chr>                         <chr>       <dbl> <chr>  
-#> 1 tidyr   1.3.1   NOTE   compiled code                 r-deve…         4 "     …
+#> 1 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …
 #> 2 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …
 #> 3 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …
-#> 4 tidyr   1.3.1   ERROR  re-building of vignette outp… r-rele…         2 "     …
+#> 4 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …
+#> 5 tidyr   1.3.1   ERROR  re-building of vignette outp… r-rele…         2 "     …
 ```
 
 ``` r
@@ -169,6 +170,24 @@ summary(tidyr_checks)
 #> ★ tidyr - note: compiled code
 #>    ❯ r-devel-linux-x86_64-debian-clang 
 #>    ❯ r-devel-linux-x86_64-debian-gcc 
+#> 
+#>      File ‘tidyr/libs/tidyr.so’:
+#>      Found non-API calls to R: ‘SETLENGTH’, ‘SET_GROWABLE_BIT’,
+#>      ‘SET_TRUELENGTH’
+#>      
+#>      Compiled code should not call non-API entry points in R.
+#>      
+#>      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.
+#>      See section ‘Moving into C API compliance’ in the ‘Writing R
+#>      Extensions’ manual for issues with use of non-API entry points.
+#> 
+#> ★ tidyr - note: data for non-ASCII characters
+#>    ❯ r-devel-linux-x86_64-fedora-clang 
+#>    ❯ r-devel-linux-x86_64-fedora-gcc 
+#> 
+#>      Note: found 24 marked UTF-8 strings
+#> 
+#> ★ tidyr - note: compiled code
 #>    ❯ r-devel-linux-x86_64-fedora-clang 
 #>    ❯ r-devel-linux-x86_64-fedora-gcc 
 #> 
@@ -178,13 +197,9 @@ summary(tidyr_checks)
 #>      
 #>      Compiled code should not call non-API entry points in R.
 #>      
-#>      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.
-#> 
-#> ★ tidyr - note: data for non-ASCII characters
-#>    ❯ r-devel-linux-x86_64-fedora-clang 
-#>    ❯ r-devel-linux-x86_64-fedora-gcc 
-#> 
-#>      Note: found 24 marked UTF-8 strings
+#>      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual,
+#>      and section ‘Moving into C API compliance’ for issues with the use of
+#>      non-API entry points.
 #> 
 #> ★ tidyr - note: compiled code
 #>    ❯ r-devel-windows-x86_64 
@@ -196,6 +211,8 @@ summary(tidyr_checks)
 #>      Compiled code should not call non-API entry points in R.
 #>      
 #>      See 'Writing portable packages' in the 'Writing R Extensions' manual.
+#>      See section 'Moving into C API compliance' in the 'Writing R
+#>      Extensions' manual for issues with use of non-API entry points.
 #> 
 #> ✖ tidyr - error: re-building of vignette outputs
 #>    ❯ r-release-macos-arm64 
@@ -243,9 +260,9 @@ on a large number of packages, using the CRAN database is recommended
 ``` r
 cran_results(pkg = "nlme", src = "crandb", progress = FALSE)
 #> # A tibble: 1 × 8
-#>   package error  fail  warn  note    ok has_other_issues fix_before
-#>   <chr>   <int> <int> <int> <int> <int> <lgl>            <chr>     
-#> 1 nlme        0     0     0     0    13 FALSE            <NA>
+#>   package error  fail  warn  note    ok deadline has_other_issues
+#>   <chr>   <int> <int> <int> <int> <int> <chr>    <lgl>           
+#> 1 nlme        0     0     0     0    13 ""       FALSE
 ```
 
 Check out the “Details” section in the help files for more information.
