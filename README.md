@@ -84,11 +84,11 @@ cran_results(email = "francois.michonneau@gmail.com")
 #> # A tibble: 5 × 8
 #>   package   error  fail  warn  note    ok deadline has_other_issues
 #>   <chr>     <int> <int> <int> <int> <int> <chr>    <lgl>           
-#> 1 foghorn       0     0     0     0    13 ""       FALSE           
-#> 2 phylobase     0     0     0     0    13 ""       FALSE           
-#> 3 riceware      0     0     0     0    13 ""       FALSE           
-#> 4 rncl          0     0     0    12     1 ""       FALSE           
-#> 5 rotl          0     0     0    10     3 ""       FALSE
+#> 1 foghorn       0     0     0     0    13 <NA>     FALSE           
+#> 2 phylobase     0     0     0     0    13 <NA>     FALSE           
+#> 3 riceware      0     0     0     0    13 <NA>     FALSE           
+#> 4 rncl          0     0     0    12     1 <NA>     FALSE           
+#> 5 rotl          0     0     0    10     3 <NA>     FALSE
 ```
 
 In addition of your own packages, you can also check the results for any
@@ -108,8 +108,8 @@ cran_results(pkg = c("ggplot2", "dplyr"))
 #> # A tibble: 2 × 8
 #>   package error  fail  warn  note    ok deadline has_other_issues
 #>   <chr>   <int> <int> <int> <int> <int> <chr>    <lgl>           
-#> 1 dplyr       0     0     0     5     8 ""       FALSE           
-#> 2 ggplot2     0     0     0     8     5 ""       FALSE
+#> 1 dplyr       0     0     0     5     8 <NA>     FALSE           
+#> 2 ggplot2     0     0     0     8     5 <NA>     FALSE
 ```
 
 ``` r
@@ -138,15 +138,15 @@ cran_results(
   pkg = c("arrow", "duckdb")
 )
 #> # A tibble: 7 × 8
-#>   package   error  fail  warn  note    ok deadline     has_other_issues
-#>   <chr>     <int> <int> <int> <int> <int> <chr>        <lgl>           
-#> 1 arrow         0     0     0    11     2 ""           FALSE           
-#> 2 duckdb        0     0     5     6     2 "2024-07-10" TRUE            
-#> 3 foghorn       0     0     0     0    13 ""           FALSE           
-#> 4 phylobase     0     0     0     0    13 ""           FALSE           
-#> 5 riceware      0     0     0     0    13 ""           FALSE           
-#> 6 rncl          0     0     0    12     1 ""           FALSE           
-#> 7 rotl          0     0     0    10     3 ""           FALSE
+#>   package   error  fail  warn  note    ok deadline   has_other_issues
+#>   <chr>     <int> <int> <int> <int> <int> <chr>      <lgl>           
+#> 1 arrow         0     0     0    11     2 <NA>       FALSE           
+#> 2 duckdb        0     0     5     6     2 2024-07-10 TRUE            
+#> 3 foghorn       0     0     0     0    13 <NA>       FALSE           
+#> 4 phylobase     0     0     0     0    13 <NA>       FALSE           
+#> 5 riceware      0     0     0     0    13 <NA>       FALSE           
+#> 6 rncl          0     0     0    12     1 <NA>       FALSE           
+#> 7 rotl          0     0     0    10     3 <NA>       FALSE
 ```
 
 You can inspect the logs for the check results using
@@ -262,7 +262,7 @@ cran_results(pkg = "nlme", src = "crandb", progress = FALSE)
 #> # A tibble: 1 × 8
 #>   package error  fail  warn  note    ok deadline has_other_issues
 #>   <chr>   <int> <int> <int> <int> <int> <chr>    <lgl>           
-#> 1 nlme        0     0     0     0    13 ""       FALSE
+#> 1 nlme        0     0     0     0    13 <NA>     FALSE
 ```
 
 Check out the “Details” section in the help files for more information.
