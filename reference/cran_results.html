@@ -60,9 +60,9 @@ set of packages specified by a maintainer or by names.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cran_results</span><span class="op">(</span></span>
 <span>  email <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"fail"</span>, <span class="st">"warn"</span>, <span class="st">"note"</span>, <span class="st">"ok"</span><span class="op">)</span>,</span>
+<span>  show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"foghorn_columns"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"fail"</span>, <span class="st">"warn"</span>, <span class="st">"note"</span>, <span class="st">"ok"</span>,</span>
+<span>    <span class="st">"deadline"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"website"</span>, <span class="st">"crandb"</span><span class="op">)</span>,</span>
-<span>  include_deadline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"foghorn_include_deadline"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  max_requests <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -79,7 +79,8 @@ set of packages specified by a maintainer or by names.</p>
 
 
 <dt>show</dt>
-<dd><p>columns of the data frame to show (all are shown by default)</p></dd>
+<dd><p>columns of the data frame to show (all are shown by default).
+See 'Details' for more information.</p></dd>
 
 
 <dt>src</dt>
@@ -87,12 +88,6 @@ set of packages specified by a maintainer or by names.</p>
 website, if <code>"crandb"</code> the data is downloaded from a RDS
 file hosted on the CRAN servers (which is used to generate the
 information found on the CRAN website).</p></dd>
-
-
-<dt>include_deadline</dt>
-<dd><p>if <code>TRUE</code>, the output will display the deadline set
-by CRAN to fix the check results before the package gets archived. (See
-Details).</p></dd>
 
 
 <dt>max_requests</dt>
@@ -137,17 +132,12 @@ from many packages or maintainers. Note that this an approximation of the
 number of requests that will be performed and there will be situations where
 more requests than this limit will be performed to retrieve the results.</p>
 <p>The <code>deadline</code> column contains the date set by CRAN to fix issues with the
-CRAN checks before the package gets archived. To limit the number of
-requests to the CRAN mirror, the existence of a deadline is checked only for
-packages where issues have been detected. If the deadline is not checked
-(either because the argument <code>include_deadline</code> is set to <code>FALSE</code>, or
-because there is no issues detected with the CRAN checks), the content of
-the <code>deadline</code> column for the package will be set to <code>NA</code>. If the existence
-of a deadline has been checked but no date has been set by the CRAN
-Maintainers, the <code>deadline</code> column for the package will be set to <code>""</code>. If
-there is a deadline, the content will be a date stored as <code>character</code>.</p>
-<p>The value of the argument <code>include_deadline</code> can be set using the
-local option <code>foghorn_include_deadline</code>.</p>
+CRAN checks before the package gets archived. If the existence of a deadline
+has been checked but no date has been set by the CRAN Maintainers, the
+<code>deadline</code> column for the package will be set to <code>""</code>. If there is a
+deadline, the content will be a date stored as <code>character</code>.</p>
+<p>The value of the argument <code>show</code> can be set using the local option
+<code>foghorn_columns</code>.</p>
 <p>When choosing <code>src = "crandb"</code> you can also specify the
 following options:</p><ul><li><p><code>dest</code>:  a folder where to store the RDS files (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>
 by default).</p></li>
