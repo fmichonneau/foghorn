@@ -37,11 +37,11 @@ extract_deadline <- function(parsed, ...)  {
     needs_fix <- xml2::xml_find_all(x, ".//tr//td//span[@style]")
     needs_fix <- xml2::xml_text(needs_fix)
     if (identical(length(needs_fix), 0L)) {
-      return(character(1))
+      return(NA_character_)
     }
     if (!grepl("issues need fixing before", needs_fix)) {
       warning("Unrecognized value: ", needs_fix, call. = FALSE)
-      return(character(1))
+      return(NA_character_)
     }
     date_match <- regexpr("\\d{4}-\\d{2}-\\d{2}", needs_fix)
     regmatches(needs_fix, date_match)
@@ -73,11 +73,6 @@ deadline_pkg_web <- function(pkg, include_deadline, max_requests) {
 deadline_pkg_crandb <- function(pkg, ...) {
   pkgs <- as.data.frame(get_cran_rds_file("packages", ...), stringsAsFactors = FALSE)
   res <- pkgs[pkgs$Package %in% pkg, c("Package", "Deadline")]
-
-  ## we overwrite CRAN's content to match foghorn's logic
-  ## NA means that we didn't check if there is a deadline when using the website data;
-  ## "" means that we checked and there is no deadline set.
-  res$Deadline[is.na(res$Deadline)] <- ""
 
   tibble::tibble(
     package = res$Package,
