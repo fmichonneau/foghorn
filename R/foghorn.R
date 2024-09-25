@@ -6,7 +6,7 @@ cran_url <- function(protocol = "https") {
   if (is.na(mirror) || identical(mirror, "@CRAN@")) {
     mirror <- "://cloud.r-project.org"
   } else {
-    mirror <- paste0("://", xml2::url_parse(mirror)[["server"]])
+    mirror <- paste0(c("://", xml2::url_parse(mirror)[c("server","path")]),  collapse = "")
   }
 
   paste0(protocol, mirror)
