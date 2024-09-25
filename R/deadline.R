@@ -1,5 +1,5 @@
 url_pkg <- function(pkg) {
-  paste0(cran_url(), "/package=", pkg)
+  paste0(cran_url(), "/web/packages/", pkg, "/index.html")
 }
 
 .internal_read_pkg_page <- function(url) {
