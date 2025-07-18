@@ -1,3 +1,11 @@
+# foghorn 1.6.1
+
+## Bug fixes
+
+* Some CRAN mirrors not hosted at the root of the domain name, and others that
+  do not support the canonical URL schema were failing (#63, reported and fixed
+  by @louisaslett).
+
 #  foghorn 1.6.0
 
 ## New Features

@@ -1,11 +1,8 @@
 ## check source validity
 
-test_that(
-  "invalid source name",
-  {
-    expect_error(cran_results(pkg = "dplyr", src = "foo"))
-  }
-)
+test_that("invalid source name", {
+  expect_error(cran_results(pkg = "dplyr", src = "foo"))
+})
 
 
 ## fail for invalid package name/emails
@@ -35,8 +32,13 @@ test_that("invalid email address", {
 # nolint start
 validate_cran_results <- function(x, deadline = TRUE) {
   result_names <- c(
-    "package", "error", "fail", "warn",
-    "note", "ok", "has_other_issues"
+    "package",
+    "error",
+    "fail",
+    "warn",
+    "note",
+    "ok",
+    "has_other_issues"
   )
   expected_size <- 7L
   if (deadline) {
@@ -52,22 +54,32 @@ validate_cran_results <- function(x, deadline = TRUE) {
     if (!deadline) {
       any(x[1, ] > 2)
     } else {
-      any(x[1, -match("deadline", names(x))] > 2)
-    } &&
-    if (!deadline) {
-      !any(is.na(x)) ## no NAs allowed
-    } else {
-      !any(is.na(x[, -match("deadline", names(x))])) ## no NAs allowed
+      {
+        any(x[1, -match("deadline", names(x))] > 2)
+      } &&
+        if (!deadline) {
+          !any(is.na(x)) ## no NAs allowed
+        } else {
+          !any(is.na(x[, -match("deadline", names(x))])) ## no NAs allowed
+        }
     }
 }
 
 validate_cran_details <- function(x) {
   length(x) == 7L &&
     inherits(x, "tbl_df") &&
-    all(names(x) %in% c(
-      "package", "version", "result", "check",
-      "flavors", "n_flavors", "message"
-    ))
+    all(
+      names(x) %in%
+        c(
+          "package",
+          "version",
+          "result",
+          "check",
+          "flavors",
+          "n_flavors",
+          "message"
+        )
+    )
 }
 # nolint end
 
@@ -103,7 +115,8 @@ test_that("works with one package, one address, or both (crandb)", {
   )
   res_both <- cran_results(
     email = "francois.michonneau@gmail.com",
-    pkg = "ridigbio", src = "crandb"
+    pkg = "ridigbio",
+    src = "crandb"
   )
   expect_true(validate_cran_results(res_pkg))
   expect_true(validate_cran_results(res_email))
@@ -148,10 +161,13 @@ test_that("case doesn't matter (crandb)", {
 test_that("works for multiple packages, multiple addresses (website)", {
   skip_on_cran()
   res_pkgs <- cran_results(pkg = c("rotl", "phylobase", "ridigbio"))
-  res_emails <- cran_results(email = c(
-    "francois.michonneau@gmail.com",
-    "hadley@rstudio.com"
-  ), max_requests = Inf)
+  res_emails <- cran_results(
+    email = c(
+      "francois.michonneau@gmail.com",
+      "hadley@rstudio.com"
+    ),
+    max_requests = Inf
+  )
   res_both <- cran_results(
     email = c(
       "francois.michonneau@gmail.com",
@@ -212,7 +228,11 @@ test_that("fails if max requests is malformed", {
 test_that("max requests is ignored if using crandb", {
   skip_on_cran()
   expect_true(
-    validate_cran_results(cran_results(pkg = c("rncl", "rotl"), max_requests = 1, src = "crandb"))
+    validate_cran_results(cran_results(
+      pkg = c("rncl", "rotl"),
+      max_requests = 1,
+      src = "crandb"
+    ))
   )
 })
 
@@ -225,7 +245,10 @@ test_that("infinite is accepted for max_requests", {
 
 test_that("deadline column valid", {
   skip_on_cran()
-  pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
+  pkg_data <- as.data.frame(
+    get_cran_rds_file("packages"),
+    stringsAsFactors = FALSE
+  )
   pkg_with_deadline <- pkg_data[!is.na(pkg_data$Deadline), , drop = FALSE]
   n_pkg_with_deadline <- nrow(pkg_with_deadline)
 
@@ -267,10 +290,11 @@ test_that("deadline column valid", {
   expect_true(validate_cran_results(res_web_with_deadline, deadline = TRUE))
   expect_true(validate_cran_results(res_crandb_with_deadline, deadline = TRUE))
 
-
   ## deadline content is character
   expect_true(is.character(res_web_with_deadline$deadline))
-  expect_true(sum(!is.na(res_web_with_deadline$deadline)) <= nrow(res_web_with_deadline))
+  expect_true(
+    sum(!is.na(res_web_with_deadline$deadline)) <= nrow(res_web_with_deadline)
+  )
   expect_true(
     identical(
       sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web_with_deadline$deadline)),
@@ -284,7 +308,8 @@ test_that("deadline column valid", {
     )
   )
   expect_true(
-    sum(!is.na(res_web_with_deadline$deadline)) <= sum(!is.na(res_crandb_with_deadline$deadline))
+    sum(!is.na(res_web_with_deadline$deadline)) <=
+      sum(!is.na(res_crandb_with_deadline$deadline))
   )
 })
 
@@ -292,7 +317,10 @@ test_that("deadline column valid", {
 test_that("local variable can be used to control content of the output", {
   skip_on_cran()
 
-  pkg_data <- as.data.frame(get_cran_rds_file("packages"), stringsAsFactors = FALSE)
+  pkg_data <- as.data.frame(
+    get_cran_rds_file("packages"),
+    stringsAsFactors = FALSE
+  )
   pkg_with_deadline <- pkg_data[!is.na(pkg_data$Deadline), , drop = FALSE]
   n_pkg_with_deadline <- nrow(pkg_with_deadline)
 
@@ -310,16 +338,25 @@ test_that("local variable can be used to control content of the output", {
 
   ## deadline is not included in the results when using the `foghorn_columns`
   ## local variable
-  withr::local_options(list(foghorn_columns = c("error", "fail", "warn", "note", "ok")))
+  withr::local_options(list(
+    foghorn_columns = c("error", "fail", "warn", "note", "ok")
+  ))
   res_web_no_deadline <- cran_results(pkg = pkg_with_deadline, src = "website")
-  expect_false("deadline" %in%  names(res_web_no_deadline))
+  expect_false("deadline" %in% names(res_web_no_deadline))
 
   ## deadline is included in the results
-  withr::local_options(list(foghorn_columns = c("error", "fail", "warn", "note", "ok", "deadline")))
-  res_web_with_deadline <- cran_results(pkg = pkg_with_deadline, src = "website")
+  withr::local_options(list(
+    foghorn_columns = c("error", "fail", "warn", "note", "ok", "deadline")
+  ))
+  res_web_with_deadline <- cran_results(
+    pkg = pkg_with_deadline,
+    src = "website"
+  )
   expect_true("deadline" %in% names(res_web_with_deadline))
-  expect_true(identical(sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web_with_deadline$deadline)), nrow(res_web_with_deadline)))
-
+  expect_true(identical(
+    sum(grepl("\\d{4}-\\d{2}-\\d{2}", res_web_with_deadline$deadline)),
+    nrow(res_web_with_deadline)
+  ))
 })
 
 
@@ -376,7 +413,12 @@ test_that("check for interactive", {
 ## summary_cran_results --------------------------------------------------------
 
 build_regexp <- function(what, pkg) {
-  pkg <- paste0("(.|\\W)+", sort(pkg), "(.|\\W)+|\\[Fix before: \\d{4}-\\d{2}-\\d{2}\\]?", collapse = "")
+  pkg <- paste0(
+    "(.|\\W)+",
+    sort(pkg),
+    "(.|\\W)+|\\[Fix before: \\d{4}-\\d{2}-\\d{2}\\]?",
+    collapse = ""
+  )
   paste0(what, pkg)
 }
 
@@ -395,7 +437,8 @@ test_that("output of summary cran results", {
   cran_mem <- get_cran_rds_file("issues")
 
   pkg_with_notes <- sample(
-    unique(cran_res$package[cran_res$status == "NOTE"]), 5
+    unique(cran_res$package[cran_res$status == "NOTE"]),
+    5
   )
 
   ## nolint start
@@ -579,7 +622,6 @@ test_that("output of cran_details", {
   )
   expect_silent(summary(web_pkg_with_ok, show_log = TRUE, print_ok = FALSE))
 
-
   ## results from CRAN db
   cran_pkg_with_ok <- cran_details(pkg_with_ok, src = "crandb")
   cran_pkg_with_notes <- cran_details(pkg_with_notes, src = "crandb")
@@ -611,5 +653,36 @@ test_that("check output for MASS", {
     expect_true(validate_cran_results(res))
     res <- cran_results(pkg = "MASS", src = "crandb")
     expect_true(validate_cran_results(res))
+  }
+})
+
+### Check mirrors --------------------------------------------------------------
+test_that("mirrors with repository not hosted at root work (#63)", {
+  skip_on_cran()
+  if (curl::has_internet()) {
+    withr::with_options(
+      list(
+        repos = c("CRAN" = "https://www.stats.bris.ac.uk/R/")
+      ),
+      {
+        res <- cran_results(pkg = "MASS", , src = "web")
+        expect_true(validate_cran_results(res))
+      }
+    )
+  }
+})
+
+test_that("mirrors that do not support canonical URLs work (#63)", {
+  skip_on_cran()
+  if (curl::has_internet()) {
+    withr::with_options(
+      list(
+        repos = c("CRAN" = "https://cran.asia/")
+      ),
+      {
+        res <- cran_results(pkg = "MASS", , src = "web")
+        expect_true(validate_cran_results(res))
+      }
+    )
   }
 })
