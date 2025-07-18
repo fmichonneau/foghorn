@@ -1,57 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/404.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/articles/foghorn.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/check_cran_results.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/cran_details.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/cran_incoming.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/cran_results.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/foghorn.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/n_cran_flavors.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/summary_cran_results.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/visit_cran_check.html</loc>
-  </url>
-  <url>
-    <loc>https://fmichonneau.github.io/foghorn/reference/winbuilder_queue.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://fmichonneau.github.io/foghorn/404.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/LICENSE-text.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/articles/foghorn.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/articles/index.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/authors.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/index.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/news/index.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/check_cran_results.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/cran_details.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/cran_incoming.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/cran_results.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/foghorn.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/index.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/n_cran_flavors.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/summary_cran_results.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/visit_cran_check.html</loc></url>
+<url><loc>https://fmichonneau.github.io/foghorn/reference/winbuilder_queue.html</loc></url>
 </urlset>
+

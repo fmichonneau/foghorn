@@ -1,10 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   foghorn: foghorn.html
-last_built: 2024-07-02T15:07Z
+last_built: 2025-07-18T09:37Z
 urls:
   reference: https://fmichonneau.github.io/foghorn/reference
   article: https://fmichonneau.github.io/foghorn/articles
-
