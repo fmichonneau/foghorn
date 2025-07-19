@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">foghorn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
                         <h4 data-toc-skip class="author">Francois
 Michonneau</h4>
             
-            <h4 data-toc-skip class="date">2024-07-02</h4>
+            <h4 data-toc-skip class="date">2025-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/fmichonneau/foghorn/blob/main/vignettes/foghorn.Rmd" class="external-link"><code>vignettes/foghorn.Rmd</code></a></small>
       <div class="d-none name"><code>foghorn.Rmd</code></div>
@@ -76,10 +76,11 @@ CRAN that produced this result.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Graphical interface</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## ✔ All clear for foghorn, phylobase, and riceware!</span></span></code></pre>
+<pre><code><span><span class="co">## ✔ All clear for foghorn and riceware!</span></span></code></pre>
 <pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">##   - rncl (12)</span></span>
-<span><span class="co">##   - rotl (10)</span></span></code></pre>
+<span><span class="co">##   - phylobase (2)</span></span>
+<span><span class="co">##   - rncl (13)</span></span>
+<span><span class="co">##   - rotl (13)</span></span></code></pre>
 <p><code><a href="../reference/summary_cran_results.html">summary_cran_results()</a></code> is actually an alias of
 <code>summary(cran_results())</code>, meaning that you can call
 <code><a href="../reference/cran_results.html">cran_results()</a></code> directly if you want to easily access the
@@ -92,97 +93,77 @@ stored in a tibble.</p>
 <span><span class="co">##   package   error  fail  warn  note    ok deadline has_other_issues</span></span>
 <span><span class="co">##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
 <span><span class="co">## 1 foghorn       0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
-<span><span class="co">## 2 phylobase     0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 2 phylobase     0     0     0     2    11 &lt;NA&gt;     FALSE           </span></span>
 <span><span class="co">## 3 riceware      0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
-<span><span class="co">## 4 rncl          0     0     0    12     1 &lt;NA&gt;     FALSE           </span></span>
-<span><span class="co">## 5 rotl          0     0     0    10     3 &lt;NA&gt;     FALSE</span></span></code></pre>
+<span><span class="co">## 4 rncl          0     0     0    13     0 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 5 rotl          0     0     0    13     0 &lt;NA&gt;     FALSE</span></span></code></pre>
 <p>In addition of your own packages, you can also check the results for
 any other packages that might be of interest to you:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## either by themselves</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">##   - dplyr (5)</span></span>
-<span><span class="co">##   - ggplot2 (8)</span></span></code></pre>
+<span><span class="co">##   - dplyr (10)</span></span>
+<span><span class="co">##   - ggplot2 (3)</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ggplot2"</span>, <span class="st">"dplyr"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## # A tibble: 2 × 8</span></span>
 <span><span class="co">##   package error  fail  warn  note    ok deadline has_other_issues</span></span>
 <span><span class="co">##   &lt;chr&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
-<span><span class="co">## 1 dplyr       0     0     0     5     8 &lt;NA&gt;     FALSE           </span></span>
-<span><span class="co">## 2 ggplot2     0     0     0     8     5 &lt;NA&gt;     FALSE</span></span></code></pre>
+<span><span class="co">## 1 dplyr       0     0     0    10     3 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 2 ggplot2     0     0     0     3    10 &lt;NA&gt;     FALSE</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## or by combining them with email addresses</span></span>
 <span><span class="fu"><a href="../reference/summary_cran_results.html">summary_cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arrow"</span>, <span class="st">"duckdb"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## ✔ All clear for foghorn, phylobase, and riceware!</span></span></code></pre>
-<pre><code><span><span class="co">## ⚠  Package with warnings on CRAN: </span></span>
-<span><span class="co">##   - duckdb (5) [Fix before: 2024-07-10]</span></span></code></pre>
+<pre><code><span><span class="co">## ✔ All clear for foghorn and riceware!</span></span></code></pre>
 <pre><code><span><span class="co">## ★  Packages with notes on CRAN: </span></span>
-<span><span class="co">##   - arrow (11)</span></span>
-<span><span class="co">##   - duckdb (6) [Fix before: 2024-07-10]</span></span>
-<span><span class="co">##   - rncl (12)</span></span>
-<span><span class="co">##   - rotl (10)</span></span></code></pre>
-<pre><code><span><span class="co">## ◉  Package with other issues on CRAN: </span></span>
-<span><span class="co">##   - duckdb [Fix before: 2024-07-10]</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<span><span class="co">##   - arrow (3)</span></span>
+<span><span class="co">##   - duckdb (3)</span></span>
+<span><span class="co">##   - phylobase (2)</span></span>
+<span><span class="co">##   - rncl (13)</span></span>
+<span><span class="co">##   - rotl (13)</span></span></code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>email <span class="op">=</span> <span class="st">"francois.michonneau@gmail.com"</span>,</span>
 <span>  pkg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arrow"</span>, <span class="st">"duckdb"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## # A tibble: 7 × 8</span></span>
-<span><span class="co">##   package   error  fail  warn  note    ok deadline   has_other_issues</span></span>
-<span><span class="co">##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;           </span></span>
-<span><span class="co">## 1 arrow         0     0     0    11     2 &lt;NA&gt;       FALSE           </span></span>
-<span><span class="co">## 2 duckdb        0     0     5     6     2 2024-07-10 TRUE            </span></span>
-<span><span class="co">## 3 foghorn       0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
-<span><span class="co">## 4 phylobase     0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
-<span><span class="co">## 5 riceware      0     0     0     0    13 &lt;NA&gt;       FALSE           </span></span>
-<span><span class="co">## 6 rncl          0     0     0    12     1 &lt;NA&gt;       FALSE           </span></span>
-<span><span class="co">## 7 rotl          0     0     0    10     3 &lt;NA&gt;       FALSE</span></span></code></pre>
+<span><span class="co">##   package   error  fail  warn  note    ok deadline has_other_issues</span></span>
+<span><span class="co">##   &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt;           </span></span>
+<span><span class="co">## 1 arrow         0     0     0     3    10 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 2 duckdb        0     0     0     3    10 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 3 foghorn       0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 4 phylobase     0     0     0     2    11 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 5 riceware      0     0     0     0    13 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 6 rncl          0     0     0    13     0 &lt;NA&gt;     FALSE           </span></span>
+<span><span class="co">## 7 rotl          0     0     0    13     0 &lt;NA&gt;     FALSE</span></span></code></pre>
 <p>You can inspect the logs for the check results using
 <code>summary_cran_details(pkg)</code> (or
 <code>summary(cran_details(pkg))</code>), while
 <code>visit_cran_check(pkg)</code> takes you directly to the CRAN
 webpage.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tidyr_details</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cran_details.html">cran_details</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"tidyr"</span><span class="op">)</span></span>
 <span><span class="va">tidyr_details</span></span></code></pre></div>
-<pre><code><span><span class="co">## # A tibble: 5 × 7</span></span>
-<span><span class="co">##   package version result check                         flavors n_flavors message</span></span>
-<span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                         &lt;chr&gt;       &lt;dbl&gt; &lt;chr&gt;  </span></span>
-<span><span class="co">## 1 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …</span></span>
-<span><span class="co">## 2 tidyr   1.3.1   NOTE   data for non-ASCII characters r-deve…         2 "     …</span></span>
-<span><span class="co">## 3 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …</span></span>
-<span><span class="co">## 4 tidyr   1.3.1   NOTE   compiled code                 r-deve…         2 "     …</span></span>
-<span><span class="co">## 5 tidyr   1.3.1   ERROR  re-building of vignette outp… r-rele…         2 "     …</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## # A tibble: 3 × 7</span></span>
+<span><span class="co">##   package version result      check         flavors                                                                                 n_flavors message</span></span>
+<span><span class="co">##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;                                                                                       &lt;dbl&gt; &lt;chr&gt;  </span></span>
+<span><span class="co">## 1 tidyr   "1.3.1" NOTE        compiled code r-devel-linux-x86_64-debian-clang, r-devel-linux-x86_64-debian-gcc, r-devel-linux-x86_…         8 "     …</span></span>
+<span><span class="co">## 2 tidyr   "1.3.1" NOTE        compiled code r-devel-windows-x86_64, r-release-windows-x86_64                                                2 "     …</span></span>
+<span><span class="co">## 3 tidyr   ""      other_issue rchk          &lt;NA&gt;                                                                                           NA "See: …</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">tidyr_details</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## ★ tidyr - note: compiled code</span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-debian-clang </span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-debian-gcc </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##      File ‘tidyr/libs/tidyr.so’:</span></span>
-<span><span class="co">##      Found non-API calls to R: ‘SETLENGTH’, ‘SET_GROWABLE_BIT’,</span></span>
-<span><span class="co">##      ‘SET_TRUELENGTH’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      Compiled code should not call non-API entry points in R.</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual.</span></span>
-<span><span class="co">##      See section ‘Moving into C API compliance’ in the ‘Writing R</span></span>
-<span><span class="co">##      Extensions’ manual for issues with use of non-API entry points.</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## ★ tidyr - note: data for non-ASCII characters</span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-clang </span></span>
 <span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-gcc </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##      Note: found 24 marked UTF-8 strings</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## ★ tidyr - note: compiled code</span></span>
-<span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-clang </span></span>
-<span><span class="co">##    ❯ r-devel-linux-x86_64-fedora-gcc </span></span>
+<span><span class="co">##    ❯ r-patched-linux-x86_64 </span></span>
+<span><span class="co">##    ❯ r-release-linux-x86_64 </span></span>
+<span><span class="co">##    ❯ r-release-macos-arm64 </span></span>
+<span><span class="co">##    ❯ r-release-macos-x86_64 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##      File ‘tidyr/libs/tidyr.so’:</span></span>
-<span><span class="co">##      Found non-API calls to R: ‘SETLENGTH’, ‘SET_GROWABLE_BIT’,</span></span>
-<span><span class="co">##      ‘SET_TRUELENGTH’</span></span>
+<span><span class="co">##      Found non-API call to R: ‘DATAPTR’</span></span>
 <span><span class="co">##      </span></span>
 <span><span class="co">##      Compiled code should not call non-API entry points in R.</span></span>
 <span><span class="co">##      </span></span>
@@ -192,48 +173,20 @@ webpage.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## ★ tidyr - note: compiled code</span></span>
 <span><span class="co">##    ❯ r-devel-windows-x86_64 </span></span>
+<span><span class="co">##    ❯ r-release-windows-x86_64 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##      File 'tidyr/libs/x64/tidyr.dll':</span></span>
-<span><span class="co">##      Found non-API calls to R: 'SETLENGTH', 'SET_GROWABLE_BIT',</span></span>
-<span><span class="co">##      'SET_TRUELENGTH'</span></span>
+<span><span class="co">##      Found non-API call to R: 'DATAPTR'</span></span>
 <span><span class="co">##      </span></span>
 <span><span class="co">##      Compiled code should not call non-API entry points in R.</span></span>
 <span><span class="co">##      </span></span>
-<span><span class="co">##      See 'Writing portable packages' in the 'Writing R Extensions' manual.</span></span>
-<span><span class="co">##      See section 'Moving into C API compliance' in the 'Writing R</span></span>
-<span><span class="co">##      Extensions' manual for issues with use of non-API entry points.</span></span>
+<span><span class="co">##      See 'Writing portable packages' in the 'Writing R Extensions' manual,</span></span>
+<span><span class="co">##      and section 'Moving into C API compliance' for issues with the use of</span></span>
+<span><span class="co">##      non-API entry points.</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## ✖ tidyr - error: re-building of vignette outputs</span></span>
-<span><span class="co">##    ❯ r-release-macos-arm64 </span></span>
+<span><span class="co">## ◉ tidyr - other_issue: rchk</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##      Error(s) in re-building vignettes:</span></span>
-<span><span class="co">##      --- re-building ‘in-packages.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      --- finished re-building ‘in-packages.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      --- re-building ‘nest.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      --- finished re-building ‘nest.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      --- re-building ‘pivot.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      Quitting from lines 44-47 [setup] (pivot.Rmd)</span></span>
-<span><span class="co">##      Error: processing vignette 'pivot.Rmd' failed with diagnostics:</span></span>
-<span><span class="co">##      there is no package called 'readr'</span></span>
-<span><span class="co">##      --- failed re-building ‘pivot.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      --- re-building ‘programming.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      --- finished re-building ‘programming.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      --- re-building ‘rectangle.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      --- finished re-building ‘rectangle.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      --- re-building ‘tidy-data.Rmd’ using rmarkdown</span></span>
-<span><span class="co">##      --- finished re-building ‘tidy-data.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      SUMMARY: processing the following file failed:</span></span>
-<span><span class="co">##      ‘pivot.Rmd’</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      Error: Vignette re-building failed.</span></span>
-<span><span class="co">##      Execution halted</span></span></code></pre>
+<span><span class="co">## See: &lt;https://raw.githubusercontent.com/kalibera/cran-checks/master/rchk/results/tidyr.out&gt;</span></span></code></pre>
 <div class="section level2">
 <h2 id="where-does-it-get-the-data">Where does it get the data?<a class="anchor" aria-label="anchor" href="#where-does-it-get-the-data"></a>
 </h2>
@@ -244,7 +197,7 @@ faster if you want to regularly check a few packages. However, if you
 are doing statistics on a large number of packages, using the CRAN
 database is recommended (it’s about 20Mb of data). To use the CRAN
 database, add <code>src = "crandb"</code> in your function calls:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/cran_results.html">cran_results</a></span><span class="op">(</span>pkg <span class="op">=</span> <span class="st">"nlme"</span>, src <span class="op">=</span> <span class="st">"crandb"</span><span class="op">)</span></span></code></pre></div>
 <p>Check out the “Details” section in the help files for more
 information.</p>
