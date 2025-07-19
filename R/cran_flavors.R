@@ -32,12 +32,14 @@
 ##' @importFrom rlang is_logical is_integer is_lgl_na
 ##' @importFrom xml2 read_html
 ##' @importFrom rvest html_node html_table
-n_cran_flavors <- function(use_cache = getOption("foghorn.use_cache", TRUE),
-                           force_default = getOption(
-                             "foghorn.force_default",
-                             FALSE
-                           ),
-                           n_flavors = getOption("foghorn.n_flavors", 12L)) {
+n_cran_flavors <- function(
+  use_cache = getOption("foghorn.use_cache", TRUE),
+  force_default = getOption(
+    "foghorn.force_default",
+    FALSE
+  ),
+  n_flavors = getOption("foghorn.n_flavors", 12L)
+) {
   stopifnot(rlang::is_logical(use_cache, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_logical(force_default, 1) && !rlang::is_lgl_na(use_cache))
   stopifnot(rlang::is_integer(n_flavors, 1))

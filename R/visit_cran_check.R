@@ -9,7 +9,8 @@
 ##' @importFrom utils browseURL
 visit_cran_check <- function(pkg = NULL, email = NULL) {
   if (is.null(pkg) && is.null(email)) {
-    stop("A package name or an email address needs to be specified",
+    stop(
+      "A package name or an email address needs to be specified",
       call. = FALSE
     )
   }

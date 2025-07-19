@@ -1,8 +1,10 @@
-new_cran_q <- function(package = character(0),
-                       version = as.package_version(character(0)),
-                       cran_folder = character(0),
-                       time = as.POSIXct(character(0)),
-                       size = character(0)) {
+new_cran_q <- function(
+  package = character(0),
+  version = as.package_version(character(0)),
+  cran_folder = character(0),
+  time = as.POSIXct(character(0)),
+  size = character(0)
+) {
   stopifnot(is.character(package))
   stopifnot(is.package_version(version))
   stopifnot(is.character(cran_folder))
@@ -57,7 +59,8 @@ parse_http_cran_incoming <- function(res_raw) {
 
 parse_pkg_version <- function(pkg) {
   vapply(
-    pkg, function(x) {
+    pkg,
+    function(x) {
       x[2]
     },
     character(1)
@@ -76,8 +79,10 @@ parse_pkg <- function(pkg) {
 ## internal function to scrape content of CRAN queue servers, used by
 ## `cran_incoming` and `winbuilder_queue`.
 cran_queue <- function(pkg, folders, url) {
-  if (!is.null(pkg) &&
-    (!is.character(pkg) || any(is.na(pkg)))) {
+  if (
+    !is.null(pkg) &&
+      (!is.character(pkg) || any(is.na(pkg)))
+  ) {
     stop(sQuote("pkg"), " must be a character vector.", call. = FALSE)
   }
 
@@ -96,10 +101,15 @@ cran_queue <- function(pkg, folders, url) {
   }
 
   for (sf in seq_along(sub_folders)) {
-    curl::curl_fetch_multi(paste0(
-      url, "/", sub_folders[sf]
-    ),
-    pool = pool, done = success, fail = fail
+    curl::curl_fetch_multi(
+      paste0(
+        url,
+        "/",
+        sub_folders[sf]
+      ),
+      pool = pool,
+      done = success,
+      fail = fail
     )
   }
   res_qry <- curl::multi_run(pool = pool)
@@ -139,7 +149,7 @@ cran_queue <- function(pkg, folders, url) {
 ##' \item{publish}{package is awaiting publication}
 ##' \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 ##' }
-##' 
+##'
 ##' @section Disclaimer:
 ##' The information provided here is only to give you an indication of where
 ##' your package stands in the submission process. It can be useful to confirm
@@ -166,7 +176,7 @@ cran_queue <- function(pkg, folders, url) {
 ##'   `cran_incoming_folders()` returns a character vector of the
 ##'   names of the folders used as part of the CRAN submission
 ##'   process, `archive` being included optionally.
-##'   
+##'
 ##'
 ##' Note that if the package version is not provided, it will appear as `NA`
 ##' in the `tibble`.
@@ -191,11 +201,11 @@ cran_queue <- function(pkg, folders, url) {
 ##' @importFrom utils read.table
 ##' @export
 ##' @md
-cran_incoming <- function(pkg = NULL,
-                          folders = cran_incoming_folders(),
-                          sort_by_date = TRUE
-                          ) {
-  
+cran_incoming <- function(
+  pkg = NULL,
+  folders = cran_incoming_folders(),
+  sort_by_date = TRUE
+) {
   folders <- match.arg(
     folders,
     cran_incoming_folders(include_archive = TRUE),
@@ -210,7 +220,7 @@ cran_incoming <- function(pkg = NULL,
 
   res <- lapply(res_data, parse_http_cran_incoming)
   res <- do.call("rbind", res)
-  
+
   if (!is.null(pkg)) {
     res <- res[res$package %in% pkg, ]
   }
@@ -218,7 +228,7 @@ cran_incoming <- function(pkg = NULL,
   if (sort_by_date) {
     res <- res[order(res$time, decreasing = TRUE), ]
   }
-  
+
   res
 }
 
@@ -238,7 +248,6 @@ cran_incoming_folders <- function(include_archive = FALSE) {
   if (include_archive) {
     folders <- c(folders, "archive")
   }
-  
+
   folders
-  
 }

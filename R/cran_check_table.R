@@ -31,12 +31,14 @@ cran_checks_table.cran_checks_email <- function(parsed, ...) {
 
 ##' @importFrom stats reshape xtabs
 process_cran_table <- function(tbl) {
-  ctbl <- stats::xtabs(~package + status, data = tbl)
+  ctbl <- stats::xtabs(~ package + status, data = tbl)
   ctbl <- as.data.frame(ctbl, stringsAsFactors = FALSE)
   ctbl <- ctbl[ctbl$Freq > 0, ]
-  ctbl <- stats::reshape(ctbl,
+  ctbl <- stats::reshape(
+    ctbl,
     idvar = c("package"),
-    timevar = "status", direction = "wide",
+    timevar = "status",
+    direction = "wide",
     v.names = "Freq"
   )
   names(ctbl) <- gsub("Freq\\.", "", names(ctbl))

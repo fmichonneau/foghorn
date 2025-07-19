@@ -56,8 +56,10 @@ check_n_requests <- function(..., max_requests) {
   elements <- list(...)
   if (sum(lengths(elements)) > max_requests) {
     stop(
-      "This query would require more than ", max_requests,
-      " web requests. Consider using ", sQuote("src = \"crandb\""),
+      "This query would require more than ",
+      max_requests,
+      " web requests. Consider using ",
+      sQuote("src = \"crandb\""),
       " before increasing the number of requests allowed.",
       call. = FALSE
     )
@@ -65,8 +67,9 @@ check_n_requests <- function(..., max_requests) {
 }
 
 
-
 ### for devtools::release()
 release_questions <- function() {
-  c("Did you re-render the vignettes by running `make_vignettes()` (in `vignettes/`)?")
+  c(
+    "Did you re-render the vignettes by running `make_vignettes()` (in `vignettes/`)?"
+  )
 }

@@ -1,8 +1,12 @@
 ##' @importFrom httr2 request req_options req_perform_parallel
-fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issues", "packages"),
-                                dest = tempdir(), protocol = c("https", "http"),
-                                overwrite = FALSE, file_prefix = NULL,
-                                ...) {
+fetch_cran_rds_file <- function(
+  file = c("details", "results", "flavors", "issues", "packages"),
+  dest = tempdir(),
+  protocol = c("https", "http"),
+  overwrite = FALSE,
+  file_prefix = NULL,
+  ...
+) {
   file <- match.arg(file)
   protocol <- match.arg(protocol)
   if (file == "packages") {
@@ -12,10 +16,11 @@ fetch_cran_rds_file <- function(file = c("details", "results", "flavors", "issue
   }
   dest_file <- file.path(dest, paste0(file_prefix, file))
 
-  if (!(file.exists(dest_file) &&
-          file.info(dest_file, extra_cols = FALSE)$size > 0) ||
-        overwrite) {
-
+  if (
+    !(file.exists(dest_file) &&
+      file.info(dest_file, extra_cols = FALSE)$size > 0) ||
+      overwrite
+  ) {
     if (file == "packages.rds") {
       file_cran_url <- paste0(cran_url(protocol), "/web/packages/", file)
     } else {
@@ -99,14 +104,19 @@ read_crandb_from_pkg <- function(pkg, file = "results", ...) {
 
 add_other_issues_crandb <- function(tbl, ...) {
   issues <- get_cran_rds_file("issues", ...)
-  res <- vapply(tbl[["package"]], function(x) {
-    pkg_issues <- issues[issues$package == x, ]
-    if (nrow(pkg_issues) > 0) {
-      paste(pkg_issues$kind, collapse = ", ")
-    } else {
-      ""
-    }
-  }, character(1), USE.NAMES = FALSE)
+  res <- vapply(
+    tbl[["package"]],
+    function(x) {
+      pkg_issues <- issues[issues$package == x, ]
+      if (nrow(pkg_issues) > 0) {
+        paste(pkg_issues$kind, collapse = ", ")
+      } else {
+        ""
+      }
+    },
+    character(1),
+    USE.NAMES = FALSE
+  )
   tbl$has_other_issues <- nchar(res) > 0
   tbl
 }

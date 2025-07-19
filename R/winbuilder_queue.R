@@ -1,8 +1,10 @@
-new_winbuilder_q <- function(package = character(0),
-                             version = as.package_version(character(0)),
-                             folder = character(0),
-                             time = as.POSIXct(character(0)),
-                             size = integer(0)) {
+new_winbuilder_q <- function(
+  package = character(0),
+  version = as.package_version(character(0)),
+  folder = character(0),
+  time = as.POSIXct(character(0)),
+  size = integer(0)
+) {
   stopifnot(is.character(package))
   stopifnot(is.package_version(version))
   stopifnot(is.character(folder))
@@ -84,8 +86,10 @@ parse_winbuilder <- function(res) {
 ##'   ## Check which packages are in the R-devel queue
 ##'   winbuilder_queue(folders = "R-devel")
 ##' }
-winbuilder_queue <- function(pkg = NULL,
-                             folders = c("R-release", "R-devel", "R-oldrelease")) {
+winbuilder_queue <- function(
+  pkg = NULL,
+  folders = c("R-release", "R-devel", "R-oldrelease")
+) {
   folders <- match.arg(folders, several.ok = TRUE)
 
   res <- cran_queue(

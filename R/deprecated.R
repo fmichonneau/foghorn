@@ -1,4 +1,3 @@
-
 ##' Deprecated functions provided for back compatibility.
 ##'
 ##' @title Deprecated functions
