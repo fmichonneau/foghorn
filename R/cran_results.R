@@ -75,24 +75,34 @@ cran_results_crandb <- function(email, pkg, ...) {
 ##'   \dontrun{
 ##'     cran_results(pkg="MASS")
 ##'   }
-cran_results <- function(email = NULL, pkg = NULL,
-                         show = getOption("foghorn_columns", c("error", "fail", "warn", "note", "ok", "deadline")),
-                         src = c("website", "crandb"),
-                         max_requests = 50, ...) {
-
+cran_results <- function(
+  email = NULL,
+  pkg = NULL,
+  show = getOption(
+    "foghorn_columns",
+    c("error", "fail", "warn", "note", "ok", "deadline")
+  ),
+  src = c("website", "crandb"),
+  max_requests = 50,
+  ...
+) {
   show <- tolower(show)
   show <- match.arg(show, several.ok = TRUE)
   show <- c("package", show, "has_other_issues")
 
   include_deadline <- "deadline" %in% show
-  stopifnot(rlang::is_scalar_logical(include_deadline) && !is.na(include_deadline))
+  stopifnot(
+    rlang::is_scalar_logical(include_deadline) && !is.na(include_deadline)
+  )
 
   src <- match.arg(src, c("website", "crandb"))
 
   if (is.null(email) && is.null(pkg)) {
     stop(
-      "You need to provide at least one value for ", sQuote("email"),
-      "or for ", sQuote("pkg")
+      "You need to provide at least one value for ",
+      sQuote("email"),
+      "or for ",
+      sQuote("pkg")
     )
   }
 
@@ -146,10 +156,15 @@ cran_results <- function(email = NULL, pkg = NULL,
 ##'     notes on the CRAN flavors. The number in parenthesis after
 ##'     the name of the packages indicates the number of CRAN
 ##'     flavors that produce these results.
-##' @importFrom cli col_red col_yellow col_blue style_bold col_cyan col_magenta symbol
+##' @importFrom cli col_red col_yellow col_blue style_bold col_cyan col_magenta symbol col_grey
 ##' @export
-summary_cran_results <- function(email = NULL, pkg = NULL,
-                                 compact = FALSE, print_ok = TRUE, ...) {
+summary_cran_results <- function(
+  email = NULL,
+  pkg = NULL,
+  compact = FALSE,
+  print_ok = TRUE,
+  ...
+) {
   res_checks <- cran_results(email, pkg, ...)
   summary(res_checks, compact = compact, print_ok = print_ok)
 }
@@ -157,8 +172,21 @@ summary_cran_results <- function(email = NULL, pkg = NULL,
 ##' @param object an object created by \code{cran_results}
 ##' @export
 ##' @rdname summary_cran_results
-summary.cran_results <- function(object, compact = FALSE, print_ok = TRUE, ...) {
-  what <- c("ok", "error", "fail", "warn", "note", "has_other_issues")
+summary.cran_results <- function(
+  object,
+  compact = FALSE,
+  print_ok = TRUE,
+  ...
+) {
+  what <- c(
+    "ok",
+    "error",
+    "fail",
+    "warn",
+    "note",
+    "has_other_issues",
+    "deadline"
+  )
   lapply(what, function(x) {
     get_pkg_with_results(object, x, compact, print_ok)
   })

@@ -173,7 +173,7 @@ test_that("works for multiple packages, multiple addresses (website)", {
       "francois.michonneau@gmail.com",
       "hadley@rstudio.com"
     ),
-    pkg = c("arrow", "duckdb", "bold")
+    pkg = c("arrow", "duckdb", "duckplyr")
   )
   expect_true(validate_cran_results(res_pkgs))
   expect_true(validate_cran_results(res_emails))
@@ -198,7 +198,7 @@ test_that("works for multiple packages, multiple addresses (crandb)", {
       "francois.michonneau@gmail.com",
       "hadley@rstudio.com"
     ),
-    pkg = c("arrow", "duckdb", "bold"),
+    pkg = c("arrow", "duckdb", "duckplyr"),
     src = "crandb"
   )
   expect_true(validate_cran_results(res_pkgs))

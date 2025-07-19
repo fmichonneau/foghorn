@@ -217,7 +217,9 @@ print_all_clear <- function(pkgs) {
 
 pkg_all_clear <- function(tbl_pkg) {
   tbl_pkg[["package"]][
-    tbl_pkg[["ok"]] == n_cran_flavors() & !tbl_pkg[["has_other_issues"]]
+    tbl_pkg[["ok"]] == n_cran_flavors() &
+      !tbl_pkg[["has_other_issues"]] &
+      is.na(tbl_pkg[["deadline"]])
   ]
 }
 
@@ -234,6 +236,12 @@ get_pkg_with_results <- function(
 ) {
   what <- match.arg(what, names(tbl_pkg)[-1])
 
+  if (compact) {
+    sptr <- c("", ", ")
+  } else {
+    sptr <- c("  - ", "\n")
+  }
+
   if (identical(what, "ok")) {
     if (length(pkg_all_clear(tbl_pkg)) && print_ok) {
       print_all_clear(pkg_all_clear(tbl_pkg))
@@ -246,31 +254,40 @@ get_pkg_with_results <- function(
   } else {
     show_n <- TRUE
   }
-  if (sum(tbl_pkg[[what]], na.rm = TRUE) > 0) {
+
+  if (identical(what, "deadline")) {
+    if (any(!is.na(tbl_pkg[[what]]))) {
+      cond <- !is.na(tbl_pkg[[what]])
+      deadline_date <- tbl_pkg$deadline[cond]
+      deadline_date[is.na(deadline_date)] <- ""
+      deadline_date <- ifelse(
+        nzchar(deadline_date),
+        paste0(" [Fix before: ", deadline_date, "]"),
+        ""
+      )
+      res <- paste0(
+        sptr[1],
+        tbl_pkg$package[cond],
+        deadline_date,
+        collapse = sptr[2]
+      )
+    } else {
+      res <- NULL
+    }
+  } else if (sum(tbl_pkg[[what]], na.rm = TRUE) > 0) {
     n <- tbl_pkg[[what]][tbl_pkg[[what]] > 0]
     if (show_n) {
       n <- paste0(" (", n, ")")
     } else {
       n <- character(0)
     }
-    if (compact) {
-      sptr <- c("", ", ")
-    } else {
-      sptr <- c("  - ", "\n")
-    }
+
     cond <- !is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0
-    deadline_date <- tbl_pkg$deadline[cond]
-    deadline_date[is.na(deadline_date)] <- ""
-    deadline_date <- ifelse(
-      nzchar(deadline_date),
-      paste0(" [Fix before: ", deadline_date, "]"),
-      ""
-    )
+
     res <- paste0(
       sptr[1],
       tbl_pkg$package[cond],
       n,
-      deadline_date,
       collapse = sptr[2]
     )
   } else {
@@ -287,7 +304,8 @@ print_summary_cran <- function(
     "fail",
     "warn",
     "note",
-    "has_other_issues"
+    "has_other_issues",
+    "deadline"
   ),
   pkgs,
   compact
