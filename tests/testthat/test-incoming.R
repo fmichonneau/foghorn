@@ -4,9 +4,16 @@ test_that("Documentation is correct", {
 
   ## make sure all folders investigated are correct
   expect_silent(res <- cran_incoming())
-  expect_true(all(names(res) %in% c(
-    "package", "version", "cran_folder", "time", "size"
-  )))
+  expect_true(all(
+    names(res) %in%
+      c(
+        "package",
+        "version",
+        "cran_folder",
+        "time",
+        "size"
+      )
+  ))
   expect_equal(ncol(res), 5L)
   expect_true(nrow(res) > 1)
   expect_identical(
@@ -41,8 +48,10 @@ test_that("specifying folders works", {
   skip_on_ci()
   res <- cran_incoming(folders = "archive")
   expect_true(nrow(res) > 1 && all(res$cran_folder == "archive"))
-  res2 <- cran_incoming(folders = c("inspect", "pending"))
-  expect_true(nrow(res2) > 1 && all(res2$cran_folder %in% c("inspect", "pending")))
+  res2 <- cran_incoming(folders = c("pretest", "waiting"))
+  expect_true(
+    nrow(res2) > 1 && all(res2$cran_folder %in% c("pretest", "waiting"))
+  )
 })
 
 test_that("sort_by_date works (without archive)", {
@@ -80,5 +89,8 @@ test_that("cran_incoming_folders works as expected", {
   expect_identical(length(cran_incoming_folders()), 7L)
   expect_false(any(grepl("archive", cran_incoming_folders())))
   expect_identical(length(cran_incoming_folders(include_archive = TRUE)), 8L)
-  expect_true(any(grepl("archive", cran_incoming_folders(include_archive = TRUE))))
+  expect_true(any(grepl(
+    "archive",
+    cran_incoming_folders(include_archive = TRUE)
+  )))
 })

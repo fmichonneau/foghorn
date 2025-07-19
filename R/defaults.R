@@ -51,5 +51,10 @@ foghorn_components <- list(
     symbol = cli::symbol$circle_filled,
     color = cli::col_cyan,
     word = "additional issues"
+  ),
+  `deadline` = c(
+    symbol = cli::symbol$checkbox_on,
+    color = cli::col_grey,
+    word = "deadlines"
   )
 )

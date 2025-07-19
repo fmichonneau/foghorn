@@ -6,7 +6,10 @@ cran_url <- function(protocol = "https") {
   if (is.na(mirror) || identical(mirror, "@CRAN@")) {
     mirror <- "://cloud.r-project.org"
   } else {
-    mirror <- paste0(c("://", xml2::url_parse(mirror)[c("server","path")]),  collapse = "")
+    mirror <- paste0(
+      c("://", xml2::url_parse(mirror)[c("server", "path")]),
+      collapse = ""
+    )
   }
 
   paste0(protocol, mirror)
@@ -19,8 +22,10 @@ url_pkg_res <- function(pkg) {
 url_email_res <- function(email) {
   email <- convert_email_to_cran_format(email)
   paste0(
-    cran_url(), "/web/checks/check_results_",
-    email, ".html"
+    cran_url(),
+    "/web/checks/check_results_",
+    email,
+    ".html"
   )
 }
 
@@ -36,7 +41,9 @@ clean_connection <- function(x) {
 
   req <- httr2::request(x)
   httr2::req_perform_parallel(
-    list(req), on_error = "continue", progress = FALSE
+    list(req),
+    on_error = "continue",
+    progress = FALSE
   )[[1]]
 }
 
@@ -45,7 +52,7 @@ retry_connect <- function(f, n_attempts = 3) {
   res <- try(f, silent = TRUE)
   attempts <- 0
   pred <- is_try_httr_multi_error(res)
-  
+
   if (pred && grepl("HTTP 404", res$message)) {
     return(res)
   }
@@ -82,18 +89,25 @@ handle_cran_web_issues <- function(input, res, msg_404, msg_other) {
   is_err <- vapply(res, function(x) is_try_httr_multi_error(x), logical(1))
   if (any(is_404)) {
     msgs <- vapply(res[is_404], function(x) x$message, character(1))
-    stop(msg_404,
+    stop(
+      msg_404,
       paste(
-        sQuote(input[is_404]), collapse = ", "
-      ), ".\n",
-      "Error: ", paste(sQuote(msgs), collapse = ", "),
+        sQuote(input[is_404]),
+        collapse = ", "
+      ),
+      ".\n",
+      "Error: ",
+      paste(sQuote(msgs), collapse = ", "),
       call. = FALSE
     )
   }
   if (any(is_err)) {
-    stop(msg_other,
-      paste(sQuote(input[is_err]), collapse = ", "), "\n",
-      "  ", res[is_err]$message,
+    stop(
+      msg_other,
+      paste(sQuote(input[is_err]), collapse = ", "),
+      "\n",
+      "  ",
+      res[is_err]$message,
       call. = FALSE
     )
   }
@@ -103,7 +117,8 @@ read_cran_web_from_email <- function(email) {
   url <- url_email_res(email)
   res <- lapply(url, read_cran_web)
   handle_cran_web_issues(
-    email, res,
+    email,
+    res,
     "Invalid email address(es): ",
     "Something went wrong with getting data with email address(es): "
   )
@@ -116,7 +131,8 @@ read_cran_web_from_pkg <- function(pkg) {
   url <- url_pkg_res(pkg)
   res <- lapply(url, read_cran_web)
   handle_cran_web_issues(
-    pkg, res,
+    pkg,
+    res,
     "Invalid package name(s): ",
     "Something went wrong with getting data for package name(s): "
   )
@@ -200,18 +216,31 @@ print_all_clear <- function(pkgs) {
 }
 
 pkg_all_clear <- function(tbl_pkg) {
-  tbl_pkg[["package"]][tbl_pkg[["ok"]] == n_cran_flavors() & !tbl_pkg[["has_other_issues"]]]
+  tbl_pkg[["package"]][
+    tbl_pkg[["ok"]] == n_cran_flavors() &
+      !tbl_pkg[["has_other_issues"]] &
+      is.na(tbl_pkg[["deadline"]])
+  ]
 }
 
 pkg_with_issues <- function(tbl_pkg) {
   tbl_pkg[["package"]][!tbl_pkg[["package"]] %in% pkg_all_clear(tbl_pkg)]
 }
 
-get_pkg_with_results <- function(tbl_pkg,
-                                 what,
-                                 compact = FALSE,
-                                 print_ok, ...) {
+get_pkg_with_results <- function(
+  tbl_pkg,
+  what,
+  compact = FALSE,
+  print_ok,
+  ...
+) {
   what <- match.arg(what, names(tbl_pkg)[-1])
+
+  if (compact) {
+    sptr <- c("", ", ")
+  } else {
+    sptr <- c("  - ", "\n")
+  }
 
   if (identical(what, "ok")) {
     if (length(pkg_all_clear(tbl_pkg)) && print_ok) {
@@ -225,25 +254,40 @@ get_pkg_with_results <- function(tbl_pkg,
   } else {
     show_n <- TRUE
   }
-  if (sum(tbl_pkg[[what]], na.rm = TRUE) > 0) {
+
+  if (identical(what, "deadline")) {
+    if (any(!is.na(tbl_pkg[[what]]))) {
+      cond <- !is.na(tbl_pkg[[what]])
+      deadline_date <- tbl_pkg$deadline[cond]
+      deadline_date[is.na(deadline_date)] <- ""
+      deadline_date <- ifelse(
+        nzchar(deadline_date),
+        paste0(" [Fix before: ", deadline_date, "]"),
+        ""
+      )
+      res <- paste0(
+        sptr[1],
+        tbl_pkg$package[cond],
+        deadline_date,
+        collapse = sptr[2]
+      )
+    } else {
+      res <- NULL
+    }
+  } else if (sum(tbl_pkg[[what]], na.rm = TRUE) > 0) {
     n <- tbl_pkg[[what]][tbl_pkg[[what]] > 0]
     if (show_n) {
       n <- paste0(" (", n, ")")
     } else {
       n <- character(0)
     }
-    if (compact) {
-      sptr <- c("", ", ")
-    } else {
-      sptr <- c("  - ", "\n")
-    }
+
     cond <- !is.na(tbl_pkg[[what]]) & tbl_pkg[[what]] > 0
-    deadline_date <- tbl_pkg$deadline[cond]
-    deadline_date[is.na(deadline_date)] <- ""
-    deadline_date <- ifelse(nzchar(deadline_date), paste0(" [Fix before: ", deadline_date, "]"), "")
-    res <- paste0(sptr[1], tbl_pkg$package[cond],
+
+    res <- paste0(
+      sptr[1],
+      tbl_pkg$package[cond],
       n,
-      deadline_date,
       collapse = sptr[2]
     )
   } else {
@@ -253,11 +297,19 @@ get_pkg_with_results <- function(tbl_pkg,
 }
 
 ##' @importFrom cli style_bold
-print_summary_cran <- function(type = c(
-                                 "ok", "error", "fail", "warn",
-                                 "note", "has_other_issues"
-                               ),
-                               pkgs, compact) {
+print_summary_cran <- function(
+  type = c(
+    "ok",
+    "error",
+    "fail",
+    "warn",
+    "note",
+    "has_other_issues",
+    "deadline"
+  ),
+  pkgs,
+  compact
+) {
   if (is.null(pkgs)) {
     return(NULL)
   }
@@ -276,13 +328,17 @@ print_summary_cran <- function(type = c(
   }
 
   msg <- paste(
-    " ", pkg_string, "with", foghorn_components[[type]]$word,
+    " ",
+    pkg_string,
+    "with",
+    foghorn_components[[type]]$word,
     "on CRAN: "
   )
   message(foghorn_components[[type]]$color(
     paste0(
       foghorn_components[[type]]$symbol,
-      msg, nl,
+      msg,
+      nl,
       cli::style_bold(pkgs)
     )
   ))
