@@ -5,6 +5,9 @@
 * Some CRAN mirrors not hosted at the root of the domain name, and others that
   do not support the canonical URL schema were failing (#63, reported and fixed
   by @louisaslett).
+* Some packages with a deadline but no issues with their CRAN checks were not
+  being reported correctly in the output of `summary_cran_results()` (in part 
+  #67, @trevorld).
 
 #  foghorn 1.6.0
 
