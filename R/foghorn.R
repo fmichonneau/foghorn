@@ -1,9 +1,30 @@
+is_default_mirror <- function(mirror) {
+  ## True default mirrors
+  if (is.na(mirror) || identical(mirror, "@CRAN@")) {
+    return(TRUE)
+  }
+
+  ## Extract host from mirror URL
+  host <- tryCatch(curl::curl_parse_url(mirror)$host, error = function(e) {
+    NA_character_
+  })
+  if (is.na(host)) {
+    return(FALSE)
+  }
+
+  ## If host is a PPM, treat it as default so we use CRAN as PPM doesn't host the check results
+  known <- c("p3m.dev", "packagemanager.posit.co", "packagemanager.rstudio.com")
+  # exact host or a subdomain of a known host
+  any(host == known | endsWith(host, paste0(".", known)))
+}
+
+
 cran_url <- function(protocol = "https") {
   protocol <- match.arg(protocol, c("https", "http"))
 
   mirror <- getOption("repos")[["CRAN"]][1]
 
-  if (is.na(mirror) || identical(mirror, "@CRAN@")) {
+  if (is_default_mirror(mirror)) {
     mirror <- "://cloud.r-project.org"
   } else {
     mirror <- paste0(
