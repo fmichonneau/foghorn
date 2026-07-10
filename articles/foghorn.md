@@ -1,0 +1,189 @@
+# Get started
+
+``` r
+
+## load the package
+library(foghorn)
+```
+
+`foghorn` provides the results of the package CRAN checks. As a
+maintainer, you can easily get the results of the checks for your
+packages by using the email address included in the `DESCRIPTION` file
+of your packages.
+
+[`summary_cran_results()`](https://fmichonneau.github.io/foghorn/reference/summary_cran_results.md)
+provides you with a graphical summary of the results of the CRAN checks.
+The number in parenthesis after the name of the package indicates the
+number of platforms used by CRAN that produced this result.
+
+``` r
+
+## Graphical interface
+summary_cran_results(email = "francois.michonneau@gmail.com")
+```
+
+    ## ✔ All clear for foghorn and riceware!
+
+    ## ★  Packages with notes on CRAN: 
+    ##   - phylobase (2)
+    ##   - rncl (13)
+    ##   - rotl (13)
+
+[`summary_cran_results()`](https://fmichonneau.github.io/foghorn/reference/summary_cran_results.md)
+is actually an alias of `summary(cran_results())`, meaning that you can
+call
+[`cran_results()`](https://fmichonneau.github.io/foghorn/reference/cran_results.md)
+directly if you want to easily access the underlying data for the
+results of the CRAN checks. These results are stored in a tibble.
+
+``` r
+
+## Results as a tibble
+cran_results(email = "francois.michonneau@gmail.com")
+```
+
+    ## # A tibble: 5 × 8
+    ##   package   error  fail  warn  note    ok deadline has_other_issues
+    ##   <chr>     <int> <int> <int> <int> <int> <chr>    <lgl>           
+    ## 1 foghorn       0     0     0     0    13 <NA>     FALSE           
+    ## 2 phylobase     0     0     0     2    11 <NA>     FALSE           
+    ## 3 riceware      0     0     0     0    13 <NA>     FALSE           
+    ## 4 rncl          0     0     0    13     0 <NA>     FALSE           
+    ## 5 rotl          0     0     0    13     0 <NA>     FALSE
+
+In addition of your own packages, you can also check the results for any
+other packages that might be of interest to you:
+
+``` r
+
+## either by themselves
+summary_cran_results(pkg = c("ggplot2", "dplyr"))
+```
+
+    ## ★  Packages with notes on CRAN: 
+    ##   - dplyr (10)
+    ##   - ggplot2 (3)
+
+``` r
+
+cran_results(pkg = c("ggplot2", "dplyr"))
+```
+
+    ## # A tibble: 2 × 8
+    ##   package error  fail  warn  note    ok deadline has_other_issues
+    ##   <chr>   <int> <int> <int> <int> <int> <chr>    <lgl>           
+    ## 1 dplyr       0     0     0    10     3 <NA>     FALSE           
+    ## 2 ggplot2     0     0     0     3    10 <NA>     FALSE
+
+``` r
+
+## or by combining them with email addresses
+summary_cran_results(email = "francois.michonneau@gmail.com",
+  pkg = c("arrow", "duckdb"))
+```
+
+    ## ✔ All clear for foghorn and riceware!
+
+    ## ★  Packages with notes on CRAN: 
+    ##   - arrow (3)
+    ##   - duckdb (3)
+    ##   - phylobase (2)
+    ##   - rncl (13)
+    ##   - rotl (13)
+
+``` r
+
+cran_results(email = "francois.michonneau@gmail.com",
+  pkg = c("arrow", "duckdb"))
+```
+
+    ## # A tibble: 7 × 8
+    ##   package   error  fail  warn  note    ok deadline has_other_issues
+    ##   <chr>     <int> <int> <int> <int> <int> <chr>    <lgl>           
+    ## 1 arrow         0     0     0     3    10 <NA>     FALSE           
+    ## 2 duckdb        0     0     0     3    10 <NA>     FALSE           
+    ## 3 foghorn       0     0     0     0    13 <NA>     FALSE           
+    ## 4 phylobase     0     0     0     2    11 <NA>     FALSE           
+    ## 5 riceware      0     0     0     0    13 <NA>     FALSE           
+    ## 6 rncl          0     0     0    13     0 <NA>     FALSE           
+    ## 7 rotl          0     0     0    13     0 <NA>     FALSE
+
+You can inspect the logs for the check results using
+`summary_cran_details(pkg)` (or `summary(cran_details(pkg))`), while
+`visit_cran_check(pkg)` takes you directly to the CRAN webpage.
+
+``` r
+
+tidyr_details <- cran_details(pkg = "tidyr")
+tidyr_details
+```
+
+    ## # A tibble: 3 × 7
+    ##   package version result      check         flavors                                                                                 n_flavors message
+    ##   <chr>   <chr>   <chr>       <chr>         <chr>                                                                                       <dbl> <chr>  
+    ## 1 tidyr   "1.3.1" NOTE        compiled code r-devel-linux-x86_64-debian-clang, r-devel-linux-x86_64-debian-gcc, r-devel-linux-x86_…         8 "     …
+    ## 2 tidyr   "1.3.1" NOTE        compiled code r-devel-windows-x86_64, r-release-windows-x86_64                                                2 "     …
+    ## 3 tidyr   ""      other_issue rchk          <NA>                                                                                           NA "See: …
+
+``` r
+
+summary(tidyr_details)
+```
+
+    ## ★ tidyr - note: compiled code
+    ##    ❯ r-devel-linux-x86_64-debian-clang 
+    ##    ❯ r-devel-linux-x86_64-debian-gcc 
+    ##    ❯ r-devel-linux-x86_64-fedora-clang 
+    ##    ❯ r-devel-linux-x86_64-fedora-gcc 
+    ##    ❯ r-patched-linux-x86_64 
+    ##    ❯ r-release-linux-x86_64 
+    ##    ❯ r-release-macos-arm64 
+    ##    ❯ r-release-macos-x86_64 
+    ## 
+    ##      File ‘tidyr/libs/tidyr.so’:
+    ##      Found non-API call to R: ‘DATAPTR’
+    ##      
+    ##      Compiled code should not call non-API entry points in R.
+    ##      
+    ##      See ‘Writing portable packages’ in the ‘Writing R Extensions’ manual,
+    ##      and section ‘Moving into C API compliance’ for issues with the use of
+    ##      non-API entry points.
+    ## 
+    ## ★ tidyr - note: compiled code
+    ##    ❯ r-devel-windows-x86_64 
+    ##    ❯ r-release-windows-x86_64 
+    ## 
+    ##      File 'tidyr/libs/x64/tidyr.dll':
+    ##      Found non-API call to R: 'DATAPTR'
+    ##      
+    ##      Compiled code should not call non-API entry points in R.
+    ##      
+    ##      See 'Writing portable packages' in the 'Writing R Extensions' manual,
+    ##      and section 'Moving into C API compliance' for issues with the use of
+    ##      non-API entry points.
+    ## 
+    ## ◉ tidyr - other_issue: rchk
+    ## 
+    ## See: <https://raw.githubusercontent.com/kalibera/cran-checks/master/rchk/results/tidyr.out>
+
+## Where does it get the data?
+
+The data from the check results used by this package are either scrapped
+from the CRAN web pages (default), or are from the CRAN database (that
+CRAN uses to build the webpages). The first option is faster if you want
+to regularly check a few packages. However, if you are doing statistics
+on a large number of packages, using the CRAN database is recommended
+(it’s about 20Mb of data). To use the CRAN database, add
+`src = "crandb"` in your function calls:
+
+``` r
+
+cran_results(pkg = "nlme", src = "crandb")
+```
+
+Check out the “Details” section in the help files for more information.
+
+## Feedback? Suggestions?
+
+Feel free to submit feedback and suggestions by [opening an
+issue](https://github.com/fmichonneau/foghorn/issues/new) on GitHub.
