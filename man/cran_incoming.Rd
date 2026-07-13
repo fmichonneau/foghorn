@@ -51,9 +51,9 @@ and the folder where they are located. This information could help
 you track your package submission. Only the following folders are
 considered (approximately in order of the CRAN queue sequence):
 \code{newbies}, \code{inspect}, \code{pretest}, \code{recheck}, \code{pending}, \code{waiting},
-\code{publish}. The folder \code{archive} is not inspected by default. The
-folders named after the initials of the CRAN volunteers are not
-inspected.
+\code{publish}, \code{special}. The folder \code{archive} is not inspected by
+default. The folders named after the initials of the CRAN
+volunteers are not inspected.
 }
 \note{
 The meaning of the package folders is as follows
@@ -66,6 +66,7 @@ The meaning of the package folders is as follows
 \item{pending}{a CRAN team member has to do a closer inspection and needs more time}
 \item{waiting}{CRAN's decision is waiting for a response from the package maintainer, e.g. when issues are present that CRAN cannot check for in the incoming checks}
 \item{publish}{package is awaiting publication}
+\item{special}{package is undergoing an additional, non-standard check (e.g. \code{noLD}, \code{valgrind}, \code{gcc-san}); unlike the other folders, \code{special} itself contains one sub-folder per check, so packages found here are reported with a \code{cran_folder} of the form \verb{special/<check>}, e.g. \code{special/noLD}}
 \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 }
 }

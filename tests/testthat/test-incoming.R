@@ -86,11 +86,22 @@ test_that("handling of misformed package name works", {
 })
 
 test_that("cran_incoming_folders works as expected", {
-  expect_identical(length(cran_incoming_folders()), 7L)
+  expect_identical(length(cran_incoming_folders()), 8L)
   expect_false(any(grepl("archive", cran_incoming_folders())))
-  expect_identical(length(cran_incoming_folders(include_archive = TRUE)), 8L)
+  expect_identical(length(cran_incoming_folders(include_archive = TRUE)), 9L)
   expect_true(any(grepl(
     "archive",
     cran_incoming_folders(include_archive = TRUE)
   )))
+})
+
+test_that("special folder is expanded into sub-folders", {
+  skip_on_cran()
+  skip_on_ci()
+
+  res <- cran_incoming(folders = "special")
+  expect_true(all(nzchar(res$package)))
+  expect_false(any(grepl("^special$", res$cran_folder)))
+  ## packages found in `special` should be reported as `special/<subfolder>`
+  expect_true(all(grepl("^special/", res$cran_folder) | nrow(res) == 0))
 })

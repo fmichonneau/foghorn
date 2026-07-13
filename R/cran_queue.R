@@ -44,6 +44,17 @@ parse_http_cran_incoming <- function(res_raw) {
     return(new_cran_q())
   }
 
+  ## the `special` folder contains sub-folders (one per special check,
+  ## e.g. `special/noLD`) rather than package tarballs directly; these
+  ## are expanded into their own queries by `expand_special_folders()`
+  ## before we get here, so any remaining directory entries (names
+  ## ending in "/") are not packages and must be dropped
+  res <- res[!grepl("/$", res$Name), , drop = FALSE]
+
+  if (identical(nrow(res), 0L)) {
+    return(new_cran_q())
+  }
+
   pkgs <- parse_pkg(res$Name)
   time <- as.POSIXct(res[["Last modified"]], tz = "Europe/Vienna")
   size <- res$Size
@@ -51,9 +62,40 @@ parse_http_cran_incoming <- function(res_raw) {
   new_cran_q(
     package = pkgs$package,
     version = pkgs$version,
-    cran_folder = basename(res_raw$url),
+    cran_folder = cran_folder_from_url(res_raw$url),
     time = time,
     size = size
+  )
+}
+
+## derive the folder name to report from the request URL, e.g.
+## ".../incoming/newbies/" -> "newbies" and
+## ".../incoming/special/noLD/" -> "special/noLD"
+cran_folder_from_url <- function(url) {
+  folder <- sub(".*/incoming/", "", url)
+  sub("/$", "", folder)
+}
+
+## the `special` folder is a directory of sub-folders (one per special
+## check) rather than a folder of package tarballs; discover its
+## sub-folders and replace `"special"` with `"special/<sub-folder>"`
+## for each of them so that `cran_queue()` fetches the actual package
+## listings
+expand_special_folders <- function(folders, url) {
+  if (!("special" %in% folders)) {
+    return(folders)
+  }
+
+  res <- curl::curl_fetch_memory(paste0(url, "/special/"))
+  res <- xml2::read_html(rawToChar(res$content))
+  res <- rvest::html_table(res)[[1]]
+
+  sub_folders <- res$Name[nzchar(res$Name) & res$Name != "Parent Directory"]
+  sub_folders <- sub("/$", "", sub_folders)
+
+  c(
+    folders[folders != "special"],
+    paste0("special/", sub_folders)
   )
 }
 
@@ -85,6 +127,8 @@ cran_queue <- function(pkg, folders, url) {
   ) {
     stop(sQuote("pkg"), " must be a character vector.", call. = FALSE)
   }
+
+  folders <- expand_special_folders(folders, url)
 
   sub_folders <- paste0(folders, "/")
 
@@ -132,9 +176,9 @@ cran_queue <- function(pkg, folders, url) {
 ##' you track your package submission. Only the following folders are
 ##' considered (approximately in order of the CRAN queue sequence):
 ##' `newbies`, `inspect`, `pretest`, `recheck`, `pending`, `waiting`,
-##' `publish`. The folder `archive` is not inspected by default. The
-##' folders named after the initials of the CRAN volunteers are not
-##' inspected.
+##' `publish`, `special`. The folder `archive` is not inspected by
+##' default. The folders named after the initials of the CRAN
+##' volunteers are not inspected.
 ##'
 ##' @note
 ##' The meaning of the package folders is as follows
@@ -147,6 +191,7 @@ cran_queue <- function(pkg, folders, url) {
 ##' \item{pending}{a CRAN team member has to do a closer inspection and needs more time}
 ##' \item{waiting}{CRAN's decision is waiting for a response from the package maintainer, e.g. when issues are present that CRAN cannot check for in the incoming checks}
 ##' \item{publish}{package is awaiting publication}
+##' \item{special}{package is undergoing an additional, non-standard check (e.g. `noLD`, `valgrind`, `gcc-san`); unlike the other folders, `special` itself contains one sub-folder per check, so packages found here are reported with a `cran_folder` of the form `special/<check>`, e.g. `special/noLD`}
 ##' \item{archive}{package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives}
 ##' }
 ##'
@@ -242,7 +287,8 @@ cran_incoming_folders <- function(include_archive = FALSE) {
     "recheck",
     "pending",
     "publish",
-    "waiting"
+    "waiting",
+    "special"
   )
 
   if (include_archive) {
