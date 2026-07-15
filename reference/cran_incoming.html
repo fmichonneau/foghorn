@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">foghorn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.6.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,9 +104,9 @@ and the folder where they are located. This information could help
 you track your package submission. Only the following folders are
 considered (approximately in order of the CRAN queue sequence):
 <code>newbies</code>, <code>inspect</code>, <code>pretest</code>, <code>recheck</code>, <code>pending</code>, <code>waiting</code>,
-<code>publish</code>. The folder <code>archive</code> is not inspected by default. The
-folders named after the initials of the CRAN volunteers are not
-inspected.</p>
+<code>publish</code>, <code>special</code>. The folder <code>archive</code> is not inspected by
+default. The folders named after the initials of the CRAN
+volunteers are not inspected.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -131,6 +131,9 @@ inspected.</p>
 
 <dt>publish</dt>
 <dd><p>package is awaiting publication</p></dd>
+
+<dt>special</dt>
+<dd><p>package is undergoing an additional, non-standard check (e.g. <code>noLD</code>, <code>valgrind</code>, <code>gcc-san</code>); unlike the other folders, <code>special</code> itself contains one sub-folder per check, so packages found here are reported with a <code>cran_folder</code> of the form <code>special/&lt;check&gt;</code>, e.g. <code>special/noLD</code></p></dd>
 
 <dt>archive</dt>
 <dd><p>package rejected: it does not pass the checks cleanly and the problems are unlikely to be false positives</p></dd>

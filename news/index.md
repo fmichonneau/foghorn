@@ -1,5 +1,15 @@
 # Changelog
 
+## foghorn 1.6.2
+
+### New Features
+
+- [`cran_incoming()`](https://fmichonneau.github.io/foghorn/reference/cran_incoming.md)
+  now includes packages that are being checked in `special/`
+  subdirectories of the CRAN incoming queue (e.g. `special/gcc-ASAN`) by
+  default ([\#69](https://github.com/fmichonneau/foghorn/issues/69),
+  [@bbolker](https://github.com/bbolker)).
+
 ## foghorn 1.6.1
 
 CRAN release: 2025-07-19

@@ -75,9 +75,9 @@ you to check the packages that are currently in the queue, and the
 folder where they are located. This information could help you track
 your package submission. Only the following folders are considered
 (approximately in order of the CRAN queue sequence): `newbies`,
-`inspect`, `pretest`, `recheck`, `pending`, `waiting`, `publish`. The
-folder `archive` is not inspected by default. The folders named after
-the initials of the CRAN volunteers are not inspected.
+`inspect`, `pretest`, `recheck`, `pending`, `waiting`, `publish`,
+`special`. The folder `archive` is not inspected by default. The folders
+named after the initials of the CRAN volunteers are not inspected.
 
 ## Note
 
@@ -118,6 +118,14 @@ Ligges mailing list comment
 - publish:
 
   package is awaiting publication
+
+- special:
+
+  package is undergoing an additional, non-standard check (e.g. `noLD`,
+  `valgrind`, `gcc-san`); unlike the other folders, `special` itself
+  contains one sub-folder per check, so packages found here are reported
+  with a `cran_folder` of the form `special/<check>`, e.g.
+  `special/noLD`
 
 - archive:
 
