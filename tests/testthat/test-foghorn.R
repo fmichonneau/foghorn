@@ -557,9 +557,17 @@ test_that("output of summary cran results", {
     build_regexp("with other issues", pkg_with_issues)
   )
 
-  msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = TRUE))
+  ## use a package known to have issues so the compact/non-compact
+  ## formatting is exercised (a hard-coded package may become all-clear
+  ## on CRAN, in which case only the "All clear" message is emitted)
+  pkg_compact <- pkg_with_issues[[1]]
+  msg <- capture_messages(
+    summary_cran_results(pkg = pkg_compact, compact = TRUE)
+  )
   expect_false(all(grepl("  -", msg)))
-  msg <- capture_messages(summary_cran_results(pkg = "rncl", compact = FALSE))
+  msg <- capture_messages(
+    summary_cran_results(pkg = pkg_compact, compact = FALSE)
+  )
   expect_true(all(grepl("  -", msg)))
 })
 
