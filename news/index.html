@@ -39,6 +39,10 @@
 <ul><li>
 <code><a href="../reference/cran_incoming.html">cran_incoming()</a></code> now includes packages that are being checked in <code>special/</code> subdirectories of the CRAN incoming queue (e.g. <code>special/gcc-ASAN</code>) by default (<a href="https://github.com/fmichonneau/foghorn/issues/69" class="external-link">#69</a>, <a href="https://github.com/bbolker" class="external-link">@bbolker</a>).</li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-6-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-2"></a></h3>
+<ul><li>When the CRAN repository is set to a Posit Package Manager (PPM) mirror, functions now fall back to CRAN to fetch check results, as PPM does not host them.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.6.1" id="foghorn-161">foghorn 1.6.1<a class="anchor" aria-label="anchor" href="#foghorn-161"></a></h2><p class="text-muted">CRAN release: 2025-07-19</p>

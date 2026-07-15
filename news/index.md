@@ -10,6 +10,12 @@
   default ([\#69](https://github.com/fmichonneau/foghorn/issues/69),
   [@bbolker](https://github.com/bbolker)).
 
+### Bug fixes
+
+- When the CRAN repository is set to a Posit Package Manager (PPM)
+  mirror, functions now fall back to CRAN to fetch check results, as PPM
+  does not host them.
+
 ## foghorn 1.6.1
 
 CRAN release: 2025-07-19
