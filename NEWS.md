@@ -1,3 +1,11 @@
+# foghorn 1.6.2
+
+## New Features
+
+* `cran_incoming()` now includes packages that are being checked in `special/`
+  subdirectories of the CRAN incoming queue (e.g. `special/gcc-ASAN`) by default
+  (#69, @bbolker).
+
 # foghorn 1.6.1
 
 ## Bug fixes
