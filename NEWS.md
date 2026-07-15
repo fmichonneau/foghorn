@@ -6,6 +6,12 @@
   subdirectories of the CRAN incoming queue (e.g. `special/gcc-ASAN`) by default
   (#69, @bbolker).
 
+## Bug fixes
+
+* When the CRAN repository is set to a Posit Package Manager (PPM) mirror,
+  functions now fall back to CRAN to fetch check results, as PPM does not host
+  them.
+
 # foghorn 1.6.1
 
 ## Bug fixes
