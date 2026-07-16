@@ -41,15 +41,15 @@ extract_deadline <- function(parsed, ...) {
     function(x) {
       needs_fix <- xml2::xml_find_all(x, ".//tr//td//span[@style]")
       needs_fix <- xml2::xml_text(needs_fix)
-      if (identical(length(needs_fix), 0L)) {
+      ## A package page may contain several styled spans (e.g. a notice
+      ## that the maintainer's email is undeliverable); keep only the one
+      ## that holds the deadline.
+      needs_fix <- needs_fix[grepl("issues need fixing before", needs_fix)]
+      if (length(needs_fix) == 0L) {
         return(NA_character_)
       }
-      if (!grepl("issues need fixing before", needs_fix)) {
-        warning("Unrecognized value: ", needs_fix, call. = FALSE)
-        return(NA_character_)
-      }
-      date_match <- regexpr("\\d{4}-\\d{2}-\\d{2}", needs_fix)
-      regmatches(needs_fix, date_match)
+      date_match <- regexpr("\\d{4}-\\d{2}-\\d{2}", needs_fix[1])
+      regmatches(needs_fix[1], date_match)
     },
     character(1)
   )

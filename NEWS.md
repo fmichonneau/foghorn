@@ -1,3 +1,11 @@
+# foghorn 1.6.2.9000
+
+## Bug fixes
+
+* `cran_results()` no longer errors when a package's CRAN page shows several
+  styled notices (for instance an undeliverable maintainer email alongside a
+  deadline). The deadline is now extracted correctly in these cases.
+
 # foghorn 1.6.2
 
 ## New Features
