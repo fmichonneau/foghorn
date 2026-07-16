@@ -31,6 +31,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Francois Michonneau \email{francois.michonneau@gmail.com}
 
+Authors:
+\itemize{
+  \item Francois Michonneau \email{francois.michonneau@gmail.com}
+}
+
 Other contributors:
 \itemize{
   \item Ben Bolker [contributor]

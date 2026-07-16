@@ -182,7 +182,7 @@ cran_queue <- function(pkg, folders, url) {
 ##'
 ##' @note
 ##' The meaning of the package folders is as follows
-##'  (see Hornik, Ligges and Zeileis \url{https://journal.r-project.org/archive/2018-1/cran.pdf} and Uwe Ligges mailing list comment \url{https://stat.ethz.ch/pipermail/r-package-devel/2019q1/003631.html}):
+##'  (see Hornik, Ligges and Zeileis \url{https://journal.r-project.org/news/RJ-2018-1-cran/RJ-2018-1-cran.pdf} and Uwe Ligges mailing list comment \url{https://stat.ethz.ch/pipermail/r-package-devel/2019q1/003631.html}):
 ##' \describe{
 ##' \item{newbies}{for first time submission; package will be manually inspected.}
 ##' \item{inspect}{package is awaiting manual inspection; always happens for first time submissions and for packages with problems that are likely to be false positives}
@@ -239,7 +239,7 @@ cran_queue <- function(pkg, folders, url) {
 ##' }
 ##' @references
 ##' \itemize{
-##' \item Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to 2018-06-30", R Journal 10(1), July 2018. \url{https://journal.r-project.org/archive/2018-1/cran.pdf}
+##' \item Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to 2018-06-30", R Journal 10(1), July 2018. \url{https://journal.r-project.org/news/RJ-2018-1-cran/RJ-2018-1-cran.pdf}
 ##' \item  Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo Gruson. "CRAN incoming dashboard", \url{https://lockedata.github.io/cransays/articles/dashboard.html}
 ##' }
 ##' @seealso cran_winbuilder

@@ -2,6 +2,7 @@
 
 S3method(all_packages,cran_checks_email)
 S3method(all_packages,cran_checks_pkg)
+S3method(cran_checks_table,cran_checks_email)
 S3method(cran_checks_table,cran_checks_pkg)
 S3method(cran_checks_table,crandb)
 S3method(summary,cran_details)

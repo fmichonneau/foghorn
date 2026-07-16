@@ -3,6 +3,7 @@ cran_checks_table <- function(parsed, ...) UseMethod("cran_checks_table")
 
 ##' @importFrom rvest html_table
 ##' @importFrom tibble as_tibble
+##' @export
 cran_checks_table.cran_checks_email <- function(parsed, ...) {
   res <- lapply(parsed, function(x) {
     tbl <- rvest::html_table(x)
