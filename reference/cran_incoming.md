@@ -82,8 +82,9 @@ named after the initials of the CRAN volunteers are not inspected.
 ## Note
 
 The meaning of the package folders is as follows (see Hornik, Ligges and
-Zeileis <https://journal.r-project.org/archive/2018-1/cran.pdf> and Uwe
-Ligges mailing list comment
+Zeileis
+<https://journal.r-project.org/news/RJ-2018-1-cran/RJ-2018-1-cran.pdf>
+and Uwe Ligges mailing list comment
 <https://stat.ethz.ch/pipermail/r-package-devel/2019q1/003631.html>):
 
 - newbies:
@@ -145,7 +146,7 @@ have any questions.
 
 - Hornik, Ligges and Zeileis. "Changes on CRAN: 2017-12-01 to
   2018-06-30", R Journal 10(1), July 2018.
-  <https://journal.r-project.org/archive/2018-1/cran.pdf>
+  <https://journal.r-project.org/news/RJ-2018-1-cran/RJ-2018-1-cran.pdf>
 
 - Maëlle Salmon, Locke Data, Stephanie Locke, Mitchell O'Hara-Wild, Hugo
   Gruson. "CRAN incoming dashboard",

@@ -31,6 +31,10 @@ Useful links:
 
 **Maintainer**: Francois Michonneau <francois.michonneau@gmail.com>
 
+Authors:
+
+- Francois Michonneau <francois.michonneau@gmail.com>
+
 Other contributors:
 
 - Ben Bolker \[contributor\]

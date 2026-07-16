@@ -9,16 +9,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/fmichonneau/foghorn/blob/v1.6.2/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/fmichonneau/foghorn/blob/main/DESCRIPTION)
 
 Michonneau F (2026). *foghorn: Summarize CRAN Check Results in the
-Terminal*. R package version 1.6.2,
+Terminal*. R package version 1.6.2.9000,
 <https://fmichonneau.github.io/foghorn/>.
 
     @Manual{,
       title = {foghorn: Summarize CRAN Check Results in the Terminal},
       author = {Francois Michonneau},
       year = {2026},
-      note = {R package version 1.6.2},
+      note = {R package version 1.6.2.9000},
       url = {https://fmichonneau.github.io/foghorn/},
     }
