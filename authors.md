@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/fmichonneau/foghorn/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/fmichonneau/foghorn/blob/v1.6.2/DESCRIPTION)
 
 Michonneau F (2026). *foghorn: Summarize CRAN Check Results in the
 Terminal*. R package version 1.6.2,
